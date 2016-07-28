@@ -15,12 +15,14 @@
     "url": "https://github.com/romsson/d3-gridding.git"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && rollup -f umd -n d3 -o build/d3-gridding.js -- index.js",
+    "pretest": "rm -rf build && mkdir build && rollup -c rollup.config.js -f umd -n d3 -o build/d3-gridding.js -- index.js",
     "test": "tape 'test/**/*-test.js'",
     "prepublish": "npm run test && uglifyjs build/d3-gridding.js -c -m -o build/d3-gridding.min.js",
     "postpublish": "zip -j build/d3-gridding.zip -- LICENSE README.md build/d3-gridding.js build/d3-gridding.min.js"
   },
   "devDependencies": {
+    "rollup-plugin-commonjs": "^2.2.1",
+    "rollup-plugin-node-resolve": "^1.4.0",
     "rollup": "0.27",
     "tape": "4",
     "uglify-js": "2"
