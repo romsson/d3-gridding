@@ -16,7 +16,7 @@ tape("changing size", function(test) {
   test.end();
 });
 
-tape("identity function returns the very same grid positions", function(test) {
+tape("identity layout returns the very same grid positions", function(test) {
 
   var nodes = [
     {x: 0, y: 0},
@@ -25,6 +25,6 @@ tape("identity function returns the very same grid positions", function(test) {
     {x: 1, y: 0}
   ];
 
-  test.deepEqual(nodes, gridding.gridding()(nodes), gridding);
+  test.deepEqual(nodes, gridding.gridding()(nodes));
   test.end();
 });

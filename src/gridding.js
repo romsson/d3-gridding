@@ -5,8 +5,8 @@ export default function() {
   var mode = "identity",
       layout = identity,
       size = [1, 1],
-      x = d3Scale.scaleOrdinal(),
-      y = d3Scale.scaleOrdinal();
+      x = d3Scale.scaleLinear(),
+      y = d3Scale.scaleLinear();
 
   function gridding(nodes) {
     return layout(nodes);
@@ -17,7 +17,7 @@ export default function() {
   }
 
   function horizontal(nodes) {
-    y.domain(nodes.map(function(d, i) { return i;})).range([0, size[1]);
+    y.domain([0, nodes.length]).range([0, size[1]]);
     nodes.forEach(function(n, i) {
       n.x = size[0] / 2;
       n.y = y(i);
@@ -26,7 +26,7 @@ export default function() {
   }
 
   function vertical(nodes) {
-    x.domain(nodes.map(function(d, i) { return i;})).range([0, size[0]]);
+    x.domain([0, nodes.length]).range([0, size[0]]);
     nodes.forEach(function(n, i) {
       n.x = x(i);
       n.y = size[1] / 2;
