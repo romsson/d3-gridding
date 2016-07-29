@@ -3,6 +3,7 @@ import * as d3Scale from 'd3-scale';
 export default function() {
 
   var mode = "identity",
+      modes = ["horizontal", "vertical", "central", "grid", "coordinate", "identity"],
       layout = identity,
       size = [1, 1],
       cols,
@@ -23,7 +24,7 @@ export default function() {
     nodes.forEach(function(n, i) {
       n.x = size[0] / 2;
       n.y = y(i);
-    })
+    });
     return nodes;
   }
 
@@ -32,14 +33,19 @@ export default function() {
     nodes.forEach(function(n, i) {
       n.x = x(i);
       n.y = size[1] / 2;
-    })
+
+    });
     return nodes;
   }
 
   function central(nodes) {
     nodes.forEach(function(n, i) {
-      n.x = size[0] / 2;
-      n.y = size[1] / 2;
+      n.x = 0;
+      n.y = 0;
+      n.cx = size[0] / 2;
+      n.cy = size[1] / 2;
+      n.height = size[0];
+      n.width = size[1];
     })
     return nodes;
   }
@@ -59,6 +65,19 @@ export default function() {
 
       n.x = x(col);
       n.y = y(row);
+    });
+
+    return nodes;
+  }
+
+  function coordinate(nodes) {
+
+    x.domain([0, 1]).range([0, size[0]]);
+    y.domain([0, 1]).range([0, size[1]]);
+
+    nodes.forEach(function(n, i) {
+      n.x = x(Math.random());
+      n.y = y(Math.random());
     })
 
     return nodes;
@@ -80,12 +99,19 @@ export default function() {
       case "grid":
         layout = grid;
       break;
+      case "coordinate":
+        layout = coordinate;
+      break;
       case "identity":
       default:
         layout = identity;
       break;
     }
     return gridding;
+  }
+
+  gridding.modes = function() {
+    return modes;
   }
 
   gridding.size = function(value) {
