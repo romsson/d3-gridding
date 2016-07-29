@@ -22,31 +22,39 @@ export default function() {
   function horizontal(nodes) {
     y.domain([0, nodes.length]).range([0, size[1]]);
     nodes.forEach(function(n, i) {
-      n.x = size[0] / 2;
-      n.y = y(i);
+      n.x = n.cx = size[0] / 2;
+      n.y = n.cy = y(i);
+      n.width = size[0];
+      n.height = size[1] / nodes.length;
     });
     return nodes;
   }
 
   function vertical(nodes) {
-    x.domain([0, nodes.length]).range([0, size[0]]);
-    nodes.forEach(function(n, i) {
-      n.x = x(i);
-      n.y = size[1] / 2;
 
+    x.domain([0, nodes.length]).range([0, size[0]]);
+
+    nodes.forEach(function(n, i) {
+      n.x = n.cx = x(i);
+      n.y = n.cy = size[1] / 2;
+      n.width = size[0] / nodes.length;
+      n.height = size[1];
     });
+
     return nodes;
   }
 
   function central(nodes) {
+
     nodes.forEach(function(n, i) {
       n.x = 0;
       n.y = 0;
       n.cx = size[0] / 2;
       n.cy = size[1] / 2;
-      n.height = size[0];
-      n.width = size[1];
-    })
+      n.width = size[0];
+      n.height = size[1];
+    });
+
     return nodes;
   }
 
@@ -63,8 +71,10 @@ export default function() {
       var col = i % cols;
       var row = Math.floor(i / cols);
 
-      n.x = x(col);
-      n.y = y(row);
+      n.x = n.cx = x(col);
+      n.y = n.cy = y(row);
+      n.width = size[0] / cols;
+      n.height = size[1] / rows;
     });
 
     return nodes;
@@ -76,9 +86,11 @@ export default function() {
     y.domain([0, 1]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
-      n.x = x(Math.random());
-      n.y = y(Math.random());
-    })
+      n.x = n.cx = x(Math.random());
+      n.y = n.cy = y(Math.random());
+      n.width = size[0] / nodes.length;
+      n.height = size[1] / nodes.length;
+    });
 
     return nodes;
   }
