@@ -22,7 +22,8 @@ export default function() {
   function horizontal(nodes) {
     y.domain([0, nodes.length]).range([0, size[1]]);
     nodes.forEach(function(n, i) {
-      n.x = n.cx = size[0] / 2;
+      n.x = 0;
+      n.cx = size[0] / 2;
       n.y = n.cy = y(i);
       n.width = size[0];
       n.height = size[1] / nodes.length;
@@ -35,7 +36,7 @@ export default function() {
     x.domain([0, nodes.length]).range([0, size[0]]);
 
     nodes.forEach(function(n, i) {
-      n.x = n.cx = x(i);
+      n.x = x(i);
       n.y = n.cy = size[1] / 2;
       n.width = size[0] / nodes.length;
       n.height = size[1];
