@@ -1,6 +1,6 @@
 # d3-gridding
 
-Creates various grid partitions and overlays for d3 charts.
+Grids for d3 charts.
 
 ## Installing
 
@@ -34,10 +34,10 @@ The key part is the `gridding` variable that adds position variables to the arra
 
 `> gridding([{}, {}, {}])`
 
-`[▶Object, ▶Object, ▶Object]`
+`[▶ Object, ▶ Object, ▶ Object]`
 
 ```
-[▼Object
+[▼ Object
     x: 0
     y: 300
     cx: 300
@@ -59,7 +59,6 @@ var points = svgPoints.selectAll(".point")
   .data(gridding(data));
 ```
 
-
 ### d3.gridding().mode()
 
 `grid` - classic grid
@@ -67,6 +66,7 @@ var points = svgPoints.selectAll(".point")
 `horizontal` - horizontal layout
 `central` - overlapping layout
 `coordinates` - absolute position
+`radial` - pie chart with uniform wedges
 `identity` - does nothing, returns same values
 
 To get the list of all available modes `gridding.modes()`
