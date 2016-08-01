@@ -3,7 +3,7 @@ import * as d3Scale from 'd3-scale';
 export default function() {
 
   var mode = "identity",
-      modes = ["horizontal", "vertical", "central", "grid", "coordinate", "identity"],
+      modes = ["horizontal", "vertical", "central", "grid", "coordinate", "radial", "identity"],
       layout = identity,
       size = [1, 1],
       cols,
@@ -98,6 +98,30 @@ export default function() {
     return nodes;
   }
 
+  function radial(nodes) {
+
+    var r = Math.min(size[0], size[1]);
+
+    var arc = d3.arc()
+        .outerRadius(r)
+        .innerRadius(0)
+
+    var pie = d3.pie()
+        .value(function(d) { return 1; });
+
+    var arcs = pie(nodes);
+
+    nodes.forEach(function(n, i) {
+      n.x = n.cx = arc.centroid(arcs[i])[0] + r / 2;
+      n.y = n.cy = arc.centroid(arcs[i])[1] + r / 2;
+      n.width = size[0] / nodes.length;
+      n.height = size[1] / nodes.length;
+    });
+
+    return nodes;
+
+  }
+
   gridding.mode = function(value) {
     if (!arguments.length) return mode;
     mode = value;
@@ -116,6 +140,9 @@ export default function() {
       break;
       case "coordinate":
         layout = coordinate;
+      break;
+      case "radial":
+        layout = radial;
       break;
       case "identity":
       default:
