@@ -23,8 +23,8 @@ export default function() {
     y.domain([0, nodes.length]).range([0, size[1]]);
     nodes.forEach(function(n, i) {
       n.x = 0;
-      n.cx = size[0] / 2;
       n.y = n.cy = y(i);
+      n.cx = size[0] / 2;
       n.width = size[0];
       n.height = size[1] / nodes.length;
     });
@@ -32,12 +32,12 @@ export default function() {
   }
 
   function vertical(nodes) {
-
     x.domain([0, nodes.length]).range([0, size[0]]);
-
     nodes.forEach(function(n, i) {
       n.x = x(i);
-      n.y = n.cy = size[1] / 2;
+      n.y = 0;
+      n.cx = x(i) + (size[0] / nodes.length) / 2;
+      n.cy = size[1] / 2;
       n.width = size[0] / nodes.length;
       n.height = size[1];
     });
@@ -64,16 +64,18 @@ export default function() {
     cols = Math.ceil(Math.sqrt(nodes.length));
     rows = Math.ceil(nodes.length / cols);
 
-    x.domain([0, nodes.length]).range([0, size[0]]);
-    y.domain([0, nodes.length]).range([0, size[1]]);
+    x.domain([0, cols]).range([0, size[0]]);
+    y.domain([0, rows]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
 
       var col = i % cols;
       var row = Math.floor(i / cols);
 
-      n.x = n.cx = x(col);
-      n.y = n.cy = y(row);
+      n.x = x(col);
+      n.cx = x(col) + (size[0] / cols) / 2;
+      n.y = y(row);
+      n.cy = y(row) + (size[1] / rows) / 2;
       n.width = size[0] / cols;
       n.height = size[1] / rows;
     });
