@@ -59,9 +59,9 @@ var points = svgPoints.selectAll(".point")
   .data(gridding(data));
 ```
 
-### d3.gridding().mode()
+<a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
 
-Sets the layout:
+The `mode` parameter sets the layout:
 
 `grid` - classic grid
 `vertical` - vertical layout
@@ -73,7 +73,7 @@ Sets the layout:
 
 To get the list of all available modes `gridding.modes()`
 
-### d3.gridding().sort([compare])
+<a name="gridding_sort" href="#gridding_sort">#</a> <i>d3.gridding()</i>.<b>sort</b>([<i>compare</i>])
 
 Sets the sort function, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_sort) and defaults to:
 
