@@ -12,7 +12,7 @@ In both cases, you then have to include the `d3-gridding.js` JavaScript file in 
 
 ## API
 
-Here is an example on how to call the lib and generate a d3 chart out of it:
+Here is a simple example:
 
 ```
 var data = d3.range(10);
@@ -61,6 +61,8 @@ var points = svgPoints.selectAll(".point")
 
 ### d3.gridding().mode()
 
+Sets the layout:
+
 `grid` - classic grid
 `vertical` - vertical layout
 `horizontal` - horizontal layout
@@ -70,4 +72,20 @@ var points = svgPoints.selectAll(".point")
 `identity` - does nothing, returns same values
 
 To get the list of all available modes `gridding.modes()`
+
+### d3.gridding().sort([compare])
+
+Sets the sort function, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_sort) and defaults to:
+
+```
+function(a, b) { return a - b; }
+```
+
+### d3.gridding().value([accessor])
+
+Sets the value accessor, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_value) and defaults to:
+
+```
+function value(d) { return d; }
+```
 

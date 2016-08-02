@@ -9,11 +9,16 @@ export default function() {
       cols,
       rows,
       r,
+      sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
       x = d3Scale.scaleLinear(),
       y = d3Scale.scaleLinear();
 
   function gridding(nodes) {
+
+    nodes.sort(function(a, b) {
+      return sort(value(a), value(b));
+    });
 
     return layout(nodes);
   }
@@ -116,6 +121,7 @@ export default function() {
         .innerRadius(0)
 
     var pie = d3.pie()
+        .sort(sort)
         .value(function(d) { return 1; });
 
     var arcs = pie(nodes);
@@ -169,14 +175,20 @@ export default function() {
   }
 
   gridding.size = function(value) {
-    if (!arguments.length) return size;
+    if(!arguments.length) return size;
     size = value;
     return gridding;
   }
 
   gridding.value = function(_value) {
-    if (!arguments.length) return value;
+    if(!arguments.length) return value;
     value = _value;
+    return gridding;
+  }
+
+  gridding.sort = function(_sort) {
+    if(!arguments.length) return _sort;
+    sort = _sort;
     return gridding;
   }
 
