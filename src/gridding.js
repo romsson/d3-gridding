@@ -114,7 +114,7 @@ export default function() {
 
   function radial(nodes) {
 
-    r = Math.min(size[0], size[1]);
+    r = Math.min(size[0], size[1]) / 2;
 
     var arc = d3.arc()
         .outerRadius(r)
@@ -127,8 +127,8 @@ export default function() {
     var arcs = pie(nodes);
 
     nodes.forEach(function(n, i) {
-      n.x = n.cx = arc.centroid(arcs[i])[0] + r / 2;
-      n.y = n.cy = arc.centroid(arcs[i])[1] + r / 2;
+      n.x = n.cx = arc.centroid(arcs[i])[0] + r;
+      n.y = n.cy = arc.centroid(arcs[i])[1] + r;
       n.width = size[0] / nodes.length;
       n.height = size[1] / nodes.length;
     });
