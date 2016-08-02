@@ -81,9 +81,9 @@ Sets the sort function, similar to [D3's](https://github.com/d3/d3-shape/blob/ma
 function(a, b) { return a - b; }
 ```
 
-### d3.gridding().value([accessor])
+<a name="gridding_value" href="#gridding_value">#</a> <i>d3.gridding()</i>.<b>value</b>([<i>accessor</i>])
 
-Sets the value accessor, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_value) and defaults to:
+Sets the value `accessor` function, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_value) and defaults to:
 
 ```
 function value(d) { return d; }
