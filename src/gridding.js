@@ -8,19 +8,25 @@ export default function() {
       size = [1, 1],
       cols,
       rows,
+      r,
+      value = function(d) { return d; },
       x = d3Scale.scaleLinear(),
       y = d3Scale.scaleLinear();
 
   function gridding(nodes) {
+
     return layout(nodes);
   }
 
   function identity(nodes) {
+
     return nodes;
   }
 
   function horizontal(nodes) {
+
     y.domain([0, nodes.length]).range([0, size[1]]);
+
     nodes.forEach(function(n, i) {
       n.x = 0;
       n.y = n.cy = y(i);
@@ -28,11 +34,14 @@ export default function() {
       n.width = size[0];
       n.height = size[1] / nodes.length;
     });
+
     return nodes;
   }
 
   function vertical(nodes) {
+
     x.domain([0, nodes.length]).range([0, size[0]]);
+
     nodes.forEach(function(n, i) {
       n.x = x(i);
       n.y = 0;
@@ -100,7 +109,7 @@ export default function() {
 
   function radial(nodes) {
 
-    var r = Math.min(size[0], size[1]);
+    r = Math.min(size[0], size[1]);
 
     var arc = d3.arc()
         .outerRadius(r)
@@ -123,8 +132,10 @@ export default function() {
   }
 
   gridding.mode = function(value) {
+
     if (!arguments.length) return mode;
     mode = value;
+
     switch(mode) {
       case "horizontal":
         layout = horizontal;
@@ -149,6 +160,7 @@ export default function() {
         layout = identity;
       break;
     }
+
     return gridding;
   }
 
@@ -159,6 +171,12 @@ export default function() {
   gridding.size = function(value) {
     if (!arguments.length) return size;
     size = value;
+    return gridding;
+  }
+
+  gridding.value = function(_value) {
+    if (!arguments.length) return value;
+    value = _value;
     return gridding;
   }
 

@@ -16,6 +16,11 @@ tape("changing size", function(test) {
   test.end();
 });
 
+tape(".value() returns same value by default", function(test) {
+  test.deepEqual(gridding.gridding().value()(1), 1);
+  test.end();
+});
+
 tape("identity layout returns the very same grid positions", function(test) {
 
   var nodes = [
