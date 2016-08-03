@@ -6,5 +6,6 @@ export default {
   plugins: [npm({jsnext: true}), commonjs({})],
   moduleId: 'd3-gridding',
   moduleName: 'd3-gridding',
+  dest: 'd3-gridding.js',
   format: 'umd'
 };

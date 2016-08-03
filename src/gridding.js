@@ -1,4 +1,6 @@
 import * as d3Scale from 'd3-scale';
+import * as d3Shape from "d3-shape";
+import * as d3Hierarchy from "d3-hierarchy";
 
 export default function() {
 
@@ -116,11 +118,11 @@ export default function() {
 
     r = Math.min(size[0], size[1]) / 2;
 
-    var arc = d3.arc()
+    var arc = d3Shape.arc()
         .outerRadius(r)
         .innerRadius(0)
 
-    var pie = d3.pie()
+    var pie = d3Shape.pie()
         .sort(sort)
         .value(function(d) { return 1; });
 
@@ -134,7 +136,6 @@ export default function() {
     });
 
     return nodes;
-
   }
 
   gridding.mode = function(value) {
