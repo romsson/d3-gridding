@@ -5,7 +5,7 @@ import * as d3Hierarchy from "d3-hierarchy";
 export default function() {
 
   var mode = "identity",
-      modes = {"horizontal": horizontal, "vertical": vertical, "central": central, "grid": grid, "coordinate": coordinate, "radial": radial, "treemap": treemap, "identity": identity},
+      modes = {"horizontal": horizontal, "vertical": vertical, "central": central, "grid": grid, "coordinate": coordinate, "radial": radial, "treemap": treemap, "pack": pack,"identity": identity},
       layout = identity,
       size = [1, 1],
       cols,
@@ -161,6 +161,33 @@ export default function() {
         n.y = n.cy = tree.children[i].y0;
         n.width = tree.children[i].x1 - n.x;
         n.height = tree.children[i].y1 - n.y;
+
+    });
+
+    return nodes;
+  }
+
+  function pack(nodes) {
+
+    var pack = d3.pack()
+        .size([width, height])
+        .padding(padding);
+
+    var packed = pack(d3.stratify()
+        .id(function(d, i) { return i; })
+        .parentId(function(d, i) {
+          return i === 0 ? "": 0;
+        })
+        ([{}].concat(nodes))
+          .sum(function(d, i) { return 1; })
+        );
+
+    nodes.forEach(function(n, i) {
+
+        n.x = n.cx = packed.children[i].x;
+        n.y = n.cy = packed.children[i].y;
+        n.width = packed.children[i].r;
+        n.height = packed.children[i].r;
 
     });
 

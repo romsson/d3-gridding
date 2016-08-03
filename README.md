@@ -71,6 +71,8 @@ The `mode` parameter sets the layout:
 `central` - overlapping layout
 `coordinates` - absolute position
 `radial` - pie chart with uniform wedges
+`treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
+`pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
 `identity` - does nothing, returns same values
 
 To get the list of all available modes `gridding.modes()`
