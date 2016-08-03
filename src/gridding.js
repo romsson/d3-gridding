@@ -5,7 +5,7 @@ import * as d3Hierarchy from "d3-hierarchy";
 export default function() {
 
   var mode = "identity",
-      modes = ["horizontal", "vertical", "central", "grid", "coordinate", "radial", "treemap", "identity"],
+      modes = {"horizontal": horizontal, "vertical": vertical, "central": central, "grid": grid, "coordinate": coordinate, "radial": radial, "treemap": treemap, "identity": identity},
       layout = identity,
       size = [1, 1],
       cols,
@@ -172,39 +172,13 @@ export default function() {
     if (!arguments.length) return mode;
     mode = value;
 
-    switch(mode) {
-      case "horizontal":
-        layout = horizontal;
-      break;
-      case "vertical":
-        layout = vertical;
-      break;
-      case "central":
-        layout = central;
-      break;
-      case "grid":
-        layout = grid;
-      break;
-      case "coordinate":
-        layout = coordinate;
-      break;
-      case "radial":
-        layout = radial;
-      break;
-      case "treemap":
-        layout = treemap;
-      break;
-      case "identity":
-      default:
-        layout = identity;
-      break;
-    }
+    layout = modes[mode];
 
     return gridding;
   }
 
   gridding.modes = function() {
-    return modes;
+    return d3.keys(modes);
   }
 
   gridding.size = function(value) {
