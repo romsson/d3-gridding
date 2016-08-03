@@ -117,3 +117,18 @@ tape("sort now by descending value", function(test) {
   test.end();
 });
 
+tape("radial layout for one single node (centered)", function(test) {
+
+  var nodes = [{}];
+
+  var grid = gridding.gridding().mode("radial").size([400, 300]);
+  grid(nodes);
+
+  test.equal(nodes[0].x, 150);
+  test.equal(nodes[0].y, 225);
+  test.equal(nodes[0].cx, 150);
+  test.equal(nodes[0].cy, 225);
+  test.equal(nodes[0].height, 300);
+  test.equal(nodes[0].width, 400);
+  test.end();
+});
