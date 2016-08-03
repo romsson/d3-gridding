@@ -5,7 +5,7 @@ import * as d3Hierarchy from "d3-hierarchy";
 export default function() {
 
   var mode = "identity",
-      modes = ["horizontal", "vertical", "central", "grid", "coordinate", "radial", "identity"],
+      modes = ["horizontal", "vertical", "central", "grid", "coordinate", "radial", "treemap", "identity"],
       layout = identity,
       size = [1, 1],
       cols,
@@ -139,6 +139,34 @@ export default function() {
     return nodes;
   }
 
+
+  function treemap(nodes) {
+
+    var treemap = d3.treemap()
+        .size([width, height])
+        .padding(padding);
+
+    var tree = treemap(d3.stratify()
+        .id(function(d, i) { return i; })
+        .parentId(function(d, i) {
+          return i === 0 ? "": 0;
+        })
+        ([{}].concat(nodes))
+          .sum(function(d, i) { return 1; })
+        );
+
+    nodes.forEach(function(n, i) {
+
+        n.x = n.cx = tree.children[i].x0;
+        n.y = n.cy = tree.children[i].y0;
+        n.width = tree.children[i].x1 - n.x;
+        n.height = tree.children[i].y1 - n.y;
+
+    });
+
+    return nodes;
+  }
+
   gridding.mode = function(value) {
 
     if (!arguments.length) return mode;
@@ -162,6 +190,9 @@ export default function() {
       break;
       case "radial":
         layout = radial;
+      break;
+      case "treemap":
+        layout = treemap;
       break;
       case "identity":
       default:
