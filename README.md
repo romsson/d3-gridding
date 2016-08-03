@@ -2,6 +2,8 @@
 
 Grids for d3 charts.
 
+Warning. This is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts
+
 ## Installing
 
 * If you use NPM, `npm install d3-gridding`. 
@@ -89,3 +91,6 @@ Sets the value `accessor` function, similar to [D3's](https://github.com/d3/d3-s
 function value(d) { return d; }
 ```
 
+<a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>padding</b>(<i>value</i>)
+
+Sets the offset between grid elements (default: 1px).

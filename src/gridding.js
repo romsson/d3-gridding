@@ -11,6 +11,7 @@ export default function() {
       cols,
       rows,
       r,
+      padding = 1,
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
       x = d3Scale.scaleLinear(),
@@ -88,12 +89,12 @@ export default function() {
       var col = i % cols;
       var row = Math.floor(i / cols);
 
-      n.x = x(col);
-      n.cx = x(col) + (size[0] / cols) / 2;
-      n.y = y(row);
-      n.cy = y(row) + (size[1] / rows) / 2;
-      n.width = size[0] / cols;
-      n.height = size[1] / rows;
+      n.x = x(col) + padding;
+      n.y = y(row) + padding;
+      n.width = size[0] / cols - 2 * padding;
+      n.height = size[1] / rows - 2 * padding;
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
     });
 
     return nodes;
@@ -190,6 +191,12 @@ export default function() {
   gridding.sort = function(_sort) {
     if(!arguments.length) return _sort;
     sort = _sort;
+    return gridding;
+  }
+
+  gridding.padding = function(_padding) {
+    if(!arguments.length) return _padding;
+    padding = _padding;
     return gridding;
   }
 
