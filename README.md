@@ -68,6 +68,7 @@ The `mode` parameter sets the layout:
 `grid` - classic grid
 `vertical` - vertical layout
 `horizontal` - horizontal layout
+`diagonal` - diagonal layout
 `central` - overlapping layout
 `coordinates` - absolute position
 `radial` - pie chart with uniform wedges

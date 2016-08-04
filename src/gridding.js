@@ -5,7 +5,18 @@ import * as d3Hierarchy from "d3-hierarchy";
 export default function() {
 
   var mode = "identity",
-      modes = {"horizontal": horizontal, "vertical": vertical, "central": central, "grid": grid, "coordinate": coordinate, "radial": radial, "treemap": treemap, "pack": pack,"identity": identity},
+      modes = {
+        "horizontal": horizontal,
+        "vertical": vertical,
+        "central": central,
+        "grid": grid,
+        "coordinate": coordinate,
+        "radial": radial,
+        "treemap": treemap,
+        "pack": pack,
+        "diagonal": diagonal,
+        "identity": identity
+      },
       layout = identity,
       size = [1, 1],
       cols,
@@ -196,6 +207,24 @@ export default function() {
         n.y = packed.children[i].y;
         n.width = packed.children[i].r;
         n.height = packed.children[i].r;
+        n.cx = n.x + n.width / 2;
+        n.cy = n.y + n.height / 2;
+    });
+
+    return nodes;
+  }
+
+  function diagonal(nodes) {
+
+    x.domain([0, nodes.length]).range([0, size[0]]);
+    y.domain([0, nodes.length]).range([0, size[1]]);
+
+    nodes.forEach(function(n, i) {
+
+        n.x = x(i);
+        n.y = y(i);
+        n.width = size[0] / nodes.length;;
+        n.height = size[1] / nodes.length;;
         n.cx = n.x + n.width / 2;
         n.cy = n.y + n.height / 2;
     });
