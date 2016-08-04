@@ -2,6 +2,8 @@
 
 Grids for d3 charts.
 
+<img src="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png" width="100%" height="100" alt="modes">
+
 Warning. This is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts
 
 ## Installing
