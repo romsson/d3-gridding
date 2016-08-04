@@ -144,13 +144,12 @@ export default function() {
     var arcs = pie(nodes);
 
     nodes.forEach(function(n, i) {
-      n.x = arc.centroid(arcs[i])[0] + size[0] / 2 + offset[0];
-      n.y = arc.centroid(arcs[i])[1] + size[1] / 2 + offset[1];
       n.width = size[0] / nodes.length;
       n.height = size[1] / nodes.length;
+      n.x = arc.centroid(arcs[i])[0] + size[0] / 2 + offset[0] - n.width / 2;
+      n.y = arc.centroid(arcs[i])[1] + size[1] / 2 + offset[1] - n.height / 2;
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
-
     });
 
     return nodes;
