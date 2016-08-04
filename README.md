@@ -96,4 +96,8 @@ function value(d) { return d; }
 
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>padding</b>(<i>value</i>)
 
-Sets the offset between grid elements (default: 1px).
+Sets the local offset between grid elements (default: 1px).
+
+<a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>offset</b>(<i>value</i>)
+
+Sets the global offset of all elements (default: 0px).
