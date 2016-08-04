@@ -37,10 +37,11 @@ export default function() {
 
     nodes.forEach(function(n, i) {
       n.x = 0;
-      n.y = n.cy = y(i);
-      n.cx = size[0] / 2;
+      n.y = y(i);
       n.width = size[0];
       n.height = size[1] / nodes.length;
+      n.cx = n.width / 2;
+      n.cy = y(i) + n.height / 2;
     });
 
     return nodes;
@@ -53,10 +54,10 @@ export default function() {
     nodes.forEach(function(n, i) {
       n.x = x(i);
       n.y = 0;
-      n.cx = x(i) + (size[0] / nodes.length) / 2;
-      n.cy = size[1] / 2;
       n.width = size[0] / nodes.length;
       n.height = size[1];
+      n.cx = n.x + n.width / 2;
+      n.cy = n.height / 2;
     });
 
     return nodes;
@@ -67,10 +68,10 @@ export default function() {
     nodes.forEach(function(n, i) {
       n.x = 0;
       n.y = 0;
-      n.cx = size[0] / 2;
-      n.cy = size[1] / 2;
       n.width = size[0];
       n.height = size[1];
+      n.cx = n.width / 2;
+      n.cy = n.height / 2;
     });
 
     return nodes;
@@ -106,10 +107,12 @@ export default function() {
     y.domain([0, 1]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
-      n.x = n.cx = x(Math.random());
-      n.y = n.cy = y(Math.random());
+      n.x = x(Math.random());
+      n.y = y(Math.random());
       n.width = size[0] / nodes.length;
       n.height = size[1] / nodes.length;
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
     });
 
     return nodes;
@@ -134,6 +137,9 @@ export default function() {
       n.y = n.cy = arc.centroid(arcs[i])[1] + r;
       n.width = size[0] / nodes.length;
       n.height = size[1] / nodes.length;
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
+
     });
 
     return nodes;
@@ -157,10 +163,12 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-        n.x = n.cx = tree.children[i].x0;
-        n.y = n.cy = tree.children[i].y0;
+        n.x = tree.children[i].x0;
+        n.y = tree.children[i].y0;
         n.width = tree.children[i].x1 - n.x;
         n.height = tree.children[i].y1 - n.y;
+        n.cx = n.x + n.width / 2;
+        n.cy = n.y + n.height / 2;
 
     });
 
@@ -184,11 +192,12 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-        n.x = n.cx = packed.children[i].x;
-        n.y = n.cy = packed.children[i].y;
+        n.x = packed.children[i].x;
+        n.y = packed.children[i].y;
         n.width = packed.children[i].r;
         n.height = packed.children[i].r;
-
+        n.cx = n.x + n.width / 2;
+        n.cy = n.y + n.height / 2;
     });
 
     return nodes;
