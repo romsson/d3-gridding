@@ -2,9 +2,13 @@
 
 Grids for d3 charts.
 
-<a href="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png"><img src="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png" width="403" height="296" alt="modes"></a>
+<p align="center">
+  <a href="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png">
+    <img src="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png" width="403" height="296" alt="modes">
+  </a>
+</p>
 
-Warning. This is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts
+Warning! This is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts.
 
 ## Installing
 
@@ -67,16 +71,16 @@ var points = svgPoints.selectAll(".point")
 
 The `mode` parameter sets the layout:
 
-`grid` - classic grid
-`vertical` - vertical layout
-`horizontal` - horizontal layout
-`diagonal` - diagonal layout
-`central` - overlapping layout
-`coordinates` - absolute position
-`radial` - pie chart with uniform wedges
-`treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
-`pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
-`identity` - does nothing, returns same values
+* `grid` - classic grid
+* `vertical` - vertical layout
+* `horizontal` - horizontal layout
+* `diagonal` - diagonal layout
+* `central` - overlapping layout
+* `coordinates` - absolute position
+* `radial` - pie chart with uniform wedges
+* `treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
+* `pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
+* `identity` - does nothing, returns same values
 
 To get the list of all available modes `gridding.modes()`
 
@@ -102,4 +106,4 @@ Sets the local offset between grid elements (default: 1px).
 
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>offset</b>(<i>value</i>)
 
-Sets the global offset of all elements (default: 0px).
+Sets the global offset for all elements (default: 0px) as an array `[left, top]`.
