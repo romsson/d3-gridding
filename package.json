@@ -1,6 +1,6 @@
 {
   "name": "d3-gridding",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "grid partitions and overlays for d3 charts",
   "keywords": [
     "d3",
@@ -28,6 +28,7 @@
     "uglify-js": "2"
   },
   "dependencies": {
+    "d3-hierarchy": "^1.0.2",
     "d3-scale": "^1.0.1",
     "d3-shape": "^1.0.2"
   }
