@@ -22,7 +22,7 @@ In both cases, you then have to include the `d3-gridding.js` JavaScript file in 
 
 Here is a simple example:
 
-```
+```js
 var data = d3.range(10);
 
 var gridding = d3.gridding()
@@ -44,7 +44,7 @@ The key part is the `gridding` variable that adds position variables to the arra
 
 `[▶ Object, ▶ Object, ▶ Object]`
 
-```
+```js
 [▼ Object
     x: 0
     y: 300
@@ -54,13 +54,13 @@ The key part is the `gridding` variable that adds position variables to the arra
     width: 266.6666666666667
 ```
 
-(`x`, `y`) the computed coordinates
-(`cx`, `cy`) the center of the coordinates
-(`height`, `width`) gives the bounding box if combined with (`x`, `y`) (which can be seen as `top` / `left` values).
+(`x`, `y`) the computed coordinates (which can be seen as `top` / `left` values)
+(`height`, `width`) gives the bounding box if combined with (`x`, `y`)
+(`cx`, `cy`) the center of the bounding box
 
-To update (such as to change the layout mode):
+To change the layout mode:
 
-```
+```js
 gridding.mode("horizontal");
 
 var points = svgPoints.selectAll(".point")
@@ -88,7 +88,7 @@ To get the list of all available modes `gridding.modes()`
 
 Sets the sort function, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_sort) and defaults to:
 
-```
+```js
 function(a, b) { return a - b; }
 ```
 
@@ -96,7 +96,7 @@ function(a, b) { return a - b; }
 
 Sets the value `accessor` function, similar to [D3's](https://github.com/d3/d3-shape/blob/master/README.md#pie_value) and defaults to:
 
-```
+```js
 function value(d) { return d; }
 ```
 
