@@ -18,14 +18,16 @@
     "pretest": "rm -rf build && mkdir build && rollup -c rollup.config.js -f umd -g d3-shape:d3,d3-scale:d3,d3-hierarchy:d3 -n d3 -o build/d3-gridding.js -- index.js",
     "test": "tape 'test/**/*-test.js'",
     "prepublish": "npm run test && uglifyjs build/d3-gridding.js -c -m -o build/d3-gridding.min.js",
+    "prepublish:watch": "watch 'npm run pretest' ./src ./test",
     "postpublish": "zip -j build/d3-gridding.zip -- LICENSE README.md build/d3-gridding.js build/d3-gridding.min.js"
   },
   "devDependencies": {
+    "rollup": "0.27",
     "rollup-plugin-commonjs": "^2.2.1",
     "rollup-plugin-node-resolve": "^1.4.0",
-    "rollup": "0.27",
     "tape": "4",
-    "uglify-js": "2"
+    "uglify-js": "2",
+    "watch": "^0.19.1"
   },
   "dependencies": {
     "d3-hierarchy": "^1.0.2",
