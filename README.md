@@ -71,15 +71,16 @@ var points = svgPoints.selectAll(".point")
 
 The `mode` parameter sets the layout:
 
-* `grid` - classic grid
 * `vertical` - vertical layout
 * `horizontal` - horizontal layout
-* `diagonal` - diagonal layout
 * `central` - overlapping layout
-* `coordinates` - absolute position
+* `grid` - classic grid
+* `coordinate` - absolute position
 * `radial` - pie chart with uniform wedges
 * `treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
 * `pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
+* `diagonal`  - aligned on the diagonal
+* `cascade` - like diagonal but with larger and overlapping cells 
 * `identity` - does nothing, returns same values
 
 To get the list of all available modes `gridding.modes()`
