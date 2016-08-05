@@ -25,6 +25,7 @@ export default function() {
       padding = 1,
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
+      orient = "down",
       x = d3Scale.scaleLinear(),
       y = d3Scale.scaleLinear();
 
@@ -114,8 +115,14 @@ export default function() {
       n.y = y(row) + padding + offset[1];
       n.width = size[0] / cols - 2 * padding;
       n.height = size[1] / rows - 2 * padding;
+
+      if(orient == "up") {
+        n.y = height - n.y - n.height;
+      }
+
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
+
     });
 
     return nodes;
@@ -254,9 +261,9 @@ export default function() {
     return d3.keys(modes);
   }
 
-  gridding.size = function(value) {
+  gridding.size = function(_size) {
     if(!arguments.length) return size;
-    size = value;
+    size = _size;
     return gridding;
   }
 
@@ -281,6 +288,12 @@ export default function() {
   gridding.offset = function(_offset) {
     if(!arguments.length) return _offset;
     offset = _offset;
+    return gridding;
+  }
+
+  gridding.orient = function(_orient) {
+    if(!arguments.length) return _orient;
+    orient = _orient;
     return gridding;
   }
 

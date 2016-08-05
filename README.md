@@ -45,7 +45,7 @@ The key part is the `gridding` variable that adds position variables to the arra
 `[▶ Object, ▶ Object, ▶ Object]`
 
 ```js
-[▼ Object
+[▼ Object                    ]
     x: 0
     y: 300
     cx: 300
@@ -107,3 +107,7 @@ Sets the local offset between grid elements (default: 1px).
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>offset</b>(<i>value</i>)
 
 Sets the global offset for all elements (default: 0px) as an array `[left, top]`.
+
+<a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>orient</b>(<i>"up" | "down" (default)</i>)
+
+Orients the `grid` either upwards or downwards when adding / removing cells.
