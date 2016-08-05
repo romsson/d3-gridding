@@ -110,4 +110,4 @@ Sets the global offset for all elements (default: 0px) as an array `[left, top]`
 
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>orient</b>(<i>"up" | "down" (default)</i>)
 
-Orients the `grid` either upwards or downwards when adding / removing cells.
+Orients the `grid` & `diagonal` layouts either upwards or downwards when adding / removing cells.
