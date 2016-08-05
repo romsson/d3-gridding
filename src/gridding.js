@@ -14,7 +14,8 @@ export default function() {
         "radial": radial,
         "treemap": treemap,
         "pack": pack,
-        "diagonal": diagonal
+        "diagonal": diagonal,
+        "cascade": cascade
       },
       layout = identity,
       size = [1, 1],
@@ -243,6 +244,26 @@ export default function() {
 
       n.width = size[0] / nodes.length;
       n.height = size[1] / nodes.length;
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
+    });
+
+    return nodes;
+  }
+
+  function cascade(nodes) {
+
+    var spacing = size[0] * 2;
+
+    x.domain([0, nodes.length]).range([0, spacing / nodes.length]);
+    y.domain([0, nodes.length]).range([0, spacing / nodes.length]);
+
+    nodes.forEach(function(n, i) {
+
+      n.x = x(i) + offset[0];
+      n.y = y(i) + offset[1];
+      n.width = size[0] - spacing / nodes.length;
+      n.height = size[1] - spacing / nodes.length;
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
     });
