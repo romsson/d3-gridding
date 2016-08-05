@@ -233,7 +233,7 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      if(orient == "down") {
+      if(orient == "up") {
         n.x = x(i) + offset[0];
         n.y = height - (y(i) + offset[1]) - size[1] / nodes.length;
       } else {
@@ -257,7 +257,7 @@ export default function() {
 
     if(mode === "identity") {
       layout = identity;
-    } else {
+    } else if(d3.keys(modes).indexOf(value) >= 0) {
       layout = modes[mode];
     }
 
