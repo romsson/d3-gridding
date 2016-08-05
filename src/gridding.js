@@ -39,6 +39,15 @@ export default function() {
 
   function identity(nodes) {
 
+    nodes.forEach(function(n, i) {
+      n.x = n.x || 0;
+      n.y = n.y || 0;
+      n.width = n.width || size[0];
+      n.height = n.height || size[1];
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
+    });
+
     return nodes;
   }
 
@@ -52,7 +61,7 @@ export default function() {
       n.width = size[0];
       n.height = size[1] / nodes.length;
       n.cx = n.width / 2;
-      n.cy = y(i) + n.height / 2;
+      n.cy = n.y + n.height / 2;
     });
 
     return nodes;
@@ -172,14 +181,12 @@ export default function() {
         );
 
     nodes.forEach(function(n, i) {
-
         n.x = tree.children[i].x0 + offset[0];
         n.y = tree.children[i].y0 + offset[1];
         n.width = tree.children[i].x1 - tree.children[i].x0;
         n.height = tree.children[i].y1 - tree.children[i].y0;
         n.cx = n.x + n.width / 2;
         n.cy = n.y + n.height / 2;
-
     });
 
     return nodes;
@@ -201,7 +208,6 @@ export default function() {
         );
 
     nodes.forEach(function(n, i) {
-
         n.x = packed.children[i].x + offset[0];
         n.y = packed.children[i].y + offset[1];
         n.width = packed.children[i].r;
@@ -219,7 +225,6 @@ export default function() {
     y.domain([0, nodes.length]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
-
         n.x = x(i) + offset[0];
         n.y = y(i) + offset[1];
         n.width = size[0] / nodes.length;
