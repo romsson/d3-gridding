@@ -14,6 +14,7 @@ export default function() {
         "radial": radial,
         "treemap": treemap,
         "pack": pack,
+        "stack": stack,
         "diagonal": diagonal,
         "cascade": cascade
       },
@@ -56,7 +57,7 @@ export default function() {
   function horizontal(nodes) {
 
     rows = nodes.length;
-    y.domain([0, nodes.length]).range([0, size[1]]);
+    y.domain([0, rows]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
       n.x = 0 + offset[0];
@@ -224,6 +225,35 @@ export default function() {
       n.y = packed.children[i].y + offset[1];
       n.width = packed.children[i].r;
       n.height = packed.children[i].r;
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
+    });
+
+    return nodes;
+  }
+
+  function stack(nodes) {
+
+    var stack = d3.stack()
+        .keys(nodes.map(function(d, i) { return i + "_"; }))
+        .value(function(d, key) { return nodes.indexOf(d[key]); });
+
+    y.domain([0, d3.sum(d3.range(nodes.length)) + nodes.length]).range([0, size[1]]);
+
+    var new_data = {};
+
+    nodes.map(function(d, i) {
+      new_data[i+"_"] = d;
+    })
+
+    var stacked = stack([new_data]);
+
+    nodes.forEach(function(n, i) {
+      var s = stacked[i][0];
+      n.x = offset[0];
+      n.y = y(s[1]) + offset[1];
+      n.width = size[0];
+      n.height = y(s[1]) - y(s[0]);
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
     });
