@@ -55,13 +55,14 @@ export default function() {
 
   function horizontal(nodes) {
 
+    rows = nodes.length;
     y.domain([0, nodes.length]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
       n.x = 0 + offset[0];
       n.y = y(i) + offset[1];
       n.width = size[0];
-      n.height = size[1] / nodes.length;
+      n.height = size[1] / rows;
       n.cx = n.width / 2;
       n.cy = n.y + n.height / 2;
     });
@@ -71,12 +72,13 @@ export default function() {
 
   function vertical(nodes) {
 
-    x.domain([0, nodes.length]).range([0, size[0]]);
+    cols = nodes.length;
+    x.domain([0, cols]).range([0, size[0]]);
 
     nodes.forEach(function(n, i) {
       n.x = x(i) + offset[0];
       n.y = 0 + offset[1];
-      n.width = size[0] / nodes.length;
+      n.width = size[0] / cols;
       n.height = size[1];
       n.cx = n.x + n.width / 2;
       n.cy = n.height / 2;
@@ -86,6 +88,8 @@ export default function() {
   }
 
   function central(nodes) {
+
+    cols = rows = 1;
 
     nodes.forEach(function(n, i) {
       n.x = 0 + offset[0];
@@ -302,26 +306,38 @@ export default function() {
   }
 
   gridding.sort = function(_sort) {
-    if(!arguments.length) return _sort;
+    if(!arguments.length) return sort;
     sort = _sort;
     return gridding;
   }
 
   gridding.padding = function(_padding) {
-    if(!arguments.length) return _padding;
+    if(!arguments.length) return padding;
     padding = _padding;
     return gridding;
   }
 
   gridding.offset = function(_offset) {
-    if(!arguments.length) return _offset;
+    if(!arguments.length) return offset;
     offset = _offset;
     return gridding;
   }
 
   gridding.orient = function(_orient) {
-    if(!arguments.length) return _orient;
+    if(!arguments.length) return orient;
     orient = _orient;
+    return gridding;
+  }
+
+  gridding.cols = function(_cols) {
+    if(!arguments.length) return cols;
+    cols = _cols;
+    return gridding;
+  }
+
+  gridding.rows = function(_rows) {
+    if(!arguments.length) return rows;
+    rows = _rows;
     return gridding;
   }
 
