@@ -282,7 +282,7 @@ export default function() {
 
     if(mode === "identity") {
       layout = identity;
-    } else if(d3.keys(modes).indexOf(value) >= 0) {
+    } else if(Object.keys(modes).indexOf(value) >= 0) {
       layout = modes[mode];
     }
 
@@ -290,7 +290,7 @@ export default function() {
   }
 
   gridding.modes = function() {
-    return d3.keys(modes);
+    return Object.keys(modes);
   }
 
   gridding.size = function(_size) {
