@@ -79,6 +79,7 @@ The `mode` parameter sets the layout:
 * `radial` - pie chart with uniform wedges
 * `treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
 * `pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
+* `stack` - [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
 * `diagonal`  - aligned on the diagonal
 * `cascade` - like diagonal but with larger and overlapping cells 
 * `identity` - does nothing, returns same values
