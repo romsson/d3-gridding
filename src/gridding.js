@@ -21,6 +21,7 @@ export default function() {
       },
       layout = identity,
       size = [1, 1],
+      cellSize,
       offset = [0, 0],
       cols,
       rows,
@@ -28,6 +29,8 @@ export default function() {
       padding = 1,
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
+      valueX,
+      valueY,
       orient = "down",
       x = d3Scale.scaleLinear(),
       y = d3Scale.scaleLinear();
@@ -141,14 +144,26 @@ export default function() {
 
   function coordinate(nodes) {
 
-    x.domain([0, 1]).range([0, size[0]]);
-    y.domain([0, 1]).range([0, size[1]]);
+    // Create random data if no value function has been set
+    if(!valueX) {
+      valueX = function() { return Math.random(); }
+      x.domain([0, 1]).range([0, size[0]]);
+    } else {
+      x.domain(d3.extent(nodes, valueX)).range([0, size[0]]);
+    }
+
+    if(!valueY) {
+      valueY = function() { return Math.random(); }
+      y.domain([0, 1]).range([0, size[1]]);
+    } else {
+      y.domain(d3.extent(nodes, valueY)).range([0, size[1]]);
+    }
 
     nodes.forEach(function(n, i) {
-      n.x = x(Math.random()) + offset[0];
-      n.y = y(Math.random()) + offset[1];
-      n.width = size[0] / nodes.length;
-      n.height = size[1] / nodes.length;
+      n.x = x(valueX(n)) + offset[0];
+      n.y = y(valueY(n)) + offset[1];
+      n.width = cellSize ? cellSize[0]: size[0] / nodes.length;
+      n.height = cellSize ? cellSize[1]: size[1] / nodes.length;
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
     });
@@ -159,7 +174,7 @@ export default function() {
   function radial(nodes) {
 
     if(!radius) {
-      radius = Math.min(size[0], size[1]) / 2;
+      radius = Math.min(size[0], size[1]) - 2 * (size[1] / nodes.length);
     }
 
     var arc = d3Shape.arc()
@@ -242,7 +257,7 @@ export default function() {
   function stack(nodes) {
 
     var stack = d3.stack()
-        .keys(nodes.map(function(d, i) { return i + "_"; }))
+        .keys(nodes.map(function(d, i) { return i + "_"; })) // Creates unique ids for nodes
         .value(function(d, key) { return nodes.indexOf(d[key]); });
 
     y.domain([0, d3.sum(d3.range(nodes.length)) + nodes.length]).range([0, size[1]]);
@@ -367,9 +382,27 @@ export default function() {
     return gridding;
   }
 
+  gridding.cellSize = function(_cellSize) {
+    if(!arguments.length) return cellSize;
+    cellSize = _cellSize;
+    return gridding;
+  }
+
   gridding.value = function(_value) {
     if(!arguments.length) return value;
     value = _value;
+    return gridding;
+  }
+
+  gridding.valueX = function(_valueX) {
+    if(!arguments.length) return valueX;
+    valueX = _valueX;
+    return gridding;
+  }
+
+  gridding.valueY = function(_valueY) {
+    if(!arguments.length) return valueY;
+    valueY = _valueY;
     return gridding;
   }
 
