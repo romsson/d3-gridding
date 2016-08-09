@@ -33,6 +33,10 @@ export default function() {
 
   function gridding(nodes) {
 
+    if(typeof nodes[0] !== "object") {
+      nodes = Array.apply(null, Array(nodes.length)).map(function() { return new Object(); });
+    }
+
     nodes.sort(function(a, b) {
       return sort(value(a), value(b));
     });
