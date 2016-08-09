@@ -1,14 +1,14 @@
 # d3-gridding
 
-Grids for d3 charts.
+Grid layouts for d3 charts.
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png">
+  <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
     <img src="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png" width="403" height="296" alt="modes">
   </a>
 </p>
 
-Warning! This is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts.
+> Be aware this is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts. Once this will be done, it should be reflected with a major version upgrade.
 
 ## Installing
 
@@ -20,7 +20,7 @@ In both cases, you then have to include the `d3-gridding.js` JavaScript file in 
 
 ## API
 
-Here is a simple example:
+The code snippet below lets you create dots organized as a grid:
 
 ```js
 var data = d3.range(10);
@@ -38,7 +38,7 @@ points.enter().append("circle")
   .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
 ```
 
-The key part is the `gridding` variable that adds position variables to the array of objects given as input:
+The magic happens with `gridding` which turns an array of JavaScript Objects, into another array with additional attributes:
 
 `> gridding([{}, {}, {}])`
 
@@ -54,11 +54,11 @@ The key part is the `gridding` variable that adds position variables to the arra
     width: 266.6666666666667
 ```
 
-(`x`, `y`) the computed coordinates (which can be seen as `top` / `left` values)
-(`height`, `width`) gives the bounding box if combined with (`x`, `y`)
-(`cx`, `cy`) the center of the bounding box
+* (`x`, `y`) the computed coordinates (which can be seen as `top` / `left` values)
+* (`height`, `width`) gives the bounding box if combined with (`x`, `y`)
+* (`cx`, `cy`) the center of the bounding box
 
-To change the layout mode:
+It becomes interesting when changing the type of layout, which will organize the elements differently, by changing the value of the attributes above:
 
 ```js
 gridding.mode("horizontal");
@@ -66,6 +66,8 @@ gridding.mode("horizontal");
 var points = svgPoints.selectAll(".point")
   .data(gridding(data));
 ```
+
+That's pretty much what you need to know at this point to get started. Below is a list of functions that will let you customize the layouts and retrieve internal values.
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
 
@@ -113,3 +115,9 @@ Sets the global offset for all elements (default: 0px) as an array `[left, top]`
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>orient</b>(<i>"up" | "down" (default)</i>)
 
 Orients the `grid` & `diagonal` layouts either upwards or downwards when adding / removing cells.
+
+## Credits
+
+* https://d3js.org/
+* http://bl.ocks.org/mbostock
+* https://github.com/interactivethings/d3-grid
