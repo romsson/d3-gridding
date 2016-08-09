@@ -116,6 +116,10 @@ Sets the global offset for all elements (default: 0px) as an array `[left, top]`
 
 Orients the `grid` & `diagonal` layouts either upwards or downwards when adding / removing cells.
 
+<a name="gridding_radius" href="#gridding_radius">#</a> <i>d3.gridding()</i>.<b>radius</b>(<i>value</i>)
+
+Radius for radial layout.
+
 ## Credits
 
 * https://d3js.org/

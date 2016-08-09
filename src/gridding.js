@@ -24,7 +24,7 @@ export default function() {
       offset = [0, 0],
       cols,
       rows,
-      r,
+      radius,
       padding = 1,
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
@@ -158,10 +158,12 @@ export default function() {
 
   function radial(nodes) {
 
-    r = Math.min(size[0], size[1]) / 2;
+    if(!radius) {
+      radius = Math.min(size[0], size[1]) / 2;
+    }
 
     var arc = d3Shape.arc()
-        .outerRadius(r)
+        .outerRadius(radius)
         .innerRadius(0);
 
     var pie = d3Shape.pie()
@@ -310,13 +312,12 @@ export default function() {
     return nodes;
   }
 
-
   function brick(nodes) {
 
     cols = Math.ceil(Math.sqrt(nodes.length));
     rows = Math.ceil(nodes.length / cols);
 
-    x.domain([0, cols + 1 /2]).range([0, size[0]]);
+    x.domain([0, cols + 1 / 2]).range([0, size[0]]);
     y.domain([0, rows]).range([0, size[1]]);
 
     nodes.forEach(function(n, i) {
@@ -405,6 +406,12 @@ export default function() {
   gridding.rows = function(_rows) {
     if(!arguments.length) return rows;
     rows = _rows;
+    return gridding;
+  }
+
+  gridding.radius = function(_radius) {
+    if(!arguments.length) return radius;
+    radius = _radius;
     return gridding;
   }
 
