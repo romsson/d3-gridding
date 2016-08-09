@@ -16,7 +16,8 @@ export default function() {
         "pack": pack,
         "stack": stack,
         "diagonal": diagonal,
-        "cascade": cascade
+        "cascade": cascade,
+        "brick": brick
       },
       layout = identity,
       size = [1, 1],
@@ -304,6 +305,38 @@ export default function() {
       n.height = size[1] - spacing / nodes.length;
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
+    });
+
+    return nodes;
+  }
+
+
+  function brick(nodes) {
+
+    cols = Math.ceil(Math.sqrt(nodes.length));
+    rows = Math.ceil(nodes.length / cols);
+
+    x.domain([0, cols + 1 /2]).range([0, size[0]]);
+    y.domain([0, rows]).range([0, size[1]]);
+
+    nodes.forEach(function(n, i) {
+
+      var col = i % cols;
+      var row = Math.floor(i / cols);
+
+      n.x = x(col) + padding + offset[0];
+      n.y = y(row) + padding + offset[1];
+
+      n.width = size[0] / (cols + 1 / 2) - 2 * padding;
+      n.height = size[1] / rows - 2 * padding;
+
+      if(row % 2 === 1) {
+        n.x += n.width / 2;
+      }
+
+      n.cx = n.x + n.width / 2;
+      n.cy = n.y + n.height / 2;
+
     });
 
     return nodes;
