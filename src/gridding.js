@@ -199,7 +199,6 @@ export default function() {
     return nodes;
   }
 
-
   function treemap(nodes) {
 
     var treemap = d3.treemap()
@@ -346,8 +345,14 @@ export default function() {
       n.width = size[0] / (cols + 1 / 2) - 2 * padding;
       n.height = size[1] / rows - 2 * padding;
 
-      if(row % 2 === 1) {
-        n.x += n.width / 2;
+      if(orient === "left") {
+        if(row % 2 === 1) {
+          n.x += n.width / 2;
+        }
+      } else {
+        if(row % 2 === 0) {
+          n.x += n.width / 2;
+        }
       }
 
       n.cx = n.x + n.width / 2;
