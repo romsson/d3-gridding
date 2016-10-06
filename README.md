@@ -1,6 +1,8 @@
 # d3-gridding
 
-Grid layouts for d3 charts.
+[![npm version](https://badge.fury.io/js/d3-gridding.svg)](https://badge.fury.io/js/d3-gridding)
+
+Grids for d3 charts.
 
 <p align="center">
   <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
