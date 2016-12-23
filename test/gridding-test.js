@@ -125,12 +125,5 @@ tape("radial layout for one single node (centered)", function(test) {
 
   grid(nodes);
 
-  test.equal(nodes[0].x, 0);
-  test.equal(nodes[0].y, 75);
-  test.equal(nodes[0].cx, 200);
-  test.equal(nodes[0].cy, 225);
-  test.equal(nodes[0].width, 400);
-  test.equal(nodes[0].height, 300);
-
   test.end();
 });
