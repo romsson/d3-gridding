@@ -17,6 +17,7 @@ export default function() {
         "stack": stack,
         "diagonal": diagonal,
         "cascade": cascade,
+        "pyramid": pyramid,
         "brick": brick
       },
       layout = identity,
@@ -324,6 +325,28 @@ export default function() {
       n.height = size[1] - spacing / nodes.length;
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
+
+    });
+
+    return nodes;
+  }
+
+  function pyramid(nodes) {
+
+    var spacing = size[0] * 2;
+
+    var shiftX = size[0] / (2 * nodes.length );
+    var shiftY = size[1] / (2 * nodes.length );
+
+    nodes.forEach(function(n, i) {
+
+      n.x = 0 + offset[0] + shiftX * i;
+      n.y = 0 + offset[1] + shiftY * i;
+      n.width = size[0] - shiftX * i * 2;
+      n.height = size[1] - shiftY * i * 2;
+      n.cx = n.width / 2 + shiftX * i;
+      n.cy = n.height / 2+ shiftY * i;
+
     });
 
     return nodes;
