@@ -37,7 +37,10 @@ export default function() {
 
   function gridding(nodes) {
 
-    if(typeof nodes[0] !== "object") {
+    if(typeof nodes[0] === "string") {
+      nodes = Array.prototype.map.call(nodes, function(d) { return {"__value": d}; });
+      value = function(d) { return d.__value.toLowerCase(); }
+    } else if(typeof nodes[0] !== "object") {
       nodes = Array.apply(null, Array(nodes.length)).map(function() { return new Object(); });
     }
 
