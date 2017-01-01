@@ -79,7 +79,7 @@ The `mode` parameter sets the layout:
 * `horizontal` - horizontal layout
 * `central` - overlapping layout
 * `grid` - classic grid
-* `coordinate` - absolute position
+* `coordinate` - absolute position by `.valueX()` and `.valueY()`
 * `radial` - pie chart with uniform wedges
 * `treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
 * `pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
@@ -97,6 +97,8 @@ Sets the sort function, similar to [D3's](https://github.com/d3/d3-shape/blob/ma
 ```js
 function(a, b) { return a - b; }
 ```
+
+Thus you can use D3's sorting functions such as `d3.ascending` and `d3.descending`.
 
 <a name="gridding_value" href="#gridding_value">#</a> <i>d3.gridding()</i>.<b>value</b>([<i>accessor</i>])
 
