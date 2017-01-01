@@ -75,20 +75,20 @@ That's pretty much what you need to know at this point to get started. Below is 
 
 The `mode` parameter sets the layout:
 
-* `vertical` - vertical layout
-* `horizontal` - horizontal layout
-* `central` - overlapping layout
-* `grid` - classic grid
+* `vertical` - vertical partitioning
+* `horizontal` - horizontal partitioning
+* `central` - overlapping partitioning
+* `grid` - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
-* `radial` - pie chart with uniform wedges
-* `treemap` - [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
-* `pack` - [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
-* `stack` - [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
+* `radial` - circular partitioning (e.g. pie chart with uniform wedges)
+* `treemap` - using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
+* `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
+* `stack` - using [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
 * `diagonal`  - aligned on the diagonal
 * `cascade` - like diagonal but with larger and overlapping cells 
 * `identity` - does nothing, returns same values
 
-To get the list of all available modes `gridding.modes()`
+To get the list of all available modes `gridding.modes()`.
 
 <a name="gridding_sort" href="#gridding_sort">#</a> <i>d3.gridding()</i>.<b>sort</b>([<i>compare</i>])
 
