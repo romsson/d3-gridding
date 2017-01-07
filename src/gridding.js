@@ -1,5 +1,6 @@
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from "d3-shape";
+import * as d3Array from "d3-array";
 import * as d3Hierarchy from "d3-hierarchy";
 
 export default function() {
@@ -54,7 +55,7 @@ export default function() {
 
   function identity(nodes) {
 
-    nodes.forEach(function(n, i) {
+    nodes.forEach(function(n) {
       n.x = n.x || 0;
       n.y = n.y || 0;
       n.width = n.width || size[0];
@@ -104,7 +105,7 @@ export default function() {
 
     cols = rows = 1;
 
-    nodes.forEach(function(n, i) {
+    nodes.forEach(function(n) {
       n.x = 0 + offset[0];
       n.y = 0 + offset[1];
       n.width = size[0];
@@ -158,17 +159,17 @@ export default function() {
       valueX = function() { return Math.random(); }
       x.domain([0, 1]).range([0, size[0]]);
     } else {
-      x.domain(d3.extent(nodes, valueX)).range([0, size[0]]);
+      x.domain(d3Array.extent(nodes, valueX)).range([0, size[0]]);
     }
 
     if(!valueY) {
       valueY = function() { return Math.random(); }
       y.domain([0, 1]).range([0, size[1]]);
     } else {
-      y.domain(d3.extent(nodes, valueY)).range([0, size[1]]);
+      y.domain(d3Array.extent(nodes, valueY)).range([0, size[1]]);
     }
 
-    nodes.forEach(function(n, i) {
+    nodes.forEach(function(n) {
       n.x = x(valueX(n)) + offset[0];
       n.y = y(valueY(n)) + offset[1];
       n.width = cellSize ? cellSize[0]: size[0] / nodes.length;
@@ -192,7 +193,7 @@ export default function() {
 
     var pie = d3Shape.pie()
         .sort(sort)
-        .value(function(d) { return 1; });
+        .value(function() { return 1; });
 
     var arcs = pie(nodes);
 
@@ -210,17 +211,16 @@ export default function() {
 
   function treemap(nodes) {
 
-    var treemap = d3.treemap()
+    var treemap = d3Hierarchy.treemap()
         .size([size[0], size[1]])
         .padding(padding);
 
-    var tree = treemap(d3.stratify()
+    var tree = treemap(d3Hierarchy.stratify()
         .id(function(d, i) { return i; })
         .parentId(function(d, i) {
           return i === 0 ? "": 0;
-        })
-        ([{}].concat(nodes))
-          .sum(function(d, i) { return 1; })
+        })([{}].concat(nodes))
+          .sum(function() { return 1; })
         );
 
     nodes.forEach(function(n, i) {
@@ -237,17 +237,16 @@ export default function() {
 
   function pack(nodes) {
 
-    var pack = d3.pack()
+    var pack = d3Hierarchy.pack()
         .size([size[0], size[1]])
         .padding(padding);
 
-    var packed = pack(d3.stratify()
+    var packed = pack(d3Hierarchy.stratify()
         .id(function(d, i) { return i; })
         .parentId(function(d, i) {
           return i === 0 ? "": 0;
-        })
-        ([{}].concat(nodes))
-          .sum(function(d, i) { return 1; })
+        })([{}].concat(nodes))
+          .sum(function() { return 1; })
         );
 
     nodes.forEach(function(n, i) {
@@ -264,11 +263,11 @@ export default function() {
 
   function stack(nodes) {
 
-    var stack = d3.stack()
+    var stack = d3Hierarchy.stack()
         .keys(nodes.map(function(d, i) { return i + "_"; })) // Creates unique ids for nodes
         .value(function(d, key) { return nodes.indexOf(d[key]); });
 
-    y.domain([0, d3.sum(d3.range(nodes.length)) + nodes.length]).range([0, size[1]]);
+    y.domain([0, d3Array.sum(d3Array.range(nodes.length)) + nodes.length]).range([0, size[1]]);
 
     var new_data = {};
 
@@ -300,7 +299,7 @@ export default function() {
 
       if(orient == "up") {
         n.x = x(i) + offset[0];
-        n.y = height - (y(i) + offset[1]) - size[1] / nodes.length;
+        n.y = size[1] - (y(i) + offset[1]) - size[1] / nodes.length;
       } else {
         n.x = x(i) + offset[0];
         n.y = y(i) + offset[1];
@@ -337,8 +336,6 @@ export default function() {
   }
 
   function pyramid(nodes) {
-
-    var spacing = size[0] * 2;
 
     var shiftX = size[0] / (2 * nodes.length );
     var shiftY = size[1] / (2 * nodes.length );
@@ -485,4 +482,4 @@ export default function() {
   }
 
   return gridding;
-};
+}
