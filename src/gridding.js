@@ -121,6 +121,11 @@ export default function() {
     cols = Math.ceil(Math.sqrt(nodes.length));
     rows = Math.ceil(nodes.length / cols);
 
+    if(typeof cellSize !== "undefined") {
+      size[0] = cellSize[0] * cols;
+      size[1] = cellSize[1] * rows;
+    }
+
     x.domain([0, cols]).range([0, size[0]]);
     y.domain([0, rows]).range([0, size[1]]);
 
@@ -135,7 +140,7 @@ export default function() {
       n.height = size[1] / rows - 2 * padding;
 
       if(orient == "up") {
-        n.y = height - n.y - n.height;
+        n.y = size[1] - n.y - n.height;
       }
 
       n.cx = n.x + n.width / 2;
