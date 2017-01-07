@@ -1,6 +1,6 @@
 {
   "name": "d3-gridding",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Grid partitions for visual representation.",
   "keywords": [
     "d3",
@@ -21,8 +21,8 @@
     "url": "http://romain.vuillemot.net/"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && rollup --banner \"$(preamble)\" -c rollup.config.js -f umd -g d3-shape:d3,d3-scale:d3,d3-hierarchy:d3 -n d3 -o build/d3-gridding.js -- index.js",
-    "test": "tape 'test/**/*-test.js'",
+    "pretest": "rm -rf build && mkdir build && rollup --banner \"$(preamble)\" -c rollup.config.js -f umd -g d3-array:d3,d3-shape:d3,d3-scale:d3,d3-hierarchy:d3 -n d3 -o build/d3-gridding.js -- index.js",
+    "test": "tape 'test/**/*-test.js' && eslint index.js src test",
     "prepublish": "npm run test && uglifyjs --preamble \"$(preamble)\" build/d3-gridding.js -c -m -o build/d3-gridding.min.js",
     "prepublish:watch": "watch 'npm run pretest' ./src ./test",
     "postpublish": "zip -j build/d3-gridding.zip -- LICENSE README.md build/d3-gridding.js build/d3-gridding.min.js"
@@ -33,12 +33,14 @@
     "rollup-plugin-node-resolve": "^1.4.0",
     "tape": "4",
     "uglify-js": "2",
-    "watch": "^0.19.1"
+    "watch": "^0.19.1",
+    "eslint": "^3.13.0",
+    "package-preamble": "0.0.2"
   },
   "dependencies": {
+    "d3-array": "^1.0.2",
     "d3-hierarchy": "^1.0.2",
     "d3-scale": "^1.0.1",
-    "d3-shape": "^1.0.2",
-    "package-preamble": "0.0.2"
+    "d3-shape": "^1.0.2"
   }
 }
