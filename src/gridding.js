@@ -18,6 +18,7 @@ export default function() {
         "stack": stack,
         "diagonal": diagonal,
         "cascade": cascade,
+        "corner": corner,
         "pyramid": pyramid,
         "brick": brick
       },
@@ -342,6 +343,25 @@ export default function() {
       n.height = size[1] - spacing / nodes.length;
       n.cx = n.x + n.width / 2;
       n.cy = n.y + n.height / 2;
+
+    });
+
+    return nodes;
+  }
+
+  function corner(nodes) {
+
+    var shiftX = size[0] / (2 * nodes.length);
+    var shiftY = size[1] / (2 * nodes.length);
+
+    nodes.forEach(function(n, i) {
+
+      n.x = 0 + offset[0];
+      n.y = 0 + offset[1];
+      n.width = size[0] - shiftX * i * 2;
+      n.height = size[1] - shiftY * i * 2;
+      n.cx = n.width / 2 + shiftX * i;
+      n.cy = n.height / 2+ shiftY * i;
 
     });
 
