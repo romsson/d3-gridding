@@ -69,14 +69,27 @@ export default function() {
 
   function horizontal(nodes) {
 
+    if(!valueY) {
+      valueY = function() { return 1; }
+      y.domain([0, nodes.length + 1]).range([0, size[1]]);
+    } else {
+      y.domain([0, d3.sum(nodes, valueY)]).range([0, size[1]]);
+    }
+
     rows = nodes.length;
-    y.domain([0, rows]).range([0, size[1]]);
+
+    nodes[0].y0 = 0 + offset[0];
 
     nodes.forEach(function(n, i) {
       n.x = 0 + offset[0];
-      n.y = y(i) + offset[1];
+      n.y = n.y0 + offset[1];
       n.width = size[0];
-      n.height = size[1] / rows;
+      n.height = y(valueY(n));
+
+      if(i < nodes.length - 1) {
+        nodes[i+1].y0 = n.y0 + n.height;
+      }
+
       n.cx = n.width / 2;
       n.cy = n.y + n.height / 2;
     });
@@ -435,7 +448,11 @@ export default function() {
 
   gridding.valueY = function(_valueY) {
     if(!arguments.length) return valueY;
-    valueY = _valueY;
+    if(typeof _valueY === "string") {
+      valueY = function(d) { return d[_valueY]; }
+    } else {
+      valueY = _valueY;
+    }
     return gridding;
   }
 
