@@ -76,7 +76,7 @@ That's pretty much what you need to know at this point to get started. Below is 
 The `mode` parameter sets the layout:
 
 * `vertical` - vertical partitioning
-* `horizontal` - horizontal partitioning
+* `horizontal` - horizontal partitioning, can be proportional to `.valueY()`
 * `central` - overlapping partitioning
 * `grid` - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
@@ -106,6 +106,20 @@ Sets the value `accessor` function, similar to [D3's](https://github.com/d3/d3-s
 
 ```js
 function value(d) { return d; }
+```
+
+<a name="gridding_value" href="#gridding_value">#</a> <i>d3.gridding()</i>.<b>valueY</b>([<i>string || accessor</i>])
+
+The value can either be a traditional `accessor` function but for attributes this time, or the data attribute itself directly as a string:
+
+```js
+.valueY(function value(d) { return d["index"]; })
+```
+
+ or
+
+```js
+.valueY("index")
 ```
 
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>padding</b>(<i>value</i>)
