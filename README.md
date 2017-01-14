@@ -108,7 +108,7 @@ Sets the value `accessor` function, similar to [D3's](https://github.com/d3/d3-s
 function value(d) { return d; }
 ```
 
-<a name="gridding_value" href="#gridding_value">#</a> <i>d3.gridding()</i>.<b>valueY</b>([<i>string || accessor</i>])
+<a name="gridding_value_y" href="#gridding_value_y">#</a> <i>d3.gridding()</i>.<b>valueY</b>([<i>string || accessor</i>])
 
 The value can either be a traditional `accessor` function but for attributes this time, or the data attribute itself directly as a string:
 
@@ -121,6 +121,10 @@ The value can either be a traditional `accessor` function but for attributes thi
 ```js
 .valueY("index")
 ```
+
+<a name="gridding_value_y" href="#gridding_value_y">#</a> <i>d3.gridding()</i>.<b>valueY</b>([<i>string || accessor</i>])
+
+See `valueY()`.
 
 <a name="gridding_padding" href="#gridding_padding">#</a> <i>d3.gridding()</i>.<b>padding</b>(<i>value</i>)
 

@@ -370,8 +370,8 @@ export default function() {
 
   function pyramid(nodes) {
 
-    var shiftX = size[0] / (2 * nodes.length );
-    var shiftY = size[1] / (2 * nodes.length );
+    var shiftX = size[0] / (2 * nodes.length);
+    var shiftY = size[1] / (2 * nodes.length);
 
     nodes.forEach(function(n, i) {
 
@@ -462,10 +462,13 @@ export default function() {
 
   gridding.valueX = function(_valueX) {
     if(!arguments.length) return valueX;
-    valueX = _valueX;
+    if(typeof _valueX === "string") {
+      valueX = function(d) { return d[_valueX]; }
+    } else {
+      valueX = _valueX;
+    }
     return gridding;
   }
-
   gridding.valueY = function(_valueY) {
     if(!arguments.length) return valueY;
     if(typeof _valueY === "string") {
