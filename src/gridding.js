@@ -32,11 +32,11 @@ export default function() {
       padding = 1,
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
-      valueX,
-      valueY,
+      valueX, valueY, valueHeight,
       orient = "down",
       x = d3Scale.scaleLinear(),
-      y = d3Scale.scaleLinear();
+      y = d3Scale.scaleLinear(),
+      height = d3Scale.scaleLinear();
 
   function gridding(nodes) {
 
@@ -70,11 +70,14 @@ export default function() {
 
   function horizontal(nodes) {
 
+    var _valueY;
+
     if(!valueY) {
-      valueY = function() { return 1; }
+      _valueY = function() { return 1; }
       y.domain([0, nodes.length + 1]).range([0, size[1]]);
     } else {
-      y.domain([0, d3.sum(nodes, valueY)]).range([0, size[1]]);
+      _valueY = valueY;
+      y.domain([0, d3.sum(nodes, _valueY)]).range([0, size[1]]);
     }
 
     rows = nodes.length;
@@ -85,7 +88,7 @@ export default function() {
       n.x = 0 + offset[0];
       n.y = n.y0 + offset[1];
       n.width = size[0];
-      n.height = y(valueY(n));
+      n.height = y(_valueY(n));
 
       if(i < nodes.length - 1) {
         nodes[i+1].y0 = n.y0 + n.height;
@@ -103,11 +106,28 @@ export default function() {
     cols = nodes.length;
     x.domain([0, cols]).range([0, size[0]]);
 
+    var _valueHeight;
+
+    if(!valueHeight) {
+      _valueHeight = function() { return 1; }
+      height.domain([0, 1]).range([0, size[1]]);
+    } else {
+      _valueHeight = valueHeight
+      height.domain(d3.extent(nodes, _valueHeight)).range([0, size[1]]);
+    }
+
     nodes.forEach(function(n, i) {
+
       n.x = x(i) + offset[0];
-      n.y = 0 + offset[1];
+
+      if(orient == "down") {
+        n.y = 0 + offset[1];
+      } else if(orient === "up") {
+        n.y = size[1] - (height(_valueHeight(n)) + offset[0]);
+      }
+
       n.width = size[0] / cols;
-      n.height = size[1];
+      n.height = height(_valueHeight(n));
       n.cx = n.x + n.width / 2;
       n.cy = n.height / 2;
     });
@@ -469,12 +489,23 @@ export default function() {
     }
     return gridding;
   }
+
   gridding.valueY = function(_valueY) {
     if(!arguments.length) return valueY;
     if(typeof _valueY === "string") {
       valueY = function(d) { return d[_valueY]; }
     } else {
       valueY = _valueY;
+    }
+    return gridding;
+  }
+
+  gridding.valueHeight = function(_valueHeight) {
+    if(!arguments.length) return valueHeight;
+    if(typeof _valueHeight === "string") {
+      valueHeight = function(d) { return d[_valueHeight]; }
+    } else {
+      valueHeight = _valueHeight;
     }
     return gridding;
   }
