@@ -33,12 +33,21 @@ export default function() {
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
       valueX, valueY, valueHeight,
+      __prefix = "",
+      __x, __y, __width, __height, __cx, __cy,
       orient = "down",
       x = d3Scale.scaleLinear(),
       y = d3Scale.scaleLinear(),
       height = d3Scale.scaleLinear();
 
   function gridding(nodes) {
+
+      __x = __prefix + "x";
+      __y = __prefix + "y";
+      __width = __prefix + "width";
+      __height = __prefix + "height";
+      __cx = __prefix + "cx";
+      __cy = __prefix + "cy";
 
     if(typeof nodes[0] === "string") {
       nodes = Array.prototype.map.call(nodes, function(d) { return {"__value": d}; });
@@ -165,17 +174,18 @@ export default function() {
       var col = i % cols;
       var row = Math.floor(i / cols);
 
-      n.x = x(col) + padding + offset[0];
-      n.y = y(row) + padding + offset[1];
-      n.width = size[0] / cols - 2 * padding;
-      n.height = size[1] / rows - 2 * padding;
+      n[__x] = x(col) + padding + offset[0];
+      n[__y] = y(row) + padding + offset[1];
+      n[__width] = size[0] / cols - 2 * padding;
+      n[__height] = size[1] / rows - 2 * padding;
 
       if(orient == "up") {
-        n.y = size[1] - n.y - n.height;
+        n[__y] = size[1] - n[__y] - n[__height];
       }
 
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
+
 
     });
 
@@ -228,12 +238,12 @@ export default function() {
     var arcs = pie(nodes);
 
     nodes.forEach(function(n, i) {
-      n.width = size[0] / nodes.length;
-      n.height = size[1] / nodes.length;
-      n.x = arc.centroid(arcs[i])[0] + size[0] / 2 + offset[0] - n.width / 2;
-      n.y = arc.centroid(arcs[i])[1] + size[1] / 2 + offset[1] - n.height / 2;
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__width] = size[0] / nodes.length;
+      n[__height] = size[1] / nodes.length;
+      n[__x] = arc.centroid(arcs[i])[0] + size[0] / 2 + offset[0] - n[__width] / 2;
+      n[__y] = arc.centroid(arcs[i])[1] + size[1] / 2 + offset[1] - n[__height] / 2;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -545,6 +555,12 @@ export default function() {
   gridding.radius = function(_radius) {
     if(!arguments.length) return radius;
     radius = _radius;
+    return gridding;
+  }
+
+  gridding.prefix = function(_prefix) {
+    if(!arguments.length) return __prefix;
+    __prefix = _prefix;
     return gridding;
   }
 
