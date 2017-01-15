@@ -47,10 +47,6 @@ export default function() {
       nodes = Array.apply(null, Array(nodes.length)).map(function() { return new Object(); });
     }
 
-    nodes.sort(function(a, b) {
-      return sort(value(a), value(b));
-    });
-
     return layout(nodes);
   }
 
