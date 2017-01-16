@@ -33,10 +33,10 @@ tape(".prefix('_') has changed and should return the right prefix value", functi
 ["horizontal", "vertical", "central", "grid", "coordinate", "radial", "treemap", "pack", "stack", "diagonal", "cascade", "corner", "pyramid", "brick"].map(function(mode) {
 
   tape(".prefix() should work with mode " + mode, function(test) {
-    var grid = gridding.gridding().prefix("");
+    var grid = gridding.gridding().prefix("__");
 
     grid.mode(mode);
-    test.equal(typeof grid([1, 2, 3])[0]["x"], "number");
+    test.equal(typeof grid([1, 2, 3])[0]["__x"], "number");
 
      test.end();
   });

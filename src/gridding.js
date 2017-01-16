@@ -65,12 +65,12 @@ export default function() {
   function identity(nodes) {
 
     nodes.forEach(function(n) {
-      n.x = n.x || 0;
-      n.y = n.y || 0;
-      n.width = n.width || size[0];
-      n.height = n.height || size[1];
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__x] = n[__x] || 0;
+      n[__y] = n[__y] || 0;
+      n[__width] = n[__width] || size[0];
+      n[__height] = n[__height] || size[1];
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -94,18 +94,18 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      n.x = 0 + offset[0];
-      n.y = n.y0 + offset[1];
+      n[__x] = 0 + offset[0];
+      n[__y] = n.y0 + offset[1];
 
-      n.width = size[0];
-      n.height = y(_valueY(n));
+      n[__width] = size[0];
+      n[__height] = y(_valueY(n));
 
       if(i < nodes.length - 1) {
         nodes[i+1].y0 = n.y0 + n.height;
       }
 
-      n.cx = n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__cx] = n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -128,18 +128,18 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      n.x = x(i) + offset[0];
+      n[__x] = x(i) + offset[0];
 
       if(orient == "down") {
-        n.y = 0 + offset[1];
+        n[__y] = 0 + offset[1];
       } else if(orient === "up") {
-        n.y = size[1] - (height(_valueHeight(n)) + offset[0]);
+        n[__y] = size[1] - (height(_valueHeight(n)) + offset[0]);
       }
 
-      n.width = size[0] / cols;
-      n.height = height(_valueHeight(n));
-      n.cx = n.x + n.width / 2;
-      n.cy = n.height / 2;
+      n[__width] = size[0] / cols;
+      n[__height] = height(_valueHeight(n));
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__height] / 2;
     });
 
     return nodes;
@@ -215,12 +215,12 @@ export default function() {
     }
 
     nodes.forEach(function(n) {
-      n.x = x(valueX(n)) + offset[0];
-      n.y = y(valueY(n)) + offset[1];
-      n.width = cellSize ? cellSize[0]: size[0] / nodes.length;
-      n.height = cellSize ? cellSize[1]: size[1] / nodes.length;
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__x] = x(valueX(n)) + offset[0];
+      n[__y] = y(valueY(n)) + offset[1];
+      n[__width] = cellSize ? cellSize[0]: size[0] / nodes.length;
+      n[__height] = cellSize ? cellSize[1]: size[1] / nodes.length;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -269,12 +269,12 @@ export default function() {
         );
 
     nodes.forEach(function(n, i) {
-      n.x = tree.children[i].x0 + offset[0];
-      n.y = tree.children[i].y0 + offset[1];
-      n.width = tree.children[i].x1 - tree.children[i].x0;
-      n.height = tree.children[i].y1 - tree.children[i].y0;
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__x] = tree.children[i].x0 + offset[0];
+      n[__y] = tree.children[i].y0 + offset[1];
+      n[__width] = tree.children[i].x1 - tree.children[i].x0;
+      n[__height] = tree.children[i].y1 - tree.children[i].y0;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -295,12 +295,12 @@ export default function() {
         );
 
     nodes.forEach(function(n, i) {
-      n.x = packed.children[i].x + offset[0];
-      n.y = packed.children[i].y + offset[1];
-      n.width = packed.children[i].r;
-      n.height = packed.children[i].r;
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__x] = packed.children[i].x + offset[0];
+      n[__y] = packed.children[i].y + offset[1];
+      n[__width] = packed.children[i].r;
+      n[__height] = packed.children[i].r;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -324,12 +324,12 @@ export default function() {
 
     nodes.forEach(function(n, i) {
       var s = stacked[i][0];
-      n.x = offset[0];
-      n.y = y(s[1]) + offset[1];
-      n.width = size[0];
-      n.height = y(s[1]) - y(s[0]);
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__x] = offset[0];
+      n[__y] = y(s[1]) + offset[1];
+      n[__width] = size[0];
+      n[__height] = y(s[1]) - y(s[0]);
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -343,17 +343,17 @@ export default function() {
     nodes.forEach(function(n, i) {
 
       if(orient == "up") {
-        n.x = x(i) + offset[0];
-        n.y = size[1] - (y(i) + offset[1]) - size[1] / nodes.length;
+        n[__x] = x(i) + offset[0];
+        n[__y] = size[1] - (y(i) + offset[1]) - size[1] / nodes.length;
       } else {
-        n.x = x(i) + offset[0];
-        n.y = y(i) + offset[1];
+        n[__x] = x(i) + offset[0];
+        n[__y] = y(i) + offset[1];
       }
 
-      n.width = size[0] / nodes.length;
-      n.height = size[1] / nodes.length;
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__width] = size[0] / nodes.length;
+      n[__height] = size[1] / nodes.length;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -368,13 +368,12 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      n.x = x(i) + offset[0];
-      n.y = y(i) + offset[1];
-      n.width = size[0] - spacing / nodes.length;
-      n.height = size[1] - spacing / nodes.length;
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
-
+      n[__x] = x(i) + offset[0];
+      n[__y] = y(i) + offset[1];
+      n[__width] = size[0] - spacing / nodes.length;
+      n[__height] = size[1] - spacing / nodes.length;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -387,33 +386,33 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      n.width = size[0] - shiftX * i * 2;
-      n.height = size[1] - shiftY * i * 2;
+      n[__width] = size[0] - shiftX * i * 2;
+      n[__height] = size[1] - shiftY * i * 2;
 
       if(orient === "top right") {
 
-        n.x = size[0] - n.width + offset[0];
-        n.y = 0 + offset[1];
+        n[__x] = size[0] - n.width + offset[0];
+        n[__y] = 0 + offset[1];
 
       } else if(orient === "bottom right") {
 
-        n.x = size[0] - n.width + offset[0];
-        n.y = size[1] - n.height + offset[1];
+        n[__x] = size[0] - n[__width] + offset[0];
+        n[__y] = size[1] - n[__height] + offset[1];
 
       } else if(orient === "bottom left") {
 
-        n.x = 0 + offset[0];
-        n.y = size[1] - n.height + offset[1];
+        n[__x] = 0 + offset[0];
+        n[__y] = size[1] - n[__height] + offset[1];
 
       } else {
 
-        n.x = 0 + offset[0];
-        n.y = 0 + offset[1];
+        n[__x] = 0 + offset[0];
+        n[__y] = 0 + offset[1];
 
       }
 
-      n.cx = n.width / 2 + n.x;
-      n.cy = n.height / 2 + shiftY * i;
+      n[__cx] = n[__width] / 2 + n[__x];
+      n[__cy] = n[__height] / 2 + shiftY * i;
 
     });
 
@@ -427,12 +426,12 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      n.x = 0 + offset[0] + shiftX * i;
-      n.y = 0 + offset[1] + shiftY * i;
-      n.width = size[0] - shiftX * i * 2;
-      n.height = size[1] - shiftY * i * 2;
-      n.cx = n.width / 2 + shiftX * i;
-      n.cy = n.height / 2+ shiftY * i;
+      n[__x] = 0 + offset[0] + shiftX * i;
+      n[__y] = 0 + offset[1] + shiftY * i;
+      n[__width] = size[0] - shiftX * i * 2;
+      n[__height] = size[1] - shiftY * i * 2;
+      n[__cx] = n[__width] / 2 + shiftX * i;
+      n[__cy] = n[__height] / 2+ shiftY * i;
 
     });
 
@@ -452,24 +451,24 @@ export default function() {
       var col = i % cols;
       var row = Math.floor(i / cols);
 
-      n.x = x(col) + padding + offset[0];
-      n.y = y(row) + padding + offset[1];
+      n[__x] = x(col) + padding + offset[0];
+      n[__y] = y(row) + padding + offset[1];
 
-      n.width = size[0] / (cols + 1 / 2) - 2 * padding;
-      n.height = size[1] / rows - 2 * padding;
+      n[__width] = size[0] / (cols + 1 / 2) - 2 * padding;
+      n[__height] = size[1] / rows - 2 * padding;
 
       if(orient === "left") {
         if(row % 2 === 1) {
-          n.x += n.width / 2;
+          n[__x] += n[__width] / 2;
         }
       } else {
         if(row % 2 === 0) {
-          n.x += n.width / 2;
+          n[__x] += n[__width] / 2;
         }
       }
 
-      n.cx = n.x + n.width / 2;
-      n.cy = n.y + n.height / 2;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
 
     });
 
