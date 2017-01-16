@@ -18,25 +18,28 @@ tape(".prefix('_') has changed and should return the right prefix value", functi
   test.equal(typeof grid([1, 2, 3])[0]["x"], "undefined");
   test.equal(typeof grid([1, 2, 3])[0]["__x"], "number");
 
-  var grid = gridding.gridding().prefix("").mode("grid");
-  test.equal(typeof grid([1, 2, 3])[0]["x"], "number");
-  test.equal(typeof grid([1, 2, 3])[0]["__x"], "undefined");
+  var grid2 = gridding.gridding().prefix("").mode("grid");
+  test.equal(typeof grid2([1, 2, 3])[0]["x"], "number");
+  test.equal(typeof grid2([1, 2, 3])[0]["__x"], "undefined");
 
-  var grid = gridding.gridding().prefix("_").mode("grid");
-  test.equal(typeof grid([1, 2, 3])[0]["x"], "undefined");
-  test.equal(typeof grid([1, 2, 3])[0]["__x"], "undefined");
-  test.equal(typeof grid([1, 2, 3])[0]["_x"], "number");
+  var grid3 = gridding.gridding().prefix("_").mode("grid");
+  test.equal(typeof grid3([1, 2, 3])[0]["x"], "undefined");
+  test.equal(typeof grid3([1, 2, 3])[0]["__x"], "undefined");
+  test.equal(typeof grid3([1, 2, 3])[0]["_x"], "number");
 
   test.end();
 });
 
-tape(".prefix() should work with all modes", function(test) {
-  var grid = gridding.gridding().prefix("");
+["horizontal", "vertical", "central", "grid", "coordinate", "radial", "treemap", "pack", "stack", "diagonal", "cascade", "corner", "pyramid", "brick"].map(function(mode) {
 
-  grid.modes().forEach(function(mode) {
+  tape(".prefix() should work with mode " + mode, function(test) {
+    var grid = gridding.gridding().prefix("");
+
     grid.mode(mode);
     test.equal(typeof grid([1, 2, 3])[0]["x"], "number");
+
+     test.end();
   });
 
-   test.end();
-});
+})
+
