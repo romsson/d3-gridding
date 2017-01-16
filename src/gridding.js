@@ -49,11 +49,14 @@ export default function() {
       __cx = __prefix + "cx";
       __cy = __prefix + "cy";
 
-    if(typeof nodes[0] === "string") {
-      nodes = Array.prototype.map.call(nodes, function(d) { return {"__value": d}; });
+    if(typeof nodes[0] !== "object") {
+
+      nodes = Array.prototype.map.call(nodes, function(d, i) {
+        return {"__value": d, "__index": i};
+      });
+
       value = function(d) { return d.__value.toLowerCase(); }
-    } else if(typeof nodes[0] !== "object") {
-      nodes = Array.apply(null, Array(nodes.length)).map(function() { return new Object(); });
+
     }
 
     return layout(nodes);
