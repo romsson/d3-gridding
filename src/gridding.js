@@ -387,12 +387,33 @@ export default function() {
 
     nodes.forEach(function(n, i) {
 
-      n.x = 0 + offset[0];
-      n.y = 0 + offset[1];
       n.width = size[0] - shiftX * i * 2;
       n.height = size[1] - shiftY * i * 2;
-      n.cx = n.width / 2 + shiftX * i;
-      n.cy = n.height / 2+ shiftY * i;
+
+      if(orient === "top right") {
+
+        n.x = size[0] - n.width + offset[0];
+        n.y = 0 + offset[1];
+
+      } else if(orient === "bottom right") {
+
+        n.x = size[0] - n.width + offset[0];
+        n.y = size[1] - n.height + offset[1];
+
+      } else if(orient === "bottom left") {
+
+        n.x = 0 + offset[0];
+        n.y = size[1] - n.height + offset[1];
+
+      } else {
+
+        n.x = 0 + offset[0];
+        n.y = 0 + offset[1];
+
+      }
+
+      n.cx = n.width / 2 + n.x;
+      n.cy = n.height / 2 + shiftY * i;
 
     });
 
