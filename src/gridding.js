@@ -82,7 +82,7 @@ export default function() {
 
     if(!valueY) {
       _valueY = function() { return 1; }
-      y.domain([0, nodes.length + 1]).range([0, size[1]]);
+      y.domain([0, nodes.length]).range([0, size[1]]);
     } else {
       _valueY = valueY;
       y.domain([0, d3.sum(nodes, _valueY)]).range([0, size[1]]);
@@ -93,8 +93,10 @@ export default function() {
     nodes[0].y0 = 0 + offset[0];
 
     nodes.forEach(function(n, i) {
+
       n.x = 0 + offset[0];
       n.y = n.y0 + offset[1];
+
       n.width = size[0];
       n.height = y(_valueY(n));
 
@@ -148,12 +150,12 @@ export default function() {
     cols = rows = 1;
 
     nodes.forEach(function(n) {
-      n.x = 0 + offset[0];
-      n.y = 0 + offset[1];
-      n.width = size[0];
-      n.height = size[1];
-      n.cx = n.width / 2;
-      n.cy = n.height / 2;
+      n[__x] = 0 + offset[0];
+      n[__y] = 0 + offset[1];
+      n[__width] = size[0];
+      n[__height] = size[1];
+      n[__cx] = n[__width] / 2;
+      n[__cy] = n[__height] / 2;
     });
 
     return nodes;
