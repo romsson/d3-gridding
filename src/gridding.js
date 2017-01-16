@@ -85,7 +85,7 @@ export default function() {
       y.domain([0, nodes.length]).range([0, size[1]]);
     } else {
       _valueY = valueY;
-      y.domain([0, d3.sum(nodes, _valueY)]).range([0, size[1]]);
+      y.domain([0, d3Array.sum(nodes, _valueY)]).range([0, size[1]]);
     }
 
     rows = nodes.length;
@@ -123,7 +123,7 @@ export default function() {
       height.domain([0, 1]).range([0, size[1]]);
     } else {
       _valueHeight = valueHeight
-      height.domain(d3.extent(nodes, _valueHeight)).range([0, size[1]]);
+      height.domain(d3Array.extent(nodes, _valueHeight)).range([0, size[1]]);
     }
 
     nodes.forEach(function(n, i) {
@@ -308,7 +308,7 @@ export default function() {
 
   function stack(nodes) {
 
-    var stack = d3Hierarchy.stack()
+    var stack = d3Shape.stack()
         .keys(nodes.map(function(d, i) { return i + "_"; })) // Creates unique ids for nodes
         .value(function(d, key) { return nodes.indexOf(d[key]); });
 
