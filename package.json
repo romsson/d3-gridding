@@ -33,7 +33,7 @@
     "rollup-plugin-node-resolve": "^1.4.0",
     "tape": "4",
     "uglify-js": "2",
-    "watch": "^0.19.1",
+    "watch": "^1.0.0",
     "eslint": "^3.13.0",
     "package-preamble": "0.0.2"
   },
