@@ -49,14 +49,16 @@ export default function() {
       __cx = __prefix + "cx";
       __cy = __prefix + "cy";
 
-    if(typeof nodes[0] !== "object") {
+    if(typeof value(nodes)[0] !== "object") {
 
       nodes = Array.prototype.map.call(nodes, function(d, i) {
         return {"__value": d, "__index": i};
       });
 
       value = function(d) { return d.__value.toLowerCase(); }
+    } else {
 
+      nodes = value(nodes);
     }
 
     return layout(nodes);
@@ -104,7 +106,7 @@ export default function() {
         nodes[i+1].y0 = n.y0 + n.height;
       }
 
-      n[__cx] = n[__width] / 2;
+      n[__cx] = n[__x] + n[__width] / 2;
       n[__cy] = n[__y] + n[__height] / 2;
     });
 
@@ -114,6 +116,7 @@ export default function() {
   function vertical(nodes) {
 
     cols = nodes.length;
+
     x.domain([0, cols]).range([0, size[0]]);
 
     var _valueHeight;
@@ -139,7 +142,7 @@ export default function() {
       n[__width] = size[0] / cols;
       n[__height] = height(_valueHeight(n));
       n[__cx] = n[__x] + n[__width] / 2;
-      n[__cy] = n[__height] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -154,8 +157,8 @@ export default function() {
       n[__y] = 0 + offset[1];
       n[__width] = size[0];
       n[__height] = size[1];
-      n[__cx] = n[__width] / 2;
-      n[__cy] = n[__height] / 2;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2;
     });
 
     return nodes;
@@ -190,8 +193,6 @@ export default function() {
 
       n[__cx] = n[__x] + n[__width] / 2;
       n[__cy] = n[__y] + n[__height] / 2;
-
-
     });
 
     return nodes;
@@ -411,8 +412,8 @@ export default function() {
 
       }
 
-      n[__cx] = n[__width] / 2 + n[__x];
-      n[__cy] = n[__height] / 2 + shiftY * i;
+      n[__cx] = n[__x] + n[__width] / 2;
+      n[__cy] = n[__y] + n[__height] / 2 + shiftY * i;
 
     });
 
@@ -469,7 +470,6 @@ export default function() {
 
       n[__cx] = n[__x] + n[__width] / 2;
       n[__cy] = n[__y] + n[__height] / 2;
-
     });
 
     return nodes;
