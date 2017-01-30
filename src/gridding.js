@@ -29,7 +29,7 @@ export default function() {
       cols,
       rows,
       radius,
-      padding = 1,
+      padding = 0,
       sort = function(a, b) { return a - b; },
       value = function(d) { return d; },
       valueX, valueY, valueHeight,
@@ -160,10 +160,10 @@ export default function() {
     cols = rows = 1;
 
     nodes.forEach(function(n) {
-      n[__x] = 0 + offset[0];
-      n[__y] = 0 + offset[1];
-      n[__width] = size[0];
-      n[__height] = size[1];
+      n[__x] = 0 + padding + offset[0];
+      n[__y] = 0 + padding + offset[1];
+      n[__width] = size[0] - 2 * padding;
+      n[__height] = size[1] - 2 * padding;
       n[__cx] = n[__x] + n[__width] / 2;
       n[__cy] = n[__y] + n[__height] / 2;
     });
