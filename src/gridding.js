@@ -42,20 +42,25 @@ export default function() {
 
   function gridding(nodes) {
 
-      __x = __prefix + "x";
-      __y = __prefix + "y";
-      __width = __prefix + "width";
-      __height = __prefix + "height";
-      __cx = __prefix + "cx";
-      __cy = __prefix + "cy";
+    __x = __prefix + "x";
+    __y = __prefix + "y";
+    __width = __prefix + "width";
+    __height = __prefix + "height";
+    __cx = __prefix + "cx";
+    __cy = __prefix + "cy";
 
-    if(typeof value(nodes)[0] !== "object") {
+    if(typeof nodes === "undefined" || nodes === "" || nodes === null) {
+
+      nodes = [];
+    } if(typeof value(nodes) === "undefined" || value(nodes) === "" || value(nodes) === null) {
+
+      nodes = [];
+    } else if(typeof value(nodes)[0] !== "object") {
 
       nodes = Array.prototype.map.call(nodes, function(d, i) {
         return {"__value": d, "__index": i};
       });
 
-      value = function(d) { return d.__value.toLowerCase(); }
     } else {
 
       nodes = value(nodes);
