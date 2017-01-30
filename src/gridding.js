@@ -137,6 +137,8 @@ export default function() {
         n[__y] = 0 + offset[1];
       } else if(orient === "up") {
         n[__y] = size[1] - (height(_valueHeight(n)) + offset[0]);
+      } else {
+        n[__y] = 0 + offset[1];
       }
 
       n[__width] = size[0] / cols;
