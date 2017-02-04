@@ -15,3 +15,16 @@ tape("coordinate layout should return full dimension when alone", function(test)
 
   test.end();
 });
+
+tape("coordinate change cellSize", function(test) {
+
+  var grid = gridding.gridding().mode("coordinate").size([10, 20])
+    .cellSize([10, 20])
+
+  var nodes = [{"id": "A", "coordX": 0}];
+
+  test.deepEqual(grid(nodes)[0]["width"], 10);
+  test.deepEqual(grid(nodes)[0]["height"], 20);
+
+  test.end();
+});
