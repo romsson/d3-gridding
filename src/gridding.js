@@ -1,21 +1,21 @@
 import * as d3Scale from 'd3-scale';
 
-import brick from "./grids/brick";
-import central from "./grids/central";
-import cascade from "./grids/cascade";
-import coordinate from "./grids/coordinate";
-import corner from "./grids/corner";
-import diagonal from "./grids/diagonal";
-import grid from "./grids/grid";
-import horizontal from "./grids/horizontal";
-import identity from "./grids/identity";
-import pack from "./grids/pack";
-import pyramid from "./grids/pyramid";
-import radial from "./grids/radial";
-import stack from "./grids/stack";
-import step from "./grids/step";
-import treemap from "./grids/treemap";
-import vertical from "./grids/vertical";
+import brick from "./modes/brick";
+import central from "./modes/central";
+import cascade from "./modes/cascade";
+import coordinate from "./modes/coordinate";
+import corner from "./modes/corner";
+import diagonal from "./modes/diagonal";
+import grid from "./modes/grid";
+import horizontal from "./modes/horizontal";
+import identity from "./modes/identity";
+import pack from "./modes/pack";
+import pyramid from "./modes/pyramid";
+import radial from "./modes/radial";
+import stack from "./modes/stack";
+import step from "./modes/step";
+import treemap from "./modes/treemap";
+import vertical from "./modes/vertical";
 
 export default function() {
 
@@ -40,11 +40,11 @@ export default function() {
     modes: {
       "horizontal": horizontal,
       "vertical": vertical,
+      "brick": brick,
       "central": central,
       "grid": grid,
       "coordinate": coordinate,
       "radial": radial,
-      "treemap": treemap,
       "pack": pack,
       "stack": stack,
       "diagonal": diagonal,
@@ -52,7 +52,7 @@ export default function() {
       "corner": corner,
       "pyramid": pyramid,
       "step": step,
-      "brick": brick
+      "treemap": treemap
     },
     radius: null,
     rows: null,
