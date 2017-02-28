@@ -21,8 +21,10 @@ export default function(nodes, v) {
     var s = stacked[i][0];
     n[v.__x] = v.offset[0];
     n[v.__y] = v.y(s[1]) + v.offset[1];
+
     n[v.__width] = v.size[0];
     n[v.__height] = v.y(s[1]) - v.y(s[0]);
+
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
   });

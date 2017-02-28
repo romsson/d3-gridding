@@ -40,7 +40,7 @@ tape(".prefix('_') has changed and should return the right prefix value", functi
     grid.mode(mode);
     test.equal(typeof grid([1, 2, 3])[0]["__x"], "number");
 
-     test.end();
+    test.end();
   });
 
 })
