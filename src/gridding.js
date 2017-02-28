@@ -14,6 +14,7 @@ import pyramid from "./modes/pyramid";
 import radial from "./modes/radial";
 import stack from "./modes/stack";
 import step from "./modes/step";
+import tree from "./modes/tree";
 import treemap from "./modes/treemap";
 import vertical from "./modes/vertical";
 
@@ -52,6 +53,7 @@ export default function() {
       "corner": corner,
       "pyramid": pyramid,
       "step": step,
+      "tree": tree,
       "treemap": treemap
     },
     radius: null,
