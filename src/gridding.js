@@ -39,22 +39,103 @@ export default function() {
     layout: identity,
     mode: "identity",
     modes: {
-      "brick": brick,
-      "cascade": cascade,
-      "central": central,
-      "coordinate": coordinate,
-      "corner": corner,
-      "diagonal": diagonal,
-      "grid": grid,
-      "horizontal": horizontal,
-      "pack": pack,
-      "pyramid": pyramid,
-      "radial": radial,
-      "stack": stack,
-      "step": step,
-      "tree": tree,
-      "treemap": treemap,
-      "vertical": vertical
+      "brick": {
+        "layout": brick,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "cascade": {
+        "layout": cascade,
+        "properties": [
+        ]
+      },
+      "central": {
+        "layout": central,
+        "properties": [
+        ]
+      },
+      "coordinate": {
+        "layout": coordinate,
+        "properties": [
+          {"valueX": null},
+          {"valueY": null}
+        ]
+      },
+      "corner": {
+        "layout": corner,
+        "properties": [
+          {"orient": "top right"}
+        ]
+      },
+      "diagonal": {
+        "layout": diagonal,
+        "properties": [
+          {"orient": "up"}
+        ]
+      },
+      "grid": {
+        "layout": grid,
+        "properties": [
+        ]
+      },
+      "horizontal": {
+        "layout": horizontal,
+        "properties": [
+          {"valueY": null},
+          {"valueWidth": null}
+        ]
+      },
+      "pack": {
+        "layout": pack,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "pyramid": {
+        "layout": pyramid,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "radial": {
+        "layout": radial,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "stack": {
+        "layout": stack,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "step": {
+        "layout": step,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "tree": {
+        "layout": tree,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "treemap": {
+        "layout": treemap,
+        "properties": [
+          {"orient": "top"}
+        ]
+      },
+      "vertical": {
+        "layout": vertical,
+        "properties": [
+          {"orient": "top"},
+          {"valueHeight": null},
+          {"valueY": null}
+        ]
+      }
     },
     radius: null,
     rows: null,
@@ -107,7 +188,7 @@ export default function() {
     if(vars.mode === "identity") {
       vars.layout = identity;
     } else if(Object.keys(vars.modes).indexOf(value) >= 0) {
-      vars.layout = vars.modes[vars.mode];
+      vars.layout = vars.modes[vars.mode].layout;
     }
 
     return gridding;
