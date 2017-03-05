@@ -310,5 +310,17 @@ export default function() {
     return gridding;
   }
 
+  gridding.id = function(_id) {
+    if(!arguments.length) return vars.id;
+    vars.id = _id;
+    return gridding;
+  }
+
+  gridding.parentId = function(_parentId) {
+    if(!arguments.length) return vars.parentId;
+    vars.parentId = _parentId;
+    return gridding;
+  }
+
   return gridding;
 }
