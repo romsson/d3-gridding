@@ -31,6 +31,7 @@ export default function() {
     cellSize: null,
     cols: null,
     height: d3Scale.scaleLinear(),
+    id: function(d, i) { return i; },
     layout: identity,
     mode: "identity",
     modes: {
@@ -137,6 +138,7 @@ export default function() {
     },
     offset: [0, 0],
     orient: "down",
+    parentId: function(d, i) { return i === 0 ? null: 0; },
     padding: 0,
     radius: null,
     rows: null,
