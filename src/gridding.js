@@ -42,7 +42,7 @@ export default function() {
       "brick": {
         "layout": brick,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "cascade": {
@@ -58,82 +58,85 @@ export default function() {
       "coordinate": {
         "layout": coordinate,
         "properties": [
-          {"valueX": null},
-          {"valueY": null}
+          {"key": "valueX", "value": null},
+          {"key": "valueY", "value": null}
         ]
       },
       "corner": {
         "layout": corner,
         "properties": [
-          {"orient": "top right"}
+          {"key": "orient", "value": "top right"}
         ]
       },
       "diagonal": {
         "layout": diagonal,
         "properties": [
-          {"orient": "up"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "grid": {
         "layout": grid,
         "properties": [
+          {"key": "orient", "value": "top"}
         ]
       },
       "horizontal": {
         "layout": horizontal,
         "properties": [
-          {"valueY": null},
-          {"valueWidth": null}
+          {"key": "valueY", "value": null},
+          {"key": "valueWidth", "value": null}
         ]
       },
       "pack": {
         "layout": pack,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "pyramid": {
         "layout": pyramid,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "radial": {
         "layout": radial,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "stack": {
         "layout": stack,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "step": {
         "layout": step,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "tree": {
         "layout": tree,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "treemap": {
         "layout": treemap,
         "properties": [
-          {"orient": "top"}
+          {"key": "orient", "value": "top"}
         ]
       },
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"orient": "top"},
-          {"valueHeight": null},
-          {"valueY": null}
+          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "left"},
+          {"key": "orient", "value": "right"},
+          {"key": "valueHeight", "value": null},
+          {"key": "valueY", "value": null}
         ]
       }
     },
@@ -194,7 +197,8 @@ export default function() {
     return gridding;
   }
 
-  gridding.modes = function() {
+  gridding.modes = function(_mode) {
+    if(arguments.length === 1) return vars.modes[_mode].properties;
     return Object.keys(vars.modes);
   }
 
