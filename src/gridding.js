@@ -21,10 +21,6 @@ import vertical from "./modes/vertical";
 export default function() {
 
   var vars = {
-    cellSize: null,
-    cols: null,
-    offset: [0, 0],
-    padding: 0,
     __prefix: "",
     __x: "",
     __y: "",
@@ -32,9 +28,8 @@ export default function() {
     __height: "",
     __cx: "",
     __cy: "",
-    orient: "down",
-    x: d3Scale.scaleLinear(),
-    y: d3Scale.scaleLinear(),
+    cellSize: null,
+    cols: null,
     height: d3Scale.scaleLinear(),
     layout: identity,
     mode: "identity",
@@ -140,16 +135,21 @@ export default function() {
         ]
       }
     },
+    offset: [0, 0],
+    orient: "down",
+    padding: 0,
     radius: null,
     rows: null,
     size: [1, 1],
     sort: function(a, b) { return a - b; },
     value: function(d) { return d; },
-    valueX: null,
-    valueY: null,
     valueHeight: null,
     valueWidth: null,
-    width: d3Scale.scaleLinear()
+    valueX: null,
+    valueY: null,
+    width: d3Scale.scaleLinear(),
+    x: d3Scale.scaleLinear(),
+    y: d3Scale.scaleLinear()
   };
 
   function gridding(nodes) {
