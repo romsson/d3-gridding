@@ -1,7 +1,7 @@
 var tape = require("tape"),
     gridding = require("../");
 
-tape("treemap layout with 1 element should central element", function(test) {
+tape("tree layout with 1 element should central element", function(test) {
 
   var nodes = ["A"];
 
