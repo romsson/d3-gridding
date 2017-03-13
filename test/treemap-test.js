@@ -10,12 +10,12 @@ tape("treemap layout with 1 element should return full canvas grid", function(te
   test.deepEqual(grid(nodes)[0]["x"], 0);
   test.deepEqual(grid(nodes)[0]["y"], 0);
   test.deepEqual(grid(nodes)[0]["width"], 10);
-  test.deepEqual(grid(nodes)[0]["height"], 10);
+  test.deepEqual(grid(nodes)[0]["height"], 20);
 
   test.end();
 });
 
-tape("treeamap elements should match number of nodes", function(test) {
+tape("treemap elements should match number of nodes", function(test) {
 
   var nodes = ["A", "B", "C", "D"];
 

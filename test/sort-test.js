@@ -10,8 +10,7 @@ tape("not sorting by default", function(test) {
     {x: 1, y: 0, value: 0}
   ];
 
-  var grid = gridding.gridding().mode("vertical").size([20, 10])
-                      .value(function(d) { return d.value; });
+  var grid = gridding.gridding().mode("vertical").size([20, 10]);
 
   grid(nodes);
 
@@ -30,13 +29,11 @@ tape("sort now by descending value", function(test) {
   ];
 
   var grid = gridding.gridding().mode("vertical").size([20, 10])
-                      .value(function(d) { return d.index; })
                       .sort(function(a, b) { return b - a; });
 
   grid(nodes);
 
   test.equal(nodes[0].index, 3);
-  test.equal(grid.value()(nodes[0]), 3);
 
   test.end();
 });
