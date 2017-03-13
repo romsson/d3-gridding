@@ -4,6 +4,11 @@ export default function(nodes, v) {
 
   v.rows = nodes.length;
 
+  if(typeof v.cellSize !== "undefined" && v.cellSize !== null) {
+    v.size[0] = v.cellSize[0] * 2;
+    v.size[1] = v.cellSize[1] * v.rows;
+  }
+
   v.y.domain([0, v.rows]).range([0, v.size[1] - 2 * v.padding]);
 
   var _valueY;
@@ -14,10 +19,6 @@ export default function(nodes, v) {
   } else {
     _valueY = v.valueY;
     v.y.domain([0, d3Array.sum(nodes, _valueY)]).range([0, v.size[1] - 2 * v.padding]);
-  }
-
-  if(typeof v.cellSize !== "undefined" && v.cellSize !== null) {
-    v.size[1] = v.cellSize[1] * v.rows;
   }
 
   var _valueWidth;
