@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+var data =  ["bottom right", "bottom left", "top right", "top left"];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var griddingDataGroups = gridding(data);
+
+svgSquares.selectAll(".square")
+    .data(griddingDataGroups, function(d) { return d.index; })
+  .enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+svgSquares.selectAll(".index")
+    .data(griddingDataGroups)
+  .enter().append("text")
+    .attr("class", "index")
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+    .text(function(d, i) { return d.__value; });
+
+// For each group, re-organize the unit elements
+griddingDataGroups.map(function(d, i) {
+
+  var grid = d3.gridding()
+    .size([d.width, d.height])
+    .offset([d.x, d.y])
+    .mode("corner")
+    .orient(d.__value)
+    .padding(0);
+
+    console.log(d.__value)
+
+  svgSquares.selectAll(".square_" + i)
+      .data(grid(d3.range(10)), function(d) { return d.index; })
+    .enter().append("rect")
+      .attr("class", "square_" + i)
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+});
+
+</script>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+// TODO
+// Fix color to fill svg http://bl.ocks.org/mbostock/43aebffeacf96d8d881f
+// Convert? http://bl.ocks.org/mbostock/debaad4fcce9bcee14cf
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid")
+
+var data = [];
+
+//d3.range(255).map(function(d, i) {
+// d3.range(10).map(function(e, j) {
+//   d3.range(10).map(function(f, k) {
+//     data.push({r: i, g: j, b: k});
+//   });
+// });
+//);
+
+
+d3.range(100).map(function(f, k) {
+  data.push({r: 0, g: 0, b: k});
+});
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+  var squares = svgSquares.selectAll(".square")
+    .data(gridding(data), function(d) { return d.index; });
+
+  squares.enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return d3.rgb(d.r, d.g, d.b); })
+    .style("fill-opacity", .8);
+
+</script>

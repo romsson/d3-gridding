@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: white;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+// TODO
+// [ ] use ← → instead of X
+
+
+var width = 400,
+    height = 300;
+
+var data = d3.range(10).map(function(d, i) {
+    return {"selected": i % 2 === 0,};
+  });
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "padding": 2,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "treemap",
+  "padding": 2,
+  "level": 1
+}];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+  var nested_data = generate_nesting(["", "selected"], "data")
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  d3.selectAll("rect").on("click", function(d, i) {
+    d.selected = !d.selected;
+    update();
+  });
+
+  d3.selectAll(".index").text(function(d) {
+    if(!d.selected) {
+      return "←";
+    } else {
+      return "→";
+    }
+  })
+
+}
+
+update();
+
+</script>

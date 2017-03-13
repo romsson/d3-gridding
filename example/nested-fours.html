@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+  fill: none;
+  fill-opacity: .8;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+// TODO: expected behavior is to group by vicinity..
+// -This should happen in the grouping function
+// -Spatial grouping is difficult since each cell has little knowledge
+// on the global configuration
+
+var width = 800,
+    height = 800,
+    paddingGroups = 5,
+    modeGroups = "grid",
+    modeUnits = "grid";
+
+var gridding = d3.gridding()
+  .size([width, height]);
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var color = d3.scaleLinear()
+    .domain([0, 10])
+    .range(["black", "white"]);
+
+var n = 1024,
+    data = generateData(n); // Unit data that remain unchanged
+
+// Generate data with unique global index
+function generateData(n, offset) {
+  offset = offset || 0;
+  return d3.range(n).map(function(d, i) {
+    return {x: d, y: i, index: i + offset};
+  });
+}
+
+// Given an SVG element and gridding data
+// renders with a depth attribute and key
+function render(el, griddingData, depth) {
+
+  var squares = el.selectAll(".square.depth_" + depth)
+    .data(griddingData, function(d) { return d.index; });
+
+  squares.enter().append("rect")
+    .attr("class", "square depth_" + depth)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  // Prevents to remove unit elements (aka depth 0 elements)
+  if(depth > 0) {
+    squares.exit().remove();
+  }
+
+  squares.transition().duration(1000)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+}
+
+function update(mode, groupBy) {
+
+  // Groups unit data into {key: "key", values: [...]}
+  var nested_data = d3.nest()
+      .key(groupBy)
+      .entries(data);
+
+  // Creates group data
+  var nbGroups = nested_data.length;
+  var dataGroups = generateData(nbGroups, data.length);
+
+  gridding
+    .mode(modeGroups)
+    .padding(paddingGroups);
+
+  // el.selectAll(".square.depth_" + depth)
+  //  .data(griddingData, function(d) { return d.index; });
+
+  var griddingDataGroups = gridding(nested_data);
+
+  render(svgSquares, griddingDataGroups, 1);
+
+  // For each group, re-organize the unit elements
+  var griddings = griddingDataGroups.map(function(d, i) {
+
+    var cols = Math.ceil(Math.sqrt(nbGroups));
+    var rows = Math.ceil(nbGroups / cols);
+    var row =  Math.floor(i / cols);
+
+    var grid = d3.gridding()
+      .size([d.width, d.height])
+      .offset([d.x, d.y])
+      .mode(modeUnits)
+      .padding(0);
+
+    render(svgSquares, grid(nested_data[i].values), 0);
+  });
+
+}
+
+var timing = 0, duration = 1000;
+
+setTimeout(function() {
+  update("grid", function(d) { return d.index % Math.floor(n); });
+}, timing++ * duration);
+
+setTimeout(function() {
+  update("grid", function(d) { return d.index % Math.floor(n/4); });
+}, timing++ * duration);
+
+setTimeout(function() {
+  update("grid", function(d) { return d.index % Math.floor(n/16); });
+}, timing++ * duration);
+
+setTimeout(function() {
+  update("grid", function(d) { return d.index % Math.floor(n/256); });
+}, timing++ * duration);
+
+
+</script>

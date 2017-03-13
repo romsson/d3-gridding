@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+// var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+var data =  d3.range(250).map(function(d, i) {
+  return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+});
+
+console.log(gridding(data))
+
+</script>

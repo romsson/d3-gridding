@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!--
+<label><input type="button" id="inflation-adjusted" value="change" onclick='change();' /> Adjust for inflation</label>
+-->
+<script src="../../node_modules/d3/build/d3.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<script src="../utils/utils.js"></script>
+<script>
+
+// TODO
+// [ ] Quick prototype
+// [ ] Flatten values
+// [ ] Recreate layout
+// [ ] .valueHeight() for each bar
+var margin = { top: 15, right: 15, bottom: 40, left: 60 }
+var width = 960 - margin.left - margin.right
+var height = 500 - margin.top - margin.bottom
+
+var years = [1985, 1995, 2005, 2015];
+var flows = ["import", "export"];
+var categories = ["import", "export"];
+var continents = ['Asia', 'North America', 'Europe', 'South America', 'Africa', 'Australia']
+
+var data = [];
+
+d3.range(1).map(function(root) {
+  years.map(function(year) {
+    flows.map(function(flow) {
+        categories.map(function(category) {
+          continents.map(function(continent) {
+            data.push({"root": root, "year": year, "flow": flow, "category": category, "continent": continent});
+          });
+        });
+    });
+  });
+});
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "padding": 2,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "vertical",
+  "padding": 2,
+  "level": 1
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "vertical",
+//  "valueHeight": function(d) { return Math.random(); },
+//  "orient": "up",
+  "padding": 2,
+  "level": 2
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "treemap",
+  "padding": 2,
+  "level": 3
+}];
+
+/*
+var nested_data = d3.nest()
+    .key(function(d) { return d["root"]; })
+    .key(function(d) { return d["year"]; })
+    .key(function(d) { return d["flow"]; })
+    .key(function(d) { return d["category"]; })
+//    .rollup(function(leaves) { return leaves.length; })
+    .entries(data);
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width*2)
+    .attr("height", height*2)
+  .append("g");
+
+var svgSummary = d3.select("body").append("svg")
+    .attr("width", width*2)
+    .attr("height", height*2)
+  .append("g");
+
+draw(svgSquares, nested_data[0], params, 0, "0_");
+
+*/
+d3.json('data.json', initialize)
+
+var flat = [];
+
+function initialize(error, data) {
+  if(error) { throw error }
+  console.log(data)
+
+  data.children.forEach(function(d) {
+    d.children.forEach(function(e) {
+      e.children.forEach(function(f) {
+        f.children.forEach(function(g) {
+          flat.push({"year": d.year, "type": e.type, "continent": f.continent, "value": g.value, "country": g.country});
+        });
+      });
+    });
+
+  })
+
+  var width = 800,
+      height = 600;
+
+  var params = [{
+    "size": function() { return [width, height]; },
+    "offset": function(d) { return [0, 0]; },
+    "mode": "vertical",
+    "padding": 0,
+    "valueHeight": "__agg",
+    "orient": "up",
+    "level": 0
+  }, {
+    "size": function(d) { return [d.width, d.height]; },
+    "offset": function(d) { return [d.x, d.y]; },
+    "mode": "grid",
+    "padding": 2,
+    "level": 1
+  }, {
+    "size": function(d) { return [d.width, d.height]; },
+    "offset": function(d) { return [d.x, d.y]; },
+    "mode": "grid",
+    "padding": 2,
+    "level": 1
+  }
+  ];
+
+  var svgSquares = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g");
+
+  function update() {
+
+    var nested_data = generate_nesting_agg([
+      {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+      {groupBy: "year", fn: d3.sum, accessor: function(d) { return d.value; }, sortBy: "year"},
+      {groupBy: "type", fn: function(d) { return d.length}, accessor: function(d) { return d.value; }}
+    ], "flat");
+
+    draw(svgSquares, nested_data[0], params, 0, "0_");
+
+    svgSquares.selectAll(".index")
+         .text(function() { return ""; })
+
+  }
+
+  update();
+
+
+};
+
+</script>
+</body>

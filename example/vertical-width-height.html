@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .valueHeight("r")
+  .valueWidth("r")
+  .orient("up")
+  .mode("vertical");
+
+var data =  d3.range(10).map(function(d, i) {
+  return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+});
+
+// var data = Array.apply(null, Array(4)).map(function () {});
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+svgSquares.selectAll(".square")
+    .data(gridding(data), function(d) { return d.index; })
+  .enter().append("rect")
+    .attr("class", "square")
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+svgSquares.selectAll(".index")
+    .data(gridding(data))
+  .enter().append("text")
+    .attr("class", "index")
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+    .text(function(d, i) { return d.value; });
+
+/*
+update();
+
+function update() {
+
+  svgSquares.selectAll(".square")
+      .data(gridding(data))
+      .transition().duration(500)
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+}
+
+var iteration = 0, iterator = 1;
+
+function repeat() {
+
+  data =  d3.range(10).map(function(d, i) {
+    return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+  });
+
+  update()
+
+  console.log("update")
+
+  setTimeout(repeat, 500);
+
+}
+
+repeat();
+*/
+</script>

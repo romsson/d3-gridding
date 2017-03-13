@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+}
+
+svg{
+  margin-top: 5px;
+  /*border: 1px solid #ccc;*/
+}
+
+text{
+  font-weight: 300;
+}
+
+</style>
+<body>
+
+<p align="center">
+  <svg></svg>
+</div>
+
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<!-- When import this way, the data is available as global variable "gridmapLayoutUsa" -->
+<script src="https://rawgit.com/kristw/gridmap-layout-usa/master/dist/gridmap-layout-usa.min.js"></script>
+<script>
+
+var options = {
+  rectWidth: 45,
+  rectHeight: 45
+};
+
+// Define color scale
+var color = d3.scale.quantize()
+  .domain([1, 20])
+  .range(['#b2ddf0', '#92bcd8', '#769cbf', '#5d7da7', '#46608f', '#334577', '#232d5f']);
+
+var svg = d3.select('svg')
+  .attr('width', 12 * options.rectWidth)
+  .attr('height', 8 * options.rectHeight);
+
+var sEnter = svg.append('g')
+  .selectAll('g')
+    .data(gridmapLayoutUsa)
+  .enter().append('g')
+    .attr('transform', function(d){return 'translate('+(d.x*options.rectWidth)+','+(d.y*options.rectHeight)+')';});
+
+sEnter.append('rect')
+  .attr('width', options.rectWidth)
+  .attr('height', options.rectHeight)
+  .attr('vector-effect', 'non-scaling-stroke')
+  .style('opacity', 0.5)
+  .style('stroke', '#aaa')
+  .style('fill', function(d){return color(d.name.length);});
+
+sEnter.append('text')
+  .attr('x', options.rectWidth/2)
+  .attr('y', options.rectHeight/2 + 2)
+  .style('text-anchor', 'middle')
+  .text(function(d){return d.key;});
+
+</script>

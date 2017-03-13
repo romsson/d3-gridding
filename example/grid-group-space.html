@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var data = d3.range(16).map(function(d, i) { return [i]; });
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "grid",
+  "padding": 10,
+  "level": 0
+}];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  nested_data = d3.nest()
+      .key(function(d, i) { return i; })
+      .entries(data);
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+}
+
+//update();
+
+setTimeout(function() {
+
+    // Add params layer
+  var params = [{
+    "size": function() { return [width, height]; },
+    "offset": function(d) { return [0, 0]; },
+    "mode": "grid",
+    "padding": 10,
+    "level": 0
+  }, {
+    "size": function(d) { return [d.width, d.height]; },
+    "offset": function(d) { return [d.x, d.y]; },
+    "mode": "grid",
+    "padding": 10,
+    "level": 1
+  }];
+
+  nested_data = d3.nest()
+      .key(function(d, i) { return i; })
+      .key(function(d, i) { return i % 4; })
+      .entries(data);
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  console.log("HERE")
+
+}, 1000)
+
+</script>

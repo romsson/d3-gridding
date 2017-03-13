@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+}
+
+.title {
+
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height]);
+
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var color = d3.scaleLinear()
+    .domain([0, 10])
+    .range(["black", "white"]);
+
+function generateData(n, offset) {
+  offset = offset || 0;
+  return d3.range(n).map(function(d, i) {
+    return {x: d, y: i, r: Math.random(), index: i + offset, group: i % 10};
+  });
+}
+
+function render(el, griddingData, depth, key) {
+
+  var squares = el.selectAll(".square.depth_" + depth)
+    .data(griddingData, function(d) { return d.index; });
+
+  squares.enter().append("rect")
+    .attr("class", "square depth_" + depth)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", "none")//function(d, i) { return color(d.index); })
+    .style("fill-opacity", .8);
+
+  if(depth > 0) {
+    squares.exit().remove();
+  }
+
+  squares.transition()
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+}
+
+var n = 25;
+
+var groupByGroup = function(d) { return d.group; }
+var groupBy1 = function(d) { return d.index % 1; }
+var groupBy2 = function(d) { return d.index % 2; }
+var groupBy5 = function(d) { return d.index % 5; }
+var groupBy10 = function(d) { return d.index % 10; }
+var groupBy20 = function(d) { return d.index % 20; }
+var groupBy100 = function(d) { return d.index % 100; }
+var groupByRandom = function(d) { return Math.floor(Math.random() * 10); }
+
+var data = generateData(220);
+
+function update(mode, groupBy, sort) {
+
+  sort = sort || d3.ascending;
+
+  var nested_data = d3.nest()
+      .key(groupBy)
+      .entries(data);
+
+  var nbGroups = nested_data.length;
+  var dataGroups = generateData(nbGroups, data.length);
+
+  gridding
+    .mode("grid")
+    .padding(10);
+
+  var griddingDataGroups = gridding(dataGroups);
+
+  render(svgSquares, griddingDataGroups, 1, "");
+
+  d3.selectAll(".square.depth_0").attr("class", "square depth_0");
+
+  var griddings = griddingDataGroups.map(function(d, i) {
+
+    var grid = d3.gridding()
+      .size([d.width, d.height])
+      .offset([d.x, d.y])
+      .mode("grid")
+      .padding(0);
+
+    render(svgSquares, grid(nested_data[i].values), 0, nested_data[i].key);
+  });
+
+}
+
+var timing = 0, duration = 2000;
+
+// Grouping
+setTimeout(function() { update("grid", groupByGroup); }, timing++ * duration);
+setTimeout(function() { update("grid", groupByRandom); }, timing++ * duration);
+setTimeout(function() { update("grid", groupBy1); }, timing++ * duration);
+setTimeout(function() { update("grid", groupBy2); }, timing++ * duration);
+setTimeout(function() { update("grid", groupBy5); }, timing++ * duration);
+setTimeout(function() { update("grid", groupBy10); }, timing++ * duration);
+setTimeout(function() { update("grid", groupBy20); }, timing++ * duration);
+setTimeout(function() { update("grid", groupBy100); }, timing++ * duration);
+
+// Un-grouping
+
+</script>

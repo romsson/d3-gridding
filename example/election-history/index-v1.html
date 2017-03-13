@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+}
+
+svg{
+  margin-top: 5px;
+  /*border: 1px solid #ccc;*/
+}
+
+text{
+  font-weight: 300;
+}
+
+</style>
+<body>
+
+<p align="center">
+  <svg></svg>
+</div>
+
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<script src="https://rawgit.com/kristw/gridmap-layout-usa/master/dist/gridmap-layout-usa.min.js"></script>
+<script>
+
+// TODO
+// Keep track of credits (data..)
+// Show color scale
+// Big number for year?
+// How to change grid?
+// Merge datasets
+
+// Efficient grouping / nesting?
+var options = {
+  rectWidth: 45,
+  rectHeight: 45
+};
+
+var invert = function (obj) {
+
+  var new_obj = {};
+
+  for (var prop in obj) {
+    if(obj.hasOwnProperty(prop)) {
+      new_obj[obj[prop]] = prop;
+    }
+  }
+
+  return new_obj;
+};
+
+// Get the data
+// Hash data https://gist.github.com/mshafrir/2646763
+// https://github.com/zonination/election-history
+d3.json("data/states_hash.json", function(error, states) {
+  d3.csv("data/elec.csv", function(error, data) {
+
+    accr = invert(states);
+
+    election_year = [];
+
+    elections = data.filter(function(d) {
+      election_year[d.Year] = true;
+      return d.Year == "2012 - Obama";
+    }).map(function(d) {
+      return {"state": d.State, "accr": accr[d.State], "dem": +d["party.1"], "rep": +d["party.2"]};
+    });
+
+    var gridding = d3.gridding()
+      .size([12 * options.rectWidth, 8 * options.rectHeight])
+      .mode("identity");
+      //.value(function(d) { return d.index; });
+
+    // Define color scale
+    // var color = d3.scaleQuantize()
+    //   .domain([1, 20])
+    //   .range(['#b2ddf0', '#92bcd8', '#769cbf', '#5d7da7', '#46608f', '#334577', '#232d5f']);
+
+    var color = d3.scaleLinear()
+      .domain([1, 20])
+      .range(['red', 'blue']);
+
+    var svg = d3.select('svg')
+      .attr('width', 12 * options.rectWidth)
+      .attr('height', 8 * options.rectHeight);
+
+    // Preparing for USA grid
+    var griddingMap = gridding(gridmapLayoutUsa.map(function(d) {
+          d.x = d.x * options.rectWidth;
+          d.y = d.y * options.rectHeight;
+          d.cx = d.x + options.rectWidth / 2;
+          d.cy = d.y + options.rectHeight / 2;
+          d.width = options.rectWidth;
+          d.height = options.rectHeight;
+          return d;
+        }))
+
+    var sEnter = svg.append('g')
+      .selectAll('g')
+        .data(griddingMap)
+      .enter()
+        .append('g')
+        .each(function(d) {
+
+          var grid = d3.gridding()
+            .size([d.width, d.height])
+            .offset([d.x, d.y])
+            .mode("grid")
+            .padding(0);
+
+            d3.select(this).selectAll('cell').data(grid(d3.range(60).map(function(e, i) { return {}; })))
+              .enter()
+                .append("rect")
+                .attr('class', 'cell')
+                .attr('x', function(d) { return d.x; })
+                .attr('y', function(d) { return d.y; })
+                .attr('width', function(d) { return d.width; })
+                .attr('height', function(d) { return d.height; })
+                .style("fill", function(d, i) { return color(i); })
+
+        });
+
+    sEnter.append('rect')
+      .attr('x', function(d) { return d.x; })
+      .attr('y', function(d) { return d.y; })
+      .attr('width', function(d) { return d.width; })
+      .attr('height', function(d) { return d.height; })
+      .attr('vector-effect', 'non-scaling-stroke')
+      .style('opacity', 0.5)
+      .style('stroke', '#aaa')
+      .style('fill', 'none');
+//      .style('fill', function(d){ return color(d.name.length);});
+  //    .style('fill', function(d, i){ return color(elections[i]["dem"] - elections[i]["rep"]); });
+
+    sEnter.append('text')
+      .attr('x', function(d) { return d.cx; })
+      .attr('y', function(d) { return d.cy; })
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'central')
+      .text(function(d){ return d.key; });
+
+    function update(mode) {
+
+      gridding
+        .mode(mode);
+
+      var sUpdate = svg.selectAll('g > g')
+        .data(gridding(gridmapLayoutUsa))
+        .each(function(d, i) {
+
+          var grid = d3.gridding()
+            .size([d.width, d.height])
+            .offset([d.x, d.y])
+            .mode("grid")
+            .padding(0);
+
+            d3.select(this).selectAll('.cell').data(grid(d3.range(60).map(function(e, i) { return {}; })))
+              .transition().duration(1000).delay(function(e, j) { return j*2 + 50*60*i; })
+              .attr('class', 'cell')
+              .attr('x', function(d) { return d.x; })
+              .attr('y', function(d) { return d.y; })
+              .attr('width', function(d) { return d.width; })
+              .attr('height', function(d) { return d.height; })
+              .style("fill", function(d, i) { return color(i); });
+
+        });
+
+      sUpdate.select('rect').transition()
+        .attr('x', function(d) { return d.x; })
+        .attr('y', function(d) { return d.y; })
+        .attr('width', function(d) { return d.width; })
+        .attr('height', function(d) { return d.height; })
+
+      sUpdate.select('text').transition()
+        .attr('x', function(d) { return d.cx; })
+        .attr('y', function(d) { return d.cy; })
+
+    }
+
+    update("identity")
+    setTimeout(function() { update("grid"); }, 2000);
+
+  });
+});
+
+function create_radios(el, data, name, callback) {
+
+  d3.select(el).append("span").html(name);
+
+  var label_radios = d3.select(el).selectAll(".checkboxes").data(data)
+        .enter()
+          .append("label")
+          .attr("class", "radios");
+
+  label_radios.append("input")
+        .attr("type", "radio")
+        .attr('name', name)
+        .attr("value", function(d) { return d; })
+        .on("change", function(d) {
+          callback(this.value);
+        })
+        .property("checked", function(d, i) {return i === 0;});
+
+  label_radios.append("span")
+      .html(function(d) {
+        return d;
+      });
+
+}
+
+create_radios("body", ['None', 'Year', 'State', 'Party'], "Group by: ", function(d) {
+
+  // Create nested data here
+
+  var groupBy = function(d) { return d.Sate; };
+
+  var nested_data = d3.nest()
+      .key(groupBy)
+      .entries(data);
+
+  console.log(nested_data)
+})
+
+create_radios("body", ['Grid', 'Map', 'Vertical', 'Horizontal', 'Treemap'], "<br>Layout: ", function(d) {
+  console.log(d)
+})
+
+create_radios("body", ['None', 'Year', 'State', 'Party'], "<br>Group by 2: ", function(d) {
+  console.log(d)
+})
+
+create_radios("body", ['Grid', 'Map', 'Vertical', 'Horizontal', 'Treemap'], "<br>Layout 2: ", function(d) {
+  console.log(d)
+})
+
+// update()
+// layout0
+// layout1
+// groupBy
+
+// Bar chart victories
+
+</script>

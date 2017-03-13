@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<canvas width="960" height="500"></canvas>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d");
+
+var width = 400,
+    height = 300;
+
+// context.translate(margin.left, margin.top);
+
+var gridding = d3.gridding()
+  .size([width, height]);
+
+var color = d3.scaleLinear()
+    .domain([0, 20])
+    .range(["black", "white"]);
+
+function generateData(n) {
+  return d3.range(n).map(function(d, i) {
+    return {x: d, y: i, r: Math.random(), index: i};
+  });
+}
+
+function update(mode, n, sort) {
+
+  sort = sort || d3.ascending;
+
+  color.domain([0, n]);
+
+  var data = generateData(n);
+
+  gridding
+    .mode(mode)
+    .padding(0)
+    .sort(sort);
+
+  var griddingData = gridding(data);
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  data.forEach(function(d) {
+    context.fillStyle = color(d.index);
+    context.fillRect(d.x, d.y, d.width, d.height);
+  });
+
+}
+
+var timing = 0, factor = 500;
+
+setTimeout(function() { update("grid", 10); }, timing++ * factor);
+setTimeout(function() { update("radial", 11); }, timing++ * factor);
+setTimeout(function() { update("treemap", 11); }, timing++ * factor);
+setTimeout(function() { update("grid", 12); }, timing++ * factor);
+setTimeout(function() { update("grid", 100); }, timing++ * factor);
+setTimeout(function() { update("grid", 1000); }, timing++ * factor);
+setTimeout(function() { update("grid", 100); }, timing++ * factor);
+setTimeout(function() { update("pack", 1000); }, timing++ * factor);
+
+
+</script>

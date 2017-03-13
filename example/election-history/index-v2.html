@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+}
+
+svg {
+  margin-top: 5px;
+  border: 1px solid #ccc;
+}
+
+text{
+  font-weight: 300;
+}
+
+text.title {
+  font-size: 24px;
+  stroke: white;
+  stroke-width: 1.5px;
+  opacity: 0.5;
+}
+
+rect {
+  fill: none;
+  stroke: none;
+}
+
+</style>
+<body>
+
+<p align="center">
+  <svg></svg>
+</div>
+
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<!-- When import this way, the data is available as global variable "gridmapLayoutUsa" -->
+<script src="https://rawgit.com/kristw/gridmap-layout-usa/master/dist/gridmap-layout-usa.min.js"></script>
+<script>
+
+var cellSize = [45, 45];
+
+var options = {
+  rectWidth: 45,
+  rectHeight: 45
+};
+
+var gridding = d3.gridding()
+  .size([12 * options.rectWidth, 8 * options.rectHeight])
+  .mode("identity");
+  //.value(function(d) { return d.index; });
+
+// Define color scale
+
+var color = d3.scaleLinear()
+  .domain([0, 1])
+  .range(['red', 'blue']);
+
+var svg = d3.select('svg')
+  .attr('width', 12 * options.rectWidth)
+  .attr('height', 8 * options.rectHeight);
+
+var gSvg = svg.append('g');
+
+//var sEnter = gSvg.selectAll('g')
+//    .data(gridding(gridmapLayoutUsa.map(function(d) {
+//      d.x = d.x * options.rectWidth;
+//      d.y = d.y * options.rectHeight;
+//      d.cx = d.x + options.rectWidth / 2;
+//      d.cy = d.y + options.rectHeight / 2;
+//      d.width = options.rectWidth;
+//      d.height = options.rectHeight;
+//      return d;
+//    })))
+//  .enter().append('g');
+//
+//sEnter.append('rect')
+//  .attr('x', function(d) { return d.x; })
+//  .attr('y', function(d) { return d.y; })
+//  .attr('width', function(d) { return d.width; })
+//  .attr('height', function(d) { return d.height; })
+//  .attr('vector-effect', 'non-scaling-stroke')
+//  .style('opacity', 0.5)
+//  .style('stroke', '#aaa')
+//  .style('fill', function(d){return color(d.name.length);});
+//
+//sEnter.append('text')
+//  .attr('x', function(d) { return d.cx; })
+//  .attr('y', function(d) { return d.cy; })
+//  .style('text-anchor', 'middle')
+//  .style('dominant-baseline', 'central')
+//  .text(function(d){ return d.key; });
+
+
+// Given an SVG element and gridding data
+// renders with a depth attribute and key
+function render(el, griddingData, depth) {
+
+  var squares = el.selectAll(".square.depth_" + depth)
+    .data(griddingData, function(d) { return d.year + " " + d.state + " " + d.key; });
+
+  squares.enter().append("rect")
+    .attr("class", "square depth_" + depth)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) {
+      if(depth === 0)  {
+        return color(d.diff);
+      } else {
+        return null;
+      }
+    });
+
+  // Prevents to remove unit elements (aka depth 0 elements)
+  if(depth > 0) {
+    squares.exit().remove();
+  }
+
+  squares
+    .transition()
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  if(depth === 1) {
+
+    var titles = el.selectAll(".title")
+      .data(griddingData, function(d) { return d.year + " " + d.state + " " + d.key; });
+
+    titles.enter().append("text")
+      .attr("class", "title")
+      .attr("text-anchor", "middle")
+      .style('dominant-baseline', 'central')
+      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .text(function(d) {  return access_title(d); });
+
+    titles.exit().remove();
+
+    titles.transition().delay(function(d, i) { return i * 10; })
+      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .text(function(d) { return access_title(d); });
+  }
+}
+
+function update(params) {
+
+  // Re-orgainize unit-data
+  var nested_data = d3.nest()
+      .key(params.groupBy)
+      .entries(units);
+
+  // Creates group data
+  var nbGroups = nested_data.length;
+
+  var griddingDataGroups = gridding
+          .mode(params.modes[0])
+          .valueX(params.valueX)
+          .valueY(params.valueY)
+          .cellSize(params.cellSize)
+          .padding(10)
+          (nested_data);
+
+  render(gSvg, griddingDataGroups, 1);
+
+  griddingDataGroups.map(function(d, i) {
+
+    var cols = gridding.cols();
+    var rows = Math.ceil(nbGroups / cols);
+    var row =  Math.floor(i / cols);
+
+    var grid = d3.gridding()
+      .size([d.width, d.height]) // auto from parent
+      .offset([d.x, d.y])        // auto from parent
+      .mode(params.modes[1])
+      .valueX(params.valueX)
+      .valueY(params.valueY)
+      .value(params.value)
+      .cellSize(params.cellSize)
+      .padding(0);
+
+    render(gSvg, grid(nested_data[i].values), 0);
+  });
+
+}
+
+// TODO
+// [ ] Give proper credits
+// https://github.com/zonination/election-history
+// https://gist.github.com/nkrumm/de5b696ce2473a24048f#file-100-years-of-us-presidential-elections-clustered-ipynb
+// [ ] Load data
+// [X] Simple scenario
+// [X] Unit data are election
+// [X] Order in a meaningful way
+// [X] Show title
+// [X] Color scale that represents the actual diff
+// [ ] Add regions metadata
+// [ ] Decide what to do with metadata
+// [ ] Upside / down to compare as bar charts
+// [ ] Fixed columns for bar chart
+// [ ] Find interesting story? Real data?
+// [ ] How to show the winner of an election??
+// [ ] Reproduce election history horizontal
+
+var timing = 0, factor = 2000;
+
+var years = d3.range(1950, 2016, 4);
+var states = gridmapLayoutUsa.map(function(d) { return d.key; });
+
+var units = [];
+
+years.forEach(function(y) {
+  gridmapLayoutUsa.forEach(function(s) {
+    var d = {};
+    d.year = y;
+    d.state = s.key;
+    d.dem = Math.random();
+    d.rep = Math.random();
+    d.diff = 1 - (d.dem - d.rep);
+    d.geo_x = s.x;
+    d.geo_y = s.y;
+    units.push(d);
+  })
+})
+
+// Custom Geo Map
+setTimeout(function() {
+  access_title = function(d) { return "100 years of U.S. Elections";}
+  update({
+    modes: ["grid", "grid"],
+    groupBy: function(d) { return 1; },
+    sort: d3.ascending,
+    value: function(d) { return d.diff; }
+});
+}, timing++ * factor);
+
+setTimeout(function() {
+  access_title = function(d) { return d.key;}
+  update({
+    modes: ["grid", "grid"],
+    groupBy: function(d) { return d.year; },
+    sort: d3.ascending,
+    value: function(d) { return d.state; }
+  });
+}, timing++ * factor);
+
+setTimeout(function() {
+  access_title = function(d) { return d.key;}
+  update({
+    modes: ["grid", "grid"],
+    groupBy: function(d) { return d.state; },
+    sort: d3.ascending,
+    value: function(d) { return d.year; }
+  });
+}, timing++ * factor);
+
+setTimeout(function() {
+  access_title = function(d) { return d.key === "true" ? "Dem": "Rep";}
+  update({
+    modes: ["grid", "grid"],
+    groupBy: function(d) { return d.diff > 1; },
+    sort: d3.ascending,
+    value: function(d) { return d.diff; }
+  });
+}, timing++ * factor);
+
+setTimeout(function() {
+  access_title = function(d) { return d.key === "true" ? "Dem": "Rep";}
+  update({
+    modes: ["radial"],
+    groupBy: function(d) { return d.diff > 1; },
+    sort: d3.ascending,
+    value: function(d) { return d.diff; }
+  });
+}, timing++ * factor);
+
+
+//setTimeout(function() {
+//  access_title = function(d) { return d.year;}
+//
+//  update([{
+//    modes: ["grid", "coordinate"],
+//    groupBy: function(d) { return d.year; },
+//    valueX: function(d) { return d["geo_x"]; },
+//    valueY: function(d) { return d["geo_y"]; },
+//    cellSize: [cellSize[0] / 4, cellSize[1] / 4]
+//  }])
+//}, timing++ * factor);
+//
+//setTimeout(function() {
+//  access_title = function(d) { return d.year;}
+//  update({modes: ["radial", "grid"], groupBy: function(d) {
+//    return d.state;
+//  }});
+//
+//}, timing++ * factor);
+
+// function interval() {
+//   var modes = gridding.modes()
+//       mode = gridding.mode();
+//       m = gridding.mode(modes[(modes.indexOf(mode) + 1) % modes.length]).mode();
+//   update(m);
+//   setTimeout(interval, 2000);
+// }
+//
+// setTimeout(interval, 2000);
+
+</script>

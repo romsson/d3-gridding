@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var data = [
+  {index: 0, val: "A", att: 1},
+  {index: 0, val: "A", att: 2},
+  {index: 0, val: "A", att: 3},
+  {index: 1, val: "B", att: 3},
+  {index: 2, val: "B", att: 4},
+  {index: 2, val: "B", att: 4},
+  {index: 2, val: "B", att: 4},
+  {index: 2, val: "B", att: 4},
+  {index: 2, val: "B", att: 4},
+  {index: 2, val: "B", att: 4}
+];
+
+var nested_data = generate_nesting_agg([
+  {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+  {groupBy: "val", fn: function(d) { return d.length}, accessor: function(d) { return d.att; }}
+], "data");
+
+
+var width = 400,
+    height = 300;
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "valueHeight": function(d) { return d["__agg"]; },
+//  "valueWidth": function(d) { return d["__agg"]; },
+  "padding": 2,
+  "level": 0,
+  "orient": "up"
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "treemap",
+  "padding": 20,
+  "level": 1
+}
+];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+}
+
+update();
+
+
+
+</script>

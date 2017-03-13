@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="../node_modules/resemblejs/resemblejs.js"></script>
+
+<img src="img/background.png" style="width: 400px">
+<canvas id="canvas" width="600" height="400"></canvas>
+<script>
+
+
+var image = new Image();
+
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+
+//drawing of the test image - img1
+image.onload = function () {
+    //draw background image
+    context.drawImage(image, 0, 0);
+    //draw a box over the top
+    context.fillStyle = "rgba(200, 0, 0, 0.5)";
+    context.fillRect(0, 0, 500, 500);
+
+    var x = 0, y = 0, width = 400, height = 300;
+    // Get the CanvasPixelArray from the given coordinates and dimensions.
+    var imgd = context.getImageData(x, y, width, height);
+    var pix = imgd.data;
+
+    // Loop over each pixel and invert the color.
+    for (var i = 0, n = pix.length; i < n; i += 4) {
+        pix[i  ] = 255 - pix[i  ]; // red
+        pix[i+1] = 255 - pix[i+1]; // green
+        pix[i+2] = 255 - pix[i+2]; // blue
+        // i+3 is alpha (the fourth element)
+    }
+
+    // Draw the ImageData at the given (x,y) coordinates.
+    context.putImageData(imgd, x, y);
+
+};
+
+image.src = "img/background.png";
+
+
+
+// TODO
+// [ ] Draw image as a series of squares
+// [ ] Change the padding of the squares
+// [ ] Random order
+
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .value(function(d) { return d.index; });
+
+var svgPoints = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var color = d3.scaleLinear()
+    .domain([0, 10])
+    .range(["black", "white"]);
+
+function generateData(n) {
+
+  return d3.range(n).map(function(d, i) {
+    return {x: d, y: i, r: Math.random(), index: i};
+  });
+
+}
+
+function update(mode, n, sort, orient) {
+
+  sort = sort || d3.ascending;
+
+  var data = generateData(n);
+
+  gridding
+    .mode(mode)
+    .sort(sort)
+    .orient(orient);
+
+  var points = svgPoints.selectAll(".point")
+    .data(gridding(data), function(d) { return d.index; });
+
+  points.enter().append("circle")
+    .attr("class", "point")
+    .attr("r", 10)
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+    .style("fill", function(d, i) { return color(d.index); })
+    .style("fill-opacity", .8);
+
+  points.exit().remove();
+
+  points.transition().delay(function(d, i) { return i * 10; })
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
+
+  var squares = svgSquares.selectAll(".square")
+    .data(gridding(data), function(d) { return d.index; });
+
+  squares.enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return color(d.index); })
+    .style("fill-opacity", .8);
+
+  squares.exit().remove();
+
+  squares.transition().delay(function(d, i) { return i * 10; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+}
+
+var timing = 0, factor = 500;
+
+//setTimeout(function() { update("grid", 10, d3.ascending, "down"); }, timing++ * factor);
+//setTimeout(function() { update("grid", 11, d3.ascending, "down"); }, timing++ * factor);
+//setTimeout(function() { update("grid", 12, d3.ascending, "down"); }, timing++ * factor);
+setTimeout(function() { update("grid", 13, d3.ascending, "up"); }, timing++ * factor);
+
+
+
+</script>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<canvas width="960" height="500"></canvas>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas"),
+    context = canvas.getContext("2d");
+
+var chart = d3.select("canvas");
+
+var width = 400,
+    height = 300;
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+// context.translate(margin.left, margin.top);
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .value(function(d) { return d.index; });
+
+var color = d3.scaleLinear()
+    .domain([0, 20])
+    .range(["black", "white"]);
+
+var detachedContainer = document.createElement("custom");
+var dataContainer = d3.select(detachedContainer);
+
+function drawCustom(data) {
+
+  var scale = d3.scaleLinear()
+    .range([10, 390])
+    .domain(d3.extent(data));
+
+  var dataBinding = dataContainer.selectAll("custom.rect")
+    .data(data, function(d) { return d; });
+
+  dataBinding
+    .attr("size", 8)
+    .transition()
+    .duration(1000)
+    .attr("size", 15)
+    .attr("fillStyle", "green");
+
+  dataBinding.enter()
+      .append("custom")
+      .classed("rect", true)
+      .attr("x", scale)
+      .attr("y", 100)
+      .attr("size", 8)
+      .attr("fillStyle", "red");
+
+  dataBinding.exit()
+    .attr("size", 8)
+    .transition()
+    .duration(1000)
+    .attr("size", 5)
+    .attr("fillStyle", "lightgrey");
+
+  var data = generateData(data.length);
+
+  gridding
+    .mode("grid")
+    .padding(0);
+
+  var griddingData = gridding(data);
+
+  var squares = svgSquares.selectAll(".square")
+    .data(griddingData, function(d) { return d.index; });
+
+  squares.enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width / 2; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return color(d.index); })
+    .style("fill-opacity", .8)
+
+  squares.exit().remove();
+
+  squares.transition().duration(1000)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  var squares = dataContainer.selectAll("custom.square")
+    .data(griddingData, function(d) { return d.index; });
+
+  squares.enter().append("custom")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width / 2; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return color(d.index); })
+    .style("fill-opacity", .8);
+
+  squares.exit().remove();
+
+  squares.transition().duration(1000)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .style("fill", function(d, i) { return color(d.index); })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+}
+
+function drawCanvas() {
+
+  // clear canvas
+  context.fillStyle = "#fff";
+  context.rect(0,0, chart.attr("width"), chart.attr("height"));
+  context.fill();
+
+  // select our dummy nodes and draw the data to canvas.
+  var elements = dataContainer.selectAll("custom.rect");
+
+  elements.each(function(d) {
+    var node = d3.select(this);
+
+    context.beginPath();
+    context.fillStyle = node.attr("fillStyle");
+    context.rect(node.attr("x"), node.attr("y"), node.attr("size"), node.attr("size"));
+    context.fill();
+    context.closePath();
+
+  })
+
+  // select our dummy nodes and draw the data to canvas.
+  var elements = dataContainer.selectAll("custom.square");
+
+  elements.each(function(d) {
+    var node = d3.select(this);
+    var translate = node.attr("transform");
+    translate = JSON.parse(translate.replace("translate(", "[").replace(")", "]"));
+
+    context.beginPath();
+    context.fillStyle = color(d.index);
+    context.rect(translate[0], translate[1], node.attr("width"), node.attr("height"));
+    context.fill();
+    context.closePath();
+
+  })
+
+}
+
+
+function generateData(n) {
+  return d3.range(n).map(function(d, i) {
+    return {x: d, y: i, r: Math.random(), index: i};
+  });
+}
+
+function update(mode, n, sort) {
+
+  sort = sort || d3.ascending;
+
+  color.domain([0, n]);
+
+  var data = generateData(n);
+
+  gridding
+    .mode(mode)
+    .padding(0)
+    .sort(sort);
+
+  var griddingData = gridding(data);
+
+
+//
+  //context.clearRect(0, 0, chart.width, chart.height);
+//
+  //data.forEach(function(d) {
+  //  context.fillStyle = color(d.index);
+  //  context.fillRect(d.x, d.y, d.width, d.height);
+ // });
+
+}
+
+d3.timer(drawCanvas);
+drawCustom([1,2,13,20,23]);
+
+setTimeout(function() {
+  drawCustom([10,22,13,20,23, 12, 23, 12]);
+}, 1000)
+
+</script>

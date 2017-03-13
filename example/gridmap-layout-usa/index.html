@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+}
+
+svg{
+  margin-top: 5px;
+  /*border: 1px solid #ccc;*/
+}
+
+text{
+  font-weight: 300;
+}
+
+</style>
+<body>
+
+<p align="center">
+  <svg></svg>
+</div>
+
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<!-- When import this way, the data is available as global variable "gridmapLayoutUsa" -->
+<script src="https://rawgit.com/kristw/gridmap-layout-usa/master/dist/gridmap-layout-usa.min.js"></script>
+<script>
+
+var options = {
+  rectWidth: 45,
+  rectHeight: 45
+};
+
+var gridding = d3.gridding()
+  .size([12 * options.rectWidth, 8 * options.rectHeight])
+  .mode("identity");
+  //.value(function(d) { return d.index; });
+
+// Define color scale
+var color = d3.scaleQuantize()
+  .domain([1, 20])
+  .range(['#b2ddf0', '#92bcd8', '#769cbf', '#5d7da7', '#46608f', '#334577', '#232d5f']);
+
+var svg = d3.select('svg')
+  .attr('width', 12 * options.rectWidth)
+  .attr('height', 8 * options.rectHeight);
+
+var sEnter = svg.append('g')
+  .selectAll('g')
+    .data(gridding(gridmapLayoutUsa.map(function(d) {
+      d.x = d.x * options.rectWidth;
+      d.y = d.y * options.rectHeight;
+      d.cx = d.x + options.rectWidth / 2;
+      d.cy = d.y + options.rectHeight / 2;
+      d.width = options.rectWidth;
+      d.height = options.rectHeight;
+      return d;
+    })))
+  .enter().append('g');
+
+sEnter.append('rect')
+  .attr('x', function(d) { return d.x; })
+  .attr('y', function(d) { return d.y; })
+  .attr('width', function(d) { return d.width; })
+  .attr('height', function(d) { return d.height; })
+  .attr('vector-effect', 'non-scaling-stroke')
+  .style('opacity', 0.5)
+  .style('stroke', '#aaa')
+  .style('fill', function(d){return color(d.name.length);});
+
+sEnter.append('text')
+  .attr('x', function(d) { return d.cx; })
+  .attr('y', function(d) { return d.cy; })
+  .style('text-anchor', 'middle')
+  .style('dominant-baseline', 'central')
+  .text(function(d){ return d.key; });
+
+function update(mode) {
+
+  gridding
+    .mode(mode);
+
+  var sUpdate = svg.selectAll('g > g')
+    .data(gridding(gridmapLayoutUsa));
+
+  sUpdate.select('rect').transition()
+    .attr('x', function(d) { return d.x; })
+    .attr('y', function(d) { return d.y; })
+    .attr('width', function(d) { return d.width; })
+    .attr('height', function(d) { return d.height; })
+
+  sUpdate.select('text').transition()
+    .attr('x', function(d) { return d.cx; })
+    .attr('y', function(d) { return d.cy; })
+
+}
+
+function interval() {
+  var modes = gridding.modes()
+      mode = gridding.mode();
+      m = gridding.mode(modes[(modes.indexOf(mode) + 1) % modes.length]).mode();
+  update(m);
+  setTimeout(interval, 2000);
+}
+
+setTimeout(interval, 2000);
+
+</script>

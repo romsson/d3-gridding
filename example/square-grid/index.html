@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.cells {
+  fill: #aaa;
+}
+
+.label {
+  text-anchor: start;
+  font: 24px sans-serif;
+}
+
+</style>
+<svg width="960" height="990"></svg>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<script>
+
+// Original example
+// Updated text tween with https://bl.ocks.org/mbostock/7004f92cac972edef365
+
+var format = d3.format(",d");
+
+var svg = d3.select("svg");
+
+var width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var groupSpacing = 3,
+    cellSpacing = 1,
+    cellSize = Math.floor((width - 11 * groupSpacing) / 100) - cellSpacing,
+    offset = Math.floor((width - 100 * cellSize - 90 * cellSpacing - 11 * groupSpacing) / 2);
+
+var updateDuration = 125,
+    updateDelay = updateDuration / 500;
+
+var gridding = d3.gridding()
+    .size([width, height])
+    .mode("grid");
+
+var cell = svg.append("g")
+    .attr("class", "cells")
+    .attr("transform", "translate(" + offset + "," + (offset + 30) + ")");
+
+var label = svg.append("text")
+    .attr("class", "label");
+
+function update(n1) {
+  var n0 = cell.selectAll("rect").size();
+
+  gridding
+    .mode("grid");
+
+  cellUpdate = cell.selectAll("rect")
+      .data(gridding(d3.range(n1)), function(d, i) { return i; });
+
+  cellUpdate.exit().transition()
+      .delay(function(d, i) { return (n0 - i) * updateDelay; })
+      .duration(updateDuration)
+      .attr("width", 0)
+      .remove();
+
+  cellUpdate.enter().append("rect")
+      .attr("width", 0)
+      .attr("height", cellSize)
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+    .transition()
+      .delay(function(d, i) { return (i - n0) * updateDelay; })
+      .duration(updateDuration)
+      .attr("width", cellSize);
+
+  label
+      .attr("x", offset + groupSpacing)
+      .attr("y", offset + groupSpacing)
+      .attr("dy", ".71em")
+    .transition()
+      .duration(Math.abs(n1 - n0) * updateDelay + updateDuration / 2)
+      .tween("text", function() {
+        var that = d3.select(this),
+            i = d3.interpolateNumber(n0, n1);;
+        return function(t) { that.text(format(Math.round(i(t)))); };
+      });
+
+}
+
+(function interval() {
+  update(Math.floor(Math.random() * 100 * 100));
+  setTimeout(interval, updateDelay * 100 * 100 + updateDuration + 1000);
+})();
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+rect {
+  stroke: black;
+  stroke-width: 1;
+  fill: none;
+  fill-opacity: .8;
+}
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://romsson.github.io/d3-gridding/build/d3-gridding-v0.0.5.js"></script>
+<script>
+var width = 800,
+    height = 800,
+    paddingGroups = 5;
+
+var gridding = d3.gridding()
+  .size([width, height]);
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var color = d3.scaleLinear()
+    .domain([0, 10])
+    .range(["black", "white"]);
+
+var n = 512,
+    data = generateData(n);
+
+// Generate data with unique index globally
+function generateData(n, offset) {
+  offset = offset || 0;
+  return d3.range(n).map(function(d, i) {
+    return {x: d, y: i, index: i + offset};
+  });
+}
+
+// Given an SVG element and gridding data
+// renders with a depth attribute and key
+function render(el, griddingData, depth) {
+
+  var squares = el.selectAll(".square.depth_" + depth)
+    .data(griddingData, function(d) { return d.index; });
+
+  squares.enter().append("rect")
+    .attr("class", "square depth_" + depth)
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  // Prevents to remove unit elements (aka depth 0 elements)
+  if(depth > 0) {
+    squares.exit().remove();
+  }
+
+  squares
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+}
+
+function update(mode, groupBy) {
+
+  // Re-orgainize unit-data
+  var nested_data = d3.nest()
+      .key(groupBy)
+      .entries(data);
+
+  // Creates group data
+  var nbGroups = nested_data.length;
+
+  var griddingDataGroups = gridding
+          .mode(mode)
+          .padding(paddingGroups)
+          (nested_data);
+
+  render(svgSquares, griddingDataGroups, 1);
+
+  // For each group, re-organize the unit elements
+  griddingDataGroups.map(function(d, i) {
+
+    var cols = gridding.cols();
+    var rows = Math.ceil(nbGroups / cols);
+    var row =  Math.floor(i / cols);
+
+    var grid = d3.gridding()
+      .size([d.width, d.height])
+      .offset([d.x, d.y])
+      .mode((((i + row)  % 2) === 0) ? "horizontal": "vertical")
+      .padding(0);
+
+    render(svgSquares, grid(nested_data[i].values), 0);
+  });
+
+}
+
+var iteration = 0, iterator = 1;
+
+function repeat() {
+
+  update("grid", function(e) {
+    return e.index % Math.floor(n / Math.pow(2, iteration));
+  });
+
+  iteration = iteration + iterator;
+
+  if(iteration === 9) {
+    iterator = -1;
+  } else if(iteration === 0) {
+    iterator = 1;
+  }
+
+  setTimeout(repeat, 500);
+
+}
+
+repeat();
+
+</script>

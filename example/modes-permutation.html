@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: white;
+  stroke: black;
+  stroke-width: 1;
+}
+
+rect:hover{
+  fill: red;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+
+var width = 800,
+    height = 800;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .prefix("__")
+  .mode("grid");
+
+
+// var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+function cross(a, b) {
+  var c = [], n = a.length, m = b.length, i, j;
+  for (i = -1; ++i < n;) {
+    for (j = -1; ++j < m;) {
+      c.push({x: a[i], i: i, y: b[j], j: j, value: a[i] + "x" + b[j]});
+    }
+  }
+  return c;
+}
+
+var dims = gridding.modes();
+
+var data = cross(dims, dims);
+
+var griddingData = gridding(data);
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+svgSquares.selectAll(".square")
+    .data(griddingData, function(d) { return d.__index; })
+  .enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.__width; })
+    .attr("height", function(d) { return d.__height; })
+    .attr("transform", function(d) { return "translate(" + d.__x + "," + d.__y + ")"; });
+
+svgSquares.selectAll(".index")
+    .data(griddingData)
+  .enter().append("text")
+    .attr("class", "index")
+    .attr("transform", function(d) { return "translate(" + d.__cx + "," + d.__cy + ")"; })
+    //.text(function(d, i) {
+    //  if(d.value[0] === d.value[2]) {
+    //    return d.value[0];
+    //  } else {
+    //    return d.value;
+    //  }
+    //});
+
+// For each group, re-organize the unit elements
+griddingData.map(function(d, i) {
+
+  var grid = d3.gridding()
+    .size([d.__width, d.__height])
+    .offset([d.__x, d.__y])
+    .mode(d.x)
+    .prefix("__")
+    .padding(0);
+
+  griddingDataGroup = grid(d3.range(10));
+
+  svgSquares.selectAll(".square_" + i)
+      .data(griddingDataGroup)
+    .enter().append("rect")
+      .attr("class", "square_" + i)
+      .attr("width", function(d) { return d.__width; })
+      .attr("height", function(d) { return d.__height; })
+      .attr("transform", function(d) { return "translate(" + d.__x + "," + d.__y + ")"; })
+
+  // For each group, re-organize the unit elements
+  griddingDataGroup.map(function(e, j) {
+
+    var grid = d3.gridding()
+      .size([e.__width, e.__height])
+      .offset([e.__x, e.__y])
+      .mode(d.y)
+      .prefix("__")
+      .padding(0);
+
+    griddingDataSubSubGroups = grid(d3.range(10));
+
+    svgSquares.selectAll(".square_l_" + i + "_" + j)
+        .data(griddingDataSubSubGroups)
+      .enter().append("rect")
+        .attr("class", "square_l_" + i + "_" + j)
+        .attr("width", function(d) { return d.__width; })
+        .attr("height", function(d) { return d.__height; })
+       .attr("transform", function(d) { return "translate(" + d.__x + "," + d.__y + ")"; })
+
+  });
+
+});
+
+
+</script>

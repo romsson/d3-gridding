@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .prefix("_")
+  .mode("grid");
+
+var gridding2 = d3.gridding()
+  .size([width, height])
+  .prefix("___")
+  .mode("radial");
+
+// var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+var data =  d3.range(250).map(function(d, i) {
+  return {r: Math.random(), index: i, value: String.fromCharCode(i)};
+});
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+svgSquares.selectAll(".square")
+    .data(gridding(data), function(d) { return d.index; })
+  .enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d._width; })
+    .attr("height", function(d) { return d._height; })
+    .attr("transform", function(d) { return "translate(" + d._x + "," + d._y + ")"; })
+
+svgSquares.selectAll(".index")
+    .data(gridding(data))
+  .enter().append("text")
+    .attr("class", "index")
+    .attr("transform", function(d) { return "translate(" + d._cx + "," + d._cy + ")"; })
+    .text(function(d, i) { return d.value; });
+
+var svgSquares2 = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+svgSquares2.selectAll(".square")
+    .data(gridding2(data), function(d) { return d.index; })
+  .enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.___width; })
+    .attr("height", function(d) { return d.___height; })
+    .attr("transform", function(d) { return "translate(" + d.___x + "," + d.___y + ")"; })
+
+svgSquares2.selectAll(".index")
+    .data(gridding2(data))
+  .enter().append("text")
+    .attr("class", "index")
+    .attr("transform", function(d) { return "translate(" + d.___cx + "," + d.___cy + ")"; })
+    .text(function(d, i) { return d.value; });
+
+
+</script>
