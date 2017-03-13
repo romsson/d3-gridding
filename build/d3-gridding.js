@@ -1,4 +1,4 @@
-// https://github.com/romsson/d3-gridding Version 0.0.8. Copyright 2017 Romain Vuillemot.
+// https://github.com/romsson/d3-gridding Version 0.0.9. Copyright 2017 Romain Vuillemot.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-scale'), require('d3-array'), require('d3-hierarchy'), require('d3-shape')) :
   typeof define === 'function' && define.amd ? define('d3-gridding', ['exports', 'd3-scale', 'd3-array', 'd3-hierarchy', 'd3-shape'], factory) :
