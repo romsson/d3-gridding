@@ -1,2 +1,5 @@
 .DS_Store
 npm-debug.log
+
+example/capture/figures/*.png
+

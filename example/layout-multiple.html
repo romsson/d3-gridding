@@ -22,26 +22,30 @@ rect, circle {
 <script src="utils/utils.js"></script>
 <script>
 
-var width = window.innerWidth,
-    height = 200;
+var width = 800, //window.innerWidth,
+    height = 600;
  //   height = window.innerHeight;
 
 var data =  [
   {mode: "vertical", value: 1},
   {mode: "vertical", value: 2},
-  {mode: "vertical", value: 3},
-  {mode: "horizontal", value: 2, valueY: "value"},
+  {mode: "vertical", value: 1},
+  {mode: "horizontal", value: 1, valueY: "value"},
   {mode: "horizontal", value: 3, valueY: "value"},
   {mode: "horizontal", value: 1, valueY: "value"},
   {mode: "grid", value: 1},
   {mode: "grid", value: 2},
-  {mode: "grid", value: 1}
+  {mode: "grid", value: 1},
+  {mode: "grid", value: 1},
+  {mode: "grid", value: 2},
+  {mode: "grid", value: 1},
+  {mode: "diagonal", value: 1}
 ];
 
 var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
-  "mode": "vertical",
+  "mode": "grid",
   "padding": 10,
   "margin": 10,
   "valueY": "value",
@@ -61,18 +65,19 @@ var params = [{
       return null;
     }
   },
-  "valueHeight": function(d) {
-    if(d.key === "vertical") {
-      return "value";
-    } else if(d.key === "horizontal") {
-      return "value";
-    } else if(d.key === "grid") {
-      return null;
-    } else {
-      return null;
-    }
-  },
-  "padding": 20,
+ // "valueHeight": function(d) {
+ //   console.log("IN VALUE HEIGHT", d, d.mode);
+ //   if(d.mode === "vertical") {
+ //     return "value";
+ //   } else if(d.key === "horizontal") {
+ //     return "value";
+ //   } else if(d.key === "grid") {
+ //     return null;
+ //   } else {
+ //     return null;
+ //   }
+ // },
+  "padding": 10,
   "level": 1
 }];
 

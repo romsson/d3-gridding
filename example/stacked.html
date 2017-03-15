@@ -22,22 +22,17 @@ rect, circle {
 <script src="utils/utils.js"></script>
 <script>
 
-// TOOD
-// Prototyping process
-// [X] gris with data = ["raw", "preview", "nesting-tree", "mapping-tree", ...
-// [ ] Start from a standard layout and assign names to zones
-// [ ]
+var width = 400,
+    height = 300;
 
-var width = window.innerWidth,
-    height = window.innerHeight;
-
-var data = ["raw-data-table", "preview", "nesting-tree", "mapping-tree", "mapping-tree-properties", "mapping-tree-properties-values", "modes", "history"]
-    .map(function(d) { return [d]; });
+var data = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function(d, i) {
+    return {"index": i, "value": d, "prop": "static"};
+  });
 
 var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
-  "mode": "grid",
+  "mode": "stack",
   "padding": 2,
   "level": 0
 }
@@ -57,18 +52,15 @@ var svgSquares = d3.select("body").append("svg")
 
 function update() {
 
+  //nested_data = d3.nest()
+  //    .key(function(d, i) { return i; })
+  //    .entries(data);
+
   var nested_data = generate_nesting([""], "data")
 
   console.log("NESTED", nested_data)
 
   draw(svgSquares, nested_data[0], params, 0, "0_");
-
-  svgSquares.selectAll(".index")
-      .attr("class", "index")
-      .style('text-anchor', 'middle')
-      .style('dominant-baseline', 'central')
-      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-      .text(function(d, i) { return d[0]; });
 
 }
 

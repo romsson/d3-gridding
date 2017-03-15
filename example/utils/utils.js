@@ -51,6 +51,18 @@ function draw(el, data, params, level, id) {
     grid.mode(params[level].mode);
   }
 
+  if(typeof params[level].valueX !== "undefined") {
+    grid.valueX(params[level].valueX);
+  }
+
+  if(typeof params[level].valueY !== "undefined") {
+    grid.valueY(params[level].valueY);
+  }
+
+  if(typeof params[level].valueWidth !== "undefined") {
+    grid.valueWidth(params[level].valueWidth);
+  }
+
   if(typeof params[level].valueHeight !== "undefined") {
 
    // if(typeof params[level].valueHeight === "function") {
@@ -59,10 +71,6 @@ function draw(el, data, params, level, id) {
     grid.valueHeight(params[level].valueHeight);
   //  }
 
-  }
-
-  if(typeof params[level].valueWidth !== "undefined") {
-    grid.valueWidth(params[level].valueWidth);
   }
 
   if(typeof params[level].orient !== "undefined") {

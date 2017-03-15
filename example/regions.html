@@ -10,9 +10,9 @@ body {
 }
 
 rect, circle {
-  fill: #aaaaaa;
+  fill: none;
   stroke: black;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 </style>
 <body>
@@ -46,24 +46,15 @@ var data = [
   {"index": 4, "x": 8, "y": 0, "height": 10, "width": 2, "name": "right"},
 ];
 
-// 4-maring chart
 var data = [
   {"index": 0, "x": 0, "y": 0, "height": 10, "width": 10},
   {"index": 1, "x": 10, "y": 10, "height": 0, "width": 0},
+
   {"index": 2, "x": 0, "y": 2, "height": 6, "width": 2, "name": "left"},
   {"index": 3, "x": 2, "y": 2, "height": 6, "width": 6, "name": "middle"},
   {"index": 4, "x": 8, "y": 2, "height": 6, "width": 2, "name": "right"},
   {"index": 5, "x": 2, "y": 0, "height": 2, "width": 6, "name": "top"},
   {"index": 6, "x": 2, "y": 8, "height": 2, "width": 6, "name": "bottom"},
-];
-
-// 2-maring chart
-var data = [
-  {"index": 0, "x": 0, "y": 0, "height": 10, "width": 10},
-  {"index": 1, "x": 10, "y": 10, "height": 0, "width": 0},
-  {"index": 3, "x": 0, "y": 2, "height": 8, "width": 8, "name": "middle"},
-  {"index": 4, "x": 8, "y": 2, "height": 8, "width": 2, "name": "right"},
-  {"index": 5, "x": 0, "y": 0, "height": 2, "width": 8, "name": "top"}
 ];
 
 var params = [{
@@ -73,7 +64,8 @@ var params = [{
   "valueY": "y",
   "valueWidth": "width",
   "valueHeight": "height",
-  "padding": 2,
+  "padding": 0,
+  "margin": 2
   "level": 0
 }];
 
@@ -89,8 +81,6 @@ function update() {
 
   svgSquares.selectAll(".index")
     .text(function(d) { return d.name; })
-
-  svgSquares.selectAll("rect").filter(function(d, i) { return i < 2; }).remove();
 
 }
 

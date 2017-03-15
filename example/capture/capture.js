@@ -17,12 +17,18 @@ var figures = [{
     url: "example/placeholder.html",
     format: "png",
     filename: "placeholder.png",
-    timeout: 200
+    timeout: 200,
+    size: [400, 300]
   }, {
     url: "example/modes.html",
     format: "png",
     filename: "modes.png",
     timeout: 200
+  }, {
+    url: "example/modes-permutation.html",
+    format: "png",
+    filename: "modes-permutation.png",
+    timeout: 400
   }, {
     url: "example/modes-permutation.html",
     format: "png",
@@ -38,6 +44,21 @@ var figures = [{
     format: "png",
     filename: "grid-histogram-grid.png",
     timeout: 200
+  }, {
+    url: "example/barchart-grouped.html",
+    format: "png",
+    filename: "grid-barchart-grouped.png",
+    timeout: 500
+  }, {
+    url: "example/barchart-stacked.html",
+    format: "png",
+    filename: "grid-barchart-stacked.png",
+    timeout: 500
+  }, {
+    url: "example/barchart-horizon.html",
+    format: "png",
+    filename: "grid-barchart-horizon.png",
+    timeout: 500
   }, {
     url: "example/bar-chart-treemap/index-gridding.html",
     format: "png",
@@ -140,6 +161,11 @@ var figures = [{
     format: "png",
     filename: "layers-25D.png",
     timeout: 500
+  }, {
+    url: "example/barchart-grouped-top.html",
+    format: "png",
+    filename: "horror-barchart-grouped-top.png",
+    timeout: 500
   }
 ];
 
@@ -155,7 +181,7 @@ function capture(fig, index) {
   var output = output_folder + f.filename;
 
   if(typeof f.size === "undefined")  {
-    f.size = [600, 500];
+    f.size = [400, 300];
   }
 
   page.open(address, function start(status) {
