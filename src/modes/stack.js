@@ -19,8 +19,9 @@ export default function(nodes, v) {
 
   nodes.forEach(function(n, i) {
     var s = stacked[i][0];
-    n[v.__x] = v.offset[0];
-    n[v.__y] = v.y(s[1]) + v.offset[1];
+
+    n[v.__x] = v.offset[0] + v.padding;
+    n[v.__y] = v.y(s[1]) + v.offset[1] + v.padding;
 
     n[v.__width] = v.size[0];
     n[v.__height] = v.y(s[1]) - v.y(s[0]);

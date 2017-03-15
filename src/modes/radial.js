@@ -21,8 +21,8 @@ export default function(nodes, v) {
     n[v.__height] = v.size[1] / nodes.length;
 
     // Must be after width & height
-    n[v.__x] = arc.centroid(arcs[i])[0] + v.size[0] / 2 + v.offset[0] - n[v.__width] / 2;
-    n[v.__y] = arc.centroid(arcs[i])[1] + v.size[1] / 2 + v.offset[1] - n[v.__height] / 2;
+    n[v.__x] = arc.centroid(arcs[i])[0] + v.size[0] / 2 + v.offset[0] - n[v.__width] / 2 + v.padding;
+    n[v.__y] = arc.centroid(arcs[i])[1] + v.size[1] / 2 + v.offset[1] - n[v.__height] / 2 + v.padding;
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;

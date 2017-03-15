@@ -16,8 +16,8 @@ export default function(nodes, v) {
     var col = i % v.cols;
     var row = Math.floor(i / v.cols);
 
-    n[v.__x] = v.x(col) + v.padding + v.offset[0];
-    n[v.__y] = v.y(row) + v.padding + v.offset[1];
+    n[v.__x] = v.x(col) + v.offset[0] + v.padding;
+    n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
     n[v.__width] = v.size[0] / v.cols - 2 * v.padding;
     n[v.__height] = v.size[1] / v.rows - 2 * v.padding;
