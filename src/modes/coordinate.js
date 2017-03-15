@@ -32,7 +32,7 @@ export default function(nodes, v) {
 
   if(!v.valueHeight) {
     _valueHeight = function() { return 1; }
-    v.height.domain([0, 1]).range([0, v.size[1]]);
+    v.height.domain([0, nodes.length]).range([0, v.size[1]]);
   } else {
     _valueHeight = v.valueHeight;
     v.height.domain(d3Array.extent(nodes, v.valueY)).range([0, v.size[1]]);
