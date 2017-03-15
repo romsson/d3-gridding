@@ -18,8 +18,8 @@
       var col = i % v.cols;
       var row = Math.floor(i / v.cols);
 
-      n[v.__x] = v.x(col) + v.padding + v.offset[0];
-      n[v.__y] = v.y(row) + v.padding + v.offset[1];
+      n[v.__x] = v.x(col) + v.offset[0] + v.padding;
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
       n[v.__width] = v.size[0] / (v.cols + 1 / 2) - 2 * v.padding;
       n[v.__height] = v.size[1] / v.rows - 2 * v.padding;
@@ -93,25 +93,45 @@
     // Create random data if no value function has been set
     if(!v.valueX) {
       v.valueX = function() { return Math.random(); }
-      v.x.domain([0, 1]).range([v.padding, v.size[0] - 2 * v.padding]);
+      v.x.domain([0, 1]).range([0, v.size[0]]);
     } else {
-      v.x.domain(d3Array.extent(nodes, v.valueX)).range([v.padding, v.size[0]  - 2 * v.padding]);
+      v.x.domain(d3Array.extent(nodes, v.valueX)).range([0, v.size[0]]);
     }
 
     // Same as for X, create random data for vertical axis
     if(!v.valueY) {
       v.valueY = function() { return Math.random(); }
-      v.y.domain([0, 1]).range([v.padding, v.size[1] - 2 * v.padding]);
+      v.y.domain([0, 1]).range([0, v.size[1]]);
     } else {
-      v.y.domain(d3Array.extent(nodes, v.valueY)).range([v.padding, v.size[1] - 2 * v.padding]);
+      v.y.domain(d3Array.extent(nodes, v.valueY)).range([0, v.size[1]]);
+    }
+
+    var _valueWidth;
+
+    if(!v.valueWidth) {
+      _valueWidth = function() { return 1; }
+      v.width.domain([0, nodes.length]).range([0, v.size[0]]);
+    } else {
+      _valueWidth = v.valueWidth;
+      v.width.domain(d3Array.extent(nodes, v.valueX)).range([0, v.size[0]]);
+    }
+
+    var _valueHeight;
+
+    if(!v.valueHeight) {
+      _valueHeight = function() { return 1; }
+      v.height.domain([0, 1]).range([0, v.size[1]]);
+    } else {
+      _valueHeight = v.valueHeight;
+      v.height.domain(d3Array.extent(nodes, v.valueY)).range([0, v.size[1]]);
     }
 
     nodes.forEach(function(n) {
-      n[v.__x] = v.x(v.valueX(n)) + v.offset[0];
-      n[v.__y] = v.y(v.valueY(n)) + v.offset[1];
+      n[v.__x] = v.x(v.valueX(n)) + v.offset[0] + v.padding;
+      n[v.__y] = v.y(v.valueY(n)) + v.offset[1] + v.padding;
 
-      n[v.__width] = v.cellSize ? v.cellSize[0]: v.size[0] / nodes.length;
-      n[v.__height] = v.cellSize ? v.cellSize[1]: v.size[1] / nodes.length;
+      n[v.__width] = v.width(_valueWidth(n)) - 2 * v.padding;
+      n[v.__height] = v.height(_valueHeight(n)) - 2 * v.padding;
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + n[v.__height] / 2;
@@ -168,15 +188,15 @@
     nodes.forEach(function(n, i) {
 
       if(v.orient == "up") {
-        n[v.__x] = v.x(i) + v.offset[0];
-        n[v.__y] = v.size[1] - (v.y(i) + v.offset[1]) - v.size[1] / nodes.length;
+        n[v.__x] = v.x(i) + v.offset[0] + v.padding;
+        n[v.__y] = v.size[1] - (v.y(i) + v.offset[1]) - v.size[1] / nodes.length + v.padding;
       } else {
-        n[v.__x] = v.x(i) + v.offset[0];
-        n[v.__y] = v.y(i) + v.offset[1];
+        n[v.__x] = v.x(i) + v.offset[0] + v.padding;
+        n[v.__y] = v.y(i) + v.offset[1] + v.padding;
       }
 
-      n[v.__width] = v.size[0] / nodes.length;
-      n[v.__height] = v.size[1] / nodes.length;
+      n[v.__width] = v.size[0] / nodes.length - 2 * v.padding;
+      n[v.__height] = v.size[1] / nodes.length - 2 * v.padding;
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + n[v.__height] / 2;
@@ -203,8 +223,8 @@
       var col = i % v.cols;
       var row = Math.floor(i / v.cols);
 
-      n[v.__x] = v.x(col) + v.padding + v.offset[0];
-      n[v.__y] = v.y(row) + v.padding + v.offset[1];
+      n[v.__x] = v.x(col) + v.offset[0] + v.padding;
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
       n[v.__width] = v.size[0] / v.cols - 2 * v.padding;
       n[v.__height] = v.size[1] / v.rows - 2 * v.padding;
@@ -362,8 +382,8 @@
       n[v.__height] = v.size[1] / nodes.length;
 
       // Must be after width & height
-      n[v.__x] = arc.centroid(arcs[i])[0] + v.size[0] / 2 + v.offset[0] - n[v.__width] / 2;
-      n[v.__y] = arc.centroid(arcs[i])[1] + v.size[1] / 2 + v.offset[1] - n[v.__height] / 2;
+      n[v.__x] = arc.centroid(arcs[i])[0] + v.size[0] / 2 + v.offset[0] - n[v.__width] / 2 + v.padding;
+      n[v.__y] = arc.centroid(arcs[i])[1] + v.size[1] / 2 + v.offset[1] - n[v.__height] / 2 + v.padding;
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + n[v.__height] / 2;
@@ -390,8 +410,9 @@
 
     nodes.forEach(function(n, i) {
       var s = stacked[i][0];
-      n[v.__x] = v.offset[0];
-      n[v.__y] = v.y(s[1]) + v.offset[1];
+
+      n[v.__x] = v.offset[0] + v.padding;
+      n[v.__y] = v.y(s[1]) + v.offset[1] + v.padding;
 
       n[v.__width] = v.size[0];
       n[v.__height] = v.y(s[1]) - v.y(s[0]);
@@ -408,8 +429,8 @@
     var _shiftX = v.size[0] / (2 * nodes.length);
 
     nodes.forEach(function(n, i) {
-      n[v.__x] = 0 + v.offset[0] + _shiftX * i;
-      n[v.__y] = 0 + v.offset[1];
+      n[v.__x] = 0 + v.offset[0] + _shiftX * i  + v.padding;
+      n[v.__y] = 0 + v.offset[1] + v.padding;
 
       n[v.__width] = v.size[0] - _shiftX * i * 2;
       n[v.__height] = v.size[1];
@@ -487,27 +508,24 @@
 
     v.cols = nodes.length;
 
-    v.x.domain([0, v.cols]).range([v.padding, v.size[0] - v.padding]);
-
     var _valueHeight;
 
     if(!v.valueHeight) {
       _valueHeight = function() { return 1; }
-      v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding]);
+      v.height.domain([0, 1]).range([0, v.size[1]]);
     } else {
-
-      _valueHeight = v.valueHeight
-      v.height.domain([0, d3Array.max(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
+      _valueHeight = v.valueHeight;
+      v.height.domain([0, d3Array.max(nodes, _valueHeight)]).range([0, v.size[1]]);
     }
 
     var _valueWidth;
 
     if(!v.valueWidth) {
       _valueWidth = function() { return 1; }
-      v.width.domain([0, nodes.length]).range([0, v.size[0] - 2 * v.padding]);
+      v.width.domain([0, nodes.length]).range([0, v.size[0] ]);
     } else {
       _valueWidth = v.valueWidth;
-      v.width.domain([0, d3Array.sum(nodes, _valueWidth)]).range([0, v.size[0] - 2 * v.padding]);
+      v.width.domain([0, d3Array.sum(nodes, _valueWidth)]).range([0, v.size[0]]);
     }
 
     nodes[0].x0 = 0;
@@ -519,12 +537,11 @@
       if(v.orient == "down") {
         n[v.__y] = 0 + v.offset[1] + v.padding;
       } else if(v.orient === "up") {
-        n[v.__y] = v.size[1] - (v.height(_valueHeight(n)) + v.offset[0]) + v.padding;
+        n[v.__y] = v.size[1] - (v.height(_valueHeight(n)) + v.offset[1]) + v.padding;
       } else {
         n[v.__y] = 0 + v.offset[1] + v.padding;
       }
 
-   //   n[v.__width] = (v.size[0] - 2 * v.padding) / v.cols;
       n[v.__width] = v.width(_valueWidth(n));
       n[v.__height] = v.height(_valueHeight(n));
 
@@ -532,6 +549,8 @@
       if(i < nodes.length - 1) {
         nodes[i+1].x0 = n.x0 + n[v.__width];
       }
+
+      n[v.__width] = v.width(_valueWidth(n)) - 2 * v.padding;
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + n[v.__height] / 2;
