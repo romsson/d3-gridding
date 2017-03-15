@@ -50,6 +50,11 @@ var figures = [{
     filename: "grid-barchart-grouped.png",
     timeout: 500
   }, {
+    url: "example/barchart-overlap.html",
+    format: "png",
+    filename: "grid-barchart-overlap.png",
+    timeout: 500
+  }, {
     url: "example/barchart-stacked.html",
     format: "png",
     filename: "grid-barchart-stacked.png",
@@ -64,6 +69,11 @@ var figures = [{
     format: "png",
     filename: "grid-bar-chart-treemap2.png",
     timeout: 1000
+  }, {
+    url: "example/scatterplot.html",
+    format: "png",
+    filename: "grid-scatterplot.png",
+    timeout: 500
   }, {
     url: "example/grid-order.html",
     format: "png",
@@ -127,6 +137,11 @@ var figures = [{
     filename: "grid-table-stacked-sorted.png",
     timeout: 500
   }, {
+//    url: "example/table-stacked-diverging.html",
+//    format: "png",
+//    filename: "grid-table-stacked-diverging.png",
+//    timeout: 500
+//  }, {
     url: "example/lineup.html",
     format: "png",
     filename: "grid-lineup.png",
@@ -165,6 +180,11 @@ var figures = [{
     url: "example/barchart-grouped-top.html",
     format: "png",
     filename: "horror-barchart-grouped-top.png",
+    timeout: 500
+  }, {
+    url: "example/layout-all.html",
+    format: "png",
+    filename: "layout-all.png",
     timeout: 500
   }
 ];
