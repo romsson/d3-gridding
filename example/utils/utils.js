@@ -21,7 +21,11 @@ function cross(a, b) {
 // [ ] Show label or not
 // [ ] Which variable for label mapping
 // [ ] Position: center (default), top, left, right, bottom
-function draw(el, data, params, level, id) {
+function draw(el, data, params, level, id, show_cross) {
+
+  if(typeof show_cross === "undefined") {
+    show_cross = false;
+  }
 
   // Special id for keavers
   if(typeof params[level + 1] !== "undefined") {
@@ -108,15 +112,57 @@ function draw(el, data, params, level, id) {
 
   squares.exit().remove();
 
+  if(show_cross) {
+
+    var crossL = el.selectAll(".crossL" + id)
+        .data(gridData, function(d, i) { return i; });
+
+    var crossLEnter = crossL.enter();
+
+    crossLEnter.append("line")
+        .attr("class", "cross crossL crossL" + id)
+        .attr("x1", function(d, i) { return d.x; })
+        .attr("x2", function(d, i) { return d.x + d.width; })
+        .attr("y1", function(d, i) { return d.y; })
+        .attr("y2", function(d, i) { return d.y + d.height; });
+
+    var crossR = el.selectAll(".crossR" + id)
+        .data(gridData, function(d, i) { return i; });
+
+    var crossREnter = crossR.enter();
+
+    crossREnter.append("line")
+        .attr("class", "cross crossR crossR" + id)
+        .attr("x1", function(d, i) { return d.x + d.width; })
+        .attr("x2", function(d, i) { return d.x; })
+        .attr("y1", function(d, i) { return d.y; })
+        .attr("y2", function(d, i) { return d.y + d.height; });
+
+  }
+
   var labels = el.selectAll(".index" + id)
       .data(gridData, function(d, i) { return i; });
 
-  labels.enter().append("text")
+  var labelsEnter = labels.enter();
+
+  labelsEnter.append("text")
       .attr("class", "index index" + id)
       .style('text-anchor', 'middle')
+      .attr('stroke','#FFF')
+      .attr('stroke-width',8)
+      .attr('stroke-linejoin','round')
       .style('dominant-baseline', 'central')
       .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
       .text(function(d, i) { return d.key || "X"; });
+
+  labelsEnter.append('text')
+      .attr("class", "index index" + id)
+      .style('text-anchor', 'middle')
+      .attr('fill','#000')
+      .style('dominant-baseline', 'central')
+      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .text(function(d, i) { return d.key || "X"; });
+
 
   labels
       .transition()
@@ -131,7 +177,7 @@ function draw(el, data, params, level, id) {
 
       if(typeof d.values !== "undefined") {
 
-        draw(el, d, params, level + 1, id + "_" + (level + 1) + "_" + i);
+        draw(el, d, params, level + 1, id + "_" + (level + 1) + "_" + i, show_cross);
 
       } else {
         // console.log("<<<<<<<< done no more values")
