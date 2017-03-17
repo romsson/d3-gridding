@@ -30,11 +30,11 @@ export default function(nodes, v) {
 
     n[v.__x] = n.x0 + v.offset[0] + v.padding;
 
-    if(v.orient == "down") {
+    if(v.orient === "down") {
       n[v.__y] = 0 + v.offset[1] + v.padding;
     } else if(v.orient === "up") {
-      n[v.__y] = v.size[1] - (v.height(_valueHeight(n)) + v.offset[1]) + v.padding;
-    } else {
+      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.padding;
+    } else { // defaut down
       n[v.__y] = 0 + v.offset[1] + v.padding;
     }
 

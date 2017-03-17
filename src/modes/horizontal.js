@@ -34,8 +34,17 @@ export default function(nodes, v) {
   nodes[0].y0 = 0;
 
   nodes.forEach(function(n, i) {
-    n[v.__x] = 0 + v.padding + v.offset[0];
-    n[v.__y] = n.y0 + v.padding + v.offset[1];
+
+    n[v.__y] = n.y0 + v.offset[1] + v.padding;
+
+    if(v.orient === "right") {
+      n[v.__x] = 0 + v.offset[0] + v.padding;
+    } else if(v.orient === "left") {
+      n[v.__x] = v.size[0] - v.width(_valueWidth(n))  + v.offset[0] + v.padding;
+      console.log(v.width(_valueWidth(n)))
+    } else { // defaut right
+      n[v.__x] = 0 + v.offset[0] + v.padding;
+    }
 
     n[v.__width] = v.width(_valueWidth(n));
     n[v.__height] = v.y(_valueY(n));
