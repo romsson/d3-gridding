@@ -9,18 +9,11 @@ body {
   fill: black;
 }
 
-rect, circle, path {
+rect, circle, line {
   fill: none;
   stroke: black;
   stroke-width: 1;
 }
-
-* {
-  font-family: sans-serif;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
 </style>
 <body>
 <!-- <script src="http://d3js.org/d3.v4.js"></script> -->
@@ -34,28 +27,24 @@ var width = 400,
 
 var data = [];
 
-d3.range(1).map(function(root) {
-  d3.range(4).map(function(year) {
-    d3.range(4).map(function(category) {
-      data.push({"root": root, "year": year, "category": category});
-    });
+d3.range(10).map(function(d, i) {
+  d3.range(2).map(function(e, j) {
+    data.push({"index": i, "value": j, "size": i*(j+1)});
   });
 });
-
-var line = d3.line()
-    .x(function(d) { return d.cx; })
-    .y(function(d) { return d.cy; });
 
 var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
   "mode": "grid",
-  "padding": 10,
+  "padding": 2,
   "level": 0
 }, {
   "size": function(d) { return [d.width, d.height]; },
   "offset": function(d) { return [d.x, d.y]; },
-  "mode": "grid",
+  "mode": "horizontal",
+  "valueWidth": "size",
+  "orient": function(d) { return +d.key === 0 ? "left": "right";},
   "padding": 2,
   "level": 1
 }
@@ -68,18 +57,15 @@ var svgSquares = d3.select("body").append("svg")
 
 function update() {
 
-  nested_data = generate_nesting(["", "year"], "data")
+  //nested_data = d3.nest()
+  //    .key(function(d, i) { return i; })
+  //    .entries(data);
 
-  grid = draw(svgSquares, nested_data[0], params, 0, "0_");
+  var nested_data = generate_nesting(["", "value"], "data")
 
-  svgSquares.selectAll("path")
-      .data([nested_data[0].values.map(function(d) { return d.values; }).reduce(function(a, b) { return a.concat(b); })])
-    .enter().append("path")
-      .attr("d", line);
+  console.log("NESTED", nested_data)
 
-  // Look & fill https://bl.ocks.org/tomgp/47d151732913c6d1f74e
-//  svgSquares.selectAll(".index")
-//    .text(function(d, i) { return i; })
+  draw(svgSquares, nested_data[0], params, 0, "0_", false);
 
 }
 

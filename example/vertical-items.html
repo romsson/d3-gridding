@@ -9,18 +9,11 @@ body {
   fill: black;
 }
 
-rect, circle, path {
+rect, circle {
   fill: none;
   stroke: black;
   stroke-width: 1;
 }
-
-* {
-  font-family: sans-serif;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
 </style>
 <body>
 <!-- <script src="http://d3js.org/d3.v4.js"></script> -->
@@ -32,25 +25,17 @@ rect, circle, path {
 var width = 400,
     height = 300;
 
-var data = [];
-
-d3.range(1).map(function(root) {
-  d3.range(4).map(function(year) {
-    d3.range(4).map(function(category) {
-      data.push({"root": root, "year": year, "category": category});
-    });
+var data = d3.range(240).map(function(d, i) {
+    return {"index": i, "value": Math.floor(Math.random()*120 / 7), "prop": "static", "v": Math.random()};
   });
-});
-
-var line = d3.line()
-    .x(function(d) { return d.cx; })
-    .y(function(d) { return d.cy; });
 
 var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
-  "mode": "grid",
-  "padding": 10,
+  "mode": "vertical",
+  "valueHeight": "__agg",
+  "orient": "up",
+  "padding": 2,
   "level": 0
 }, {
   "size": function(d) { return [d.width, d.height]; },
@@ -68,18 +53,19 @@ var svgSquares = d3.select("body").append("svg")
 
 function update() {
 
-  nested_data = generate_nesting(["", "year"], "data")
+  //nested_data = d3.nest()
+  //    .key(function(d, i) { return i; })
+  //    .entries(data);
 
-  grid = draw(svgSquares, nested_data[0], params, 0, "0_");
 
-  svgSquares.selectAll("path")
-      .data([nested_data[0].values.map(function(d) { return d.values; }).reduce(function(a, b) { return a.concat(b); })])
-    .enter().append("path")
-      .attr("d", line);
+  var nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+    {groupBy: "value", fn: d3.sum, accessor: function(d) { return d.value; }, sortBy: "year"}
+    ], "data");
 
-  // Look & fill https://bl.ocks.org/tomgp/47d151732913c6d1f74e
-//  svgSquares.selectAll(".index")
-//    .text(function(d, i) { return i; })
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  svgSquares.selectAll(".index").remove();
 
 }
 

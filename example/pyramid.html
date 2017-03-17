@@ -23,8 +23,7 @@ var width = 400,
     height = 300;
 
 var gridding = d3.gridding()
-  .size([width, height])
-  .value(function(d) { return d.index; });
+  .size([width, height]);
 
 var svgPoints = d3.select("body").append("svg")
     .attr("width", width)

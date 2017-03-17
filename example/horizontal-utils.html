@@ -26,7 +26,9 @@ var width = 400,
 
 var gridding = d3.gridding()
   .size([width, height])
-  .mode("vertical");
+  .valueWidth("r")
+  .orient("left")
+  .mode("horizontal");
 
 // var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 

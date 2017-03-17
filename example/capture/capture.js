@@ -14,7 +14,7 @@ var output_folder = "figures/";
 // [ ]
 
 var figures = [{
-    url: "example/placeholder.html",
+    url: "example/placeholder-utils.html",
     format: "png",
     filename: "placeholder.png",
     timeout: 200,
@@ -65,6 +65,11 @@ var figures = [{
     filename: "grid-barchart-horizon.png",
     timeout: 500
   }, {
+    url: "example/barchart-population.html",
+    format: "png",
+    filename: "grid-barchart-population.png",
+    timeout: 500
+  }, {
     url: "example/bar-chart-treemap/index-gridding.html",
     format: "png",
     filename: "grid-bar-chart-treemap2.png",
@@ -73,6 +78,11 @@ var figures = [{
     url: "example/scatterplot.html",
     format: "png",
     filename: "grid-scatterplot.png",
+    timeout: 500
+  }, {
+    url: "example/scatterplot-barchart.html",
+    format: "png",
+    filename: "grid-scatterplot-barchart.png",
     timeout: 500
   }, {
     url: "example/grid-order.html",
@@ -147,9 +157,9 @@ var figures = [{
     filename: "grid-lineup.png",
     timeout: 500
   }, {
-    url: "example/vertical.html",
+    url: "example/vertical-items.html",
     format: "png",
-    filename: "grid-vertical.png",
+    filename: "grid-vertical-items.png",
     timeout: 500
   }, {
     url: "example/vertical-width.html",

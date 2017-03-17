@@ -77,7 +77,10 @@ function draw(el, data, params, level, id, show_cross) {
 
   }
 
-  if(typeof params[level].orient !== "undefined") {
+  if(typeof params[level].orient === "function") {
+    console.log("HERERE", params[level].orient(data))
+    grid.orient(params[level].orient(data));
+  } else if(typeof params[level].orient !== "undefined") {
     grid.orient(params[level].orient);
   }
 
