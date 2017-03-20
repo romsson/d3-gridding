@@ -97,6 +97,18 @@ var figures = [{
     timeout: 500,
     size: [400, 300]
   }, {
+    url: "example/grid-orient-top.html",
+    format: "png",
+    filename: "grid-orient-top.png",
+    timeout: 500,
+    size: [400, 300]
+  }, {
+    url: "example/grid-orient-left.html",
+    format: "png",
+    filename: "grid-orient-left.png",
+    timeout: 500,
+    size: [400, 300]
+  }, {
     url: "example/grid-canvas.html",
     format: "png",
     filename: "grid-canvas.png",
@@ -175,6 +187,11 @@ var figures = [{
     url: "example/vertical-width-height.html",
     format: "png",
     filename: "grid-vertical-width-height.png",
+    timeout: 500
+  }, {
+    url: "example/horizontal-utils.html",
+    format: "png",
+    filename: "grid-horizontal.png",
     timeout: 500
   }, {
     url: "example/margin.html",
