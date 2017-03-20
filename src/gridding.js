@@ -73,7 +73,10 @@ export default function() {
       "grid": {
         "layout": grid,
         "properties": [
-          {"key": "orient", "value": "top"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"},
+          {"key": "orient", "value": "left"},
+          {"key": "orient", "value": "right"}
         ]
       },
       "horizontal": {

@@ -231,6 +231,15 @@
 
       if(v.orient == "up") {
         n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
+      } else if(v.orient == "down") {
+        //n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
+
+      } else if(v.orient == "left") {
+
+      } else if(v.orient == "right") {
+
+      } else { // default up
+        n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
       }
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
@@ -623,7 +632,10 @@
         "grid": {
           "layout": grid,
           "properties": [
-            {"key": "orient", "value": "top"}
+            {"key": "orient", "value": "up"},
+            {"key": "orient", "value": "down"},
+            {"key": "orient", "value": "left"},
+            {"key": "orient", "value": "right"}
           ]
         },
         "horizontal": {
