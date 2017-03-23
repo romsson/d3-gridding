@@ -77,9 +77,25 @@ function update() {
     .enter().append("path")
       .attr("d", line);
 
-  // Look & fill https://bl.ocks.org/tomgp/47d151732913c6d1f74e
-//  svgSquares.selectAll(".index")
-//    .text(function(d, i) { return i; })
+  var i = 0;
+
+  d3.selectAll(".index").remove();
+
+  svgSquares.selectAll(".indexNumber")
+      .data(nested_data[0].values.map(function(d) { return d.values; }).reduce(function(a, b) { return a.concat(b); }))
+    .enter().append("text")
+      .attr("class", "indexNumber")
+      .attr("x", function(d, i) { return d.cx; })
+      .attr("y", function(d, i) { return d.cy; })
+      .text(function(d, i) { return i + 1; })
+      .style('text-anchor', 'middle')
+      .attr('fill','gray')
+      .style('dominant-baseline', 'central')
+      .style("font-size", 30)
+ //     .attr('stroke','#FFF')
+ //     .attr('stroke-width',8)
+//      .attr('stroke-linejoin','round')
+//      .style('dominant-baseline', 'central')
 
 }
 

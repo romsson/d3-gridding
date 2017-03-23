@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
@@ -10,7 +9,7 @@ body {
   fill: black;
 }
 
-rect, circle {
+rect, circle, line {
   fill: none;
   stroke: black;
   stroke-width: 1;
@@ -23,37 +22,45 @@ rect, circle {
 <script src="utils/utils.js"></script>
 <script>
 
-var width = 400,
-    height = 300;
+var width = 600,
+    height = 400;
 
-var data = []
+var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-d3.range(6).map(function(d) {
-  d3.range(3).map(function(e) {
-    data.push({"level1": d, "level2": e, "index": Math.random()});
+var data = letters.split("").map(function(d, i) {
+
+    var e = {"index": i, "value": d, "prop": "static"};
+    e.flow = i > letters.length / 2 ? 0: 1;
+
+    if(e.flow === 0) {
+      e.posX = 0;
+      e.posY = 0;
+    } else {
+      e.posX = 0;
+      e.posY = 20;
+    }
+
+    return e;
   });
-});
-
 
 var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
-  "mode": "vertical",
-  "valueHeight": "__agg",
-  "orient": "up",
+  "mode": "horizontal",
+  //"valueX": "posX",
+  //"valueY": "posY",
   "padding": 2,
   "level": 0
 }, {
   "size": function(d) { return [d.width, d.height]; },
-  "offset": function(d) { return [d.x, d.height-height]; },
-  "mode": "vertical",
-  "valueHeight": "index", //function(d) { return d["v"]; },
-  "valueY": "index",
-  "orient": "up",
-  "padding": 1,
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "treemap",
+  "padding": 2,
   "level": 1
 }
 ];
+
+args = ["posX", "posY"];
 
 var svgSquares = d3.select("body").append("svg")
     .attr("width", width)
@@ -62,15 +69,18 @@ var svgSquares = d3.select("body").append("svg")
 
 function update() {
 
+  //nested_data = d3.nest()
+  //    .key(function(d, i) { return i; })
+  //    .entries(data);
+
   nested_data = generate_nesting_agg([
     {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
-    {groupBy: "level1", fn: function(d) { return d.length}, sortBy: "year"}
+    {groupBy: "flow", fn: d3.sum, accessor: function(d) { return d.value; }, sortBy: "year"}
     ], "data");
 
-  draw(svgSquares, nested_data[0], params, 0, "0_");
+  console.log("NESTED", nested_data)
 
-  svgSquares.selectAll(".index").remove();
-  svgSquares.selectAll(".square0_").remove();
+  draw(svgSquares, nested_data[0], params, 0, "0_", false);
 
 }
 

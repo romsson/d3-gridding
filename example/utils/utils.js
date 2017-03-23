@@ -33,7 +33,6 @@ function draw(el, data, params, level, id, show_cross) {
   }
 
   var grid = d3.gridding()
-      .mode(params[level].mode)
       .value(function(d) { return d.values; });
 
   // In case non-generic params have been defined
@@ -56,29 +55,38 @@ function draw(el, data, params, level, id, show_cross) {
   }
 
   if(typeof params[level].valueX !== "undefined") {
-    grid.valueX(params[level].valueX);
+    if(typeof params[level].valueX === "function") {
+      grid.valueX(params[level].valueX(data));
+    } else {
+      grid.valueX(params[level].valueX);
+    }
   }
 
   if(typeof params[level].valueY !== "undefined") {
-    grid.valueY(params[level].valueY);
+    if(typeof params[level].valueY === "function") {
+      grid.valueY(params[level].valueY(data));
+    } else {
+      grid.valueY(params[level].valueY);
+    }
   }
 
   if(typeof params[level].valueWidth !== "undefined") {
-    grid.valueWidth(params[level].valueWidth);
+    if(typeof params[level].valueWidth === "function") {
+      grid.valueWidth(params[level].valueWidth(data));
+    } else {
+      grid.valueWidth(params[level].valueWidth);
+    }
   }
 
   if(typeof params[level].valueHeight !== "undefined") {
-
-   // if(typeof params[level].valueHeight === "function") {
-   //   grid.valueHeight(params[level].valueHeight(data));
-   // } else {
-    grid.valueHeight(params[level].valueHeight);
-  //  }
-
+    if(typeof params[level].valueHeight === "function") {
+      grid.valueHeight(params[level].valueHeight(data));
+    } else {
+      grid.valueHeight(params[level].valueHeight);
+    }
   }
 
   if(typeof params[level].orient === "function") {
-    console.log("HERERE", params[level].orient(data))
     grid.orient(params[level].orient(data));
   } else if(typeof params[level].orient !== "undefined") {
     grid.orient(params[level].orient);
@@ -86,14 +94,8 @@ function draw(el, data, params, level, id, show_cross) {
 
   if(typeof params[level].cellSize !== "undefined") {
     grid.cellSize(params[level].cellSize);
-    console.log("cellSize", grid.cellSize())
   }
 
-  if(typeof params[level].valueY === "function") {
-    grid.valueY(params[level].valueY(data));
-  } else {
-    grid.valueY(params[level].valueY);
-  }
 
   var gridData = grid(data);
 
@@ -103,15 +105,51 @@ function draw(el, data, params, level, id, show_cross) {
   squares.enter().append("rect")
       .attr("class", "square" + id)
       .attr("data-level", level)
-      .attr("width", function(d, i) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("width", function(d, i) {
+        if(isNaN(d.width) || d.width < 0) {
+          console.log("rect width < 0, set to 0");
+          return 0;
+        }
+        return d.width;
+      })
+      .attr("height", function(d) {
+        if(isNaN(d.height) || d.height < 0) {
+          console.log("rect width < 0, set to 0");
+          return 0;
+        }
+        return d.height;
+      })
+      .attr("transform", function(d) {
+        if(isNaN(d.x) || isNaN(d.y)) {
+          console.log("rect translate is NaN, set to 0");
+          return "translate(" + 0 + "," + 0 + ")";
+        }
+        return "translate(" + d.x + "," + d.y + ")";
+      });
 
   squares
       .transition()
-      .attr("width", function(d, i) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("width", function(d, i) {
+        if(isNaN(d.width) || d.width < 0) {
+          console.log("rect width < 0, set to 0");
+          return 0;
+        }
+        return d.width;
+      })
+      .attr("height", function(d) {
+        if(isNaN(d.height) || d.height < 0) {
+          console.log("rect width < 0, set to 0");
+          return 0;
+        }
+        return d.height;
+      })
+      .attr("transform", function(d) {
+        if(isNaN(d.x) || isNaN(d.y)) {
+          console.log("rect translate is NaN, set to 0");
+          return "translate(" + 0 + "," + 0 + ")";
+        }
+        return "translate(" + d.x + "," + d.y + ")";
+      });
 
   squares.exit().remove();
 
@@ -155,7 +193,12 @@ function draw(el, data, params, level, id, show_cross) {
       .attr('stroke-width',8)
       .attr('stroke-linejoin','round')
       .style('dominant-baseline', 'central')
-      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .attr("transform", function(d) {
+        if(isNaN(d.cx) || isNaN(d.cy)) {
+          return "translate(" + 0 + "," + 0 + ")";
+        }
+        return "translate(" + d.cx + "," + d.cy + ")";
+      })
       .text(function(d, i) { return d.key || "X"; });
 
   labelsEnter.append('text')
@@ -163,7 +206,12 @@ function draw(el, data, params, level, id, show_cross) {
       .style('text-anchor', 'middle')
       .attr('fill','#000')
       .style('dominant-baseline', 'central')
-      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .attr("transform", function(d) {
+        if(isNaN(d.cx) || isNaN(d.cy)) {
+          return "translate(" + 0 + "," + 0 + ")";
+        }
+        return "translate(" + d.cx + "," + d.cy + ")";
+      })
       .text(function(d, i) { return d.key || "X"; });
 
 
@@ -213,7 +261,7 @@ function generate_nesting(dimensions, str_data) {
   var r = eval(res);
 
   // var data = eval(str_data);
-  // console.log("RRR",r, data)
+  console.log("NESTING", res)
 
   return r;
 
@@ -232,13 +280,35 @@ function browse_nest(nested, dimensions, level) {
       return;
     } else {
 
-      console.log("process", dimensions[level]);
+      console.log("process", dimensions[level], "level", level);
 
       var dim = dimensions[level];
 
       d["__agg"] = dim.fn(d.values, dim.accessor);
 
+      if(typeof args !== "undefined") {
+
+        args.forEach(function(a) {
+
+          if(level === 0) {
+            d[a] = d.values[0].values[0][a]
+          } else {
+            d[a] = d.values[0][a]
+          }
+
+        })
+
+      }
+
       browse_nest(d.values, dimensions, level + 1);
+
+      if(level > 0 && typeof d.values[0].__x !== "undefined") {
+
+          d["__x"] = d.values[0].__x
+          d["__y"] = d.values[0].__y
+          d["__width"] = d.values[0].__width
+          d["__height"] = d.values[0].__height
+      }
 
     }
 

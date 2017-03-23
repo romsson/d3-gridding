@@ -75,6 +75,11 @@ var figures = [{
     filename: "grid-bar-chart-treemap2.png",
     timeout: 1000
   }, {
+    url: "example/treemap-utils.html",
+    format: "png",
+    filename: "grid-treemap.png",
+    timeout: 1000
+  }, {
     url: "example/scatterplot.html",
     format: "png",
     filename: "grid-scatterplot.png",
@@ -169,6 +174,11 @@ var figures = [{
     filename: "grid-lineup.png",
     timeout: 500
   }, {
+    url: "example/vertical-treemap.html",
+    format: "png",
+    filename: "grid-vertical-treemap.png",
+    timeout: 500
+  }, {
     url: "example/vertical-items.html",
     format: "png",
     filename: "grid-vertical-items.png",
@@ -212,6 +222,44 @@ var figures = [{
     url: "example/layout-all.html",
     format: "png",
     filename: "layout-all.png",
+    timeout: 500
+  }, {
+    url: "example/layout-marginal.html",
+    format: "png",
+    filename: "layout-marginal.png",
+    timeout: 500
+  }, {
+    url: "example/parallel-coordinates.html",
+    format: "png",
+    filename: "parallel-coordinates.png",
+    timeout: 500,
+    size: [400, 100]
+  }, {
+    url: "example/parallel-linechart.html",
+    format: "png",
+    filename: "parallel-linechart.png",
+    timeout: 500,
+    size: [400, 100]
+  }, {
+    url: "example/test-textures.html",
+    format: "png",
+    filename: "test-textures.png",
+    timeout: 500,
+    size: [400, 150]
+  }, {
+    url: "example/scatterplot-matrix.html",
+    format: "png",
+    filename: "scatterplot-matrix.png",
+    timeout: 500
+  }, {
+    url: "example/treemap-double.html",
+    format: "png",
+    filename: "treemap-double.png",
+    timeout: 500
+  }, {
+    url: "example/stacked.html",
+    format: "png",
+    filename: "grid-horizontal-stack.png",
     timeout: 500
   }
 ];

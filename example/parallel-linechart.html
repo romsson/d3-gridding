@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, line, path {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+var width = 400,
+    height = 100;
+
+var data = [];
+var nb_dimensions = 10;
+var nb_items = 20;
+
+d3.range(nb_dimensions).map(function(d, i) {
+
+  d3.range(nb_items).map(function(e, j) {
+
+    data.push({"dim": i, "col": j, "colWidth": 10, "value": Math.floor(Math.random()*120 / 7), "prop": "static", "v": Math.random()});
+
+  });
+});
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "padding": 0,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "coordinate",
+  "valueX": "colWidth",
+  "padding": 2,
+  "level": 1
+}
+];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  var nested_data = generate_nesting(["","dim"], "data");
+
+  draw(svgSquares, nested_data[0], params, 0, "0_", false);
+
+  //d3.selectAll(".index").remove();
+
+  pos = d3.range(nb_dimensions*2).map(function() { return []; });
+
+  var line = d3.line()
+    .x(function(d) { return d.cx; })
+    .y(function(d) { return d.cy; });
+
+  d3.selectAll(".index").remove();//.each(function(d, i) { console.log("DDD", d, i); pos[d.dim].push(d); })
+
+  data.forEach(function(d) {
+    d.cx += 15;
+    d.cy = height - d.cy * d.dim / nb_dimensions;
+    pos[d.col].push(d);
+  })
+
+  svgSquares.selectAll("path")
+      .data(pos)
+    .enter().append("path")
+      .attr("d", line);
+
+}
+
+update();
+
+</script>

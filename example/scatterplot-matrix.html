@@ -22,10 +22,25 @@ rect, circle {
 <script src="utils/utils.js"></script>
 <script>
 
+// TODO
+// [ ] Generate static data
+// [ ] Map them
+// [ ] Build histogram
+// http://127.0.0.1/dev/d3-gridding/example/histogram.html
+
 var width = 400,
     height = 300;
 
-var data = d3.range(25).map(function(d) { return [{}]; });
+var data = [];
+
+var dimensions = d3.range(4);
+var cross_dimensions = cross(dimensions, dimensions);
+
+cross_dimensions.map(function(d) {
+  d3.range(25).map(function(e) {
+    return data.push({"dimension": d.value, "value": e});
+  });
+});
 
 var params = [{
   "size": function() { return [width, height]; },
@@ -36,7 +51,20 @@ var params = [{
 }, {
   "size": function(d) { return [d.width, d.height]; },
   "offset": function(d) { return [d.x, d.y]; },
-  "mode": "coordinate",
+  "mode": function(d) {
+    if(d.key[0] === d.key[2]) {
+      return "vertical"
+    } else {
+      return "coordinate";
+    }
+  },
+  "valueHeight": function(d) {
+    if(d.key[0] === d.key[2]) {
+      return "value"
+    } else {
+      return null;
+    }
+  },
   "padding": 2,
   "level": 1
 }
@@ -49,7 +77,7 @@ var svgSquares = d3.select("body").append("svg")
 
 function update() {
 
-  var nested_data = generate_nesting([""], "data")
+  var nested_data = generate_nesting(["", "dimension"], "data")
 
   draw(svgSquares, nested_data[0], params, 0, "0_");
 
