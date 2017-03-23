@@ -23,6 +23,11 @@ export default function(nodes, v) {
       n[v.__x] = 0 + v.offset[0];
       n[v.__y] = v.size[1] - n[v.__height] + v.offset[1];
 
+    } else if(v.orient === "top") {
+
+      n[v.__x] = v.size[0] - n.width + v.offset[0];
+      n[v.__y] = 0 + v.offset[1];
+
     } else {
 
       n[v.__x] = 0 + v.offset[0];

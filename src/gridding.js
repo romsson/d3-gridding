@@ -230,6 +230,7 @@ export default function() {
     if(typeof _valueX === "string") {
       vars.valueX = function(d) { return d[_valueX]; }
     } else {
+      console.log("SET valueX", _valueX)
       vars.valueX = _valueX;
     }
     return gridding;
