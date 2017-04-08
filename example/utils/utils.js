@@ -8,6 +8,16 @@ function cross(a, b) {
   return c;
 }
 
+var duration_update = 500;
+var duration_enter = 500;
+var duration_exit = 500;
+var delay_update = 500;
+var delay_enter = duration_update+duration_exit;
+var delay_exit = 0;
+
+// TOFIX
+var first_time = true;
+
 // data: data to be gridded => array
 // [{key: 0,
 //   values: [{key: ...}, {key: ...}]
@@ -48,6 +58,10 @@ function draw(el, data, params, level, id, show_cross) {
     grid.padding(params[level].padding);
   }
 
+  if(typeof params[level].margin !== "undefined") {
+    grid.margin(params[level].margin);
+  }
+
   if(typeof params[level].mode === "function") {
     grid.mode(params[level].mode(data)); // TOFIX, DATA should contain all data attributes
   } else {
@@ -83,6 +97,7 @@ function draw(el, data, params, level, id, show_cross) {
       grid.valueHeight(params[level].valueHeight(data));
     } else {
       grid.valueHeight(params[level].valueHeight);
+      console.log("SET HEIGH", grid.valueHeight(), params[level].valueHeight);
     }
   }
 
@@ -96,13 +111,24 @@ function draw(el, data, params, level, id, show_cross) {
     grid.cellSize(params[level].cellSize);
   }
 
+  if(typeof params[level].rows !== "undefined") {
+    grid.rows(params[level].rows);
+  }
+
+  if(typeof params[level].cols !== "undefined") {
+    grid.cols(params[level].cols);
+  }
+
+  if(typeof params[level].sort !== "undefined") {
+    grid.sort(params[level].sort);
+  }
 
   var gridData = grid(data);
 
   var squares = el.selectAll(".square" + id)
       .data(gridData, function(d, i) { return i; });
 
-  squares.enter().append("rect")
+  var squaresEnter = squares.enter().append("rect")
       .attr("class", "square" + id)
       .attr("data-level", level)
       .attr("width", function(d, i) {
@@ -125,10 +151,16 @@ function draw(el, data, params, level, id, show_cross) {
           return "translate(" + 0 + "," + 0 + ")";
         }
         return "translate(" + d.x + "," + d.y + ")";
-      });
+      })
+      .style("opacity", 0);
+
+
+  squaresEnter
+    .transition().duration(first_time === true ? 0: duration_enter).delay(first_time === true ? 0: delay_enter)
+    .style("opacity", 1)
 
   squares
-      .transition()
+      .transition().duration(first_time === true ? 0: duration_update).delay(first_time === true ? 0: delay_update)
       .attr("width", function(d, i) {
         if(isNaN(d.width) || d.width < 0) {
           console.log("rect width < 0, set to 0");
@@ -151,7 +183,11 @@ function draw(el, data, params, level, id, show_cross) {
         return "translate(" + d.x + "," + d.y + ")";
       });
 
-  squares.exit().remove();
+  squares.exit()
+    .transition().duration(first_time === true ? 0: duration_exit).delay(first_time === true ? 0: delay_exit)
+    .style("opacity", 0)
+    .remove();
+
 
   if(show_cross) {
 
@@ -199,7 +235,9 @@ function draw(el, data, params, level, id, show_cross) {
         }
         return "translate(" + d.cx + "," + d.cy + ")";
       })
-      .text(function(d, i) { return d.key || "X"; });
+      .text(function(d, i) { return d.key || "X"; })
+      .style("opacity", 0).style("opacity", 1)
+
 
   labelsEnter.append('text')
       .attr("class", "index index" + id)
@@ -216,11 +254,13 @@ function draw(el, data, params, level, id, show_cross) {
 
 
   labels
-      .transition()
+      .transition().duration(first_time === true ? 0: duration_update).delay(first_time === true ? 0: delay_update)
       .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
       .text(function(d, i) { return d.key || "X"; });
 
-  labels.exit().remove();
+  labels.exit()
+    .transition().duration(first_time === true ? 0: duration_exit).delay(first_time === true ? 0: delay_exit)
+    .remove();
 
   if(typeof params[level + 1] !== "undefined") {
 
@@ -231,6 +271,7 @@ function draw(el, data, params, level, id, show_cross) {
         draw(el, d, params, level + 1, id + "_" + (level + 1) + "_" + i, show_cross);
 
       } else {
+
         // console.log("<<<<<<<< done no more values")
       }
 
@@ -247,6 +288,15 @@ function draw(el, data, params, level, id, show_cross) {
 
 
 function generate_nesting(dimensions, str_data) {
+
+  var __this__data = null;
+
+  if(typeof str_data !== "string") {
+
+    __this__data = str_data;
+    str_data = "__this__data";
+
+  }
 
   var res = "d3.nest()";
 
@@ -267,13 +317,19 @@ function generate_nesting(dimensions, str_data) {
 
 }
 
-function browse_nest(nested, dimensions, level) {
+function browse_nest(nested, dimensions, level, parent_key) {
 
   if(typeof level === "undefined") {
     level = 0;
   }
 
+ // if(level > 0 && nested.key === "undefined") {
+ //   return ;
+ // }
+
   nested.forEach(function(d) {
+
+
 
     if(typeof d.values === "undefined") {
 //      d.parentId = parent;
@@ -285,6 +341,7 @@ function browse_nest(nested, dimensions, level) {
       var dim = dimensions[level];
 
       d["__agg"] = dim.fn(d.values, dim.accessor);
+      d["__parent_key"] = parent_key;
 
       if(typeof args !== "undefined") {
 
@@ -300,7 +357,7 @@ function browse_nest(nested, dimensions, level) {
 
       }
 
-      browse_nest(d.values, dimensions, level + 1);
+      browse_nest(d.values, dimensions, level + 1, d.key);
 
       if(level > 0 && typeof d.values[0].__x !== "undefined") {
 
@@ -336,6 +393,16 @@ function generate_nesting_agg(dimensions, str_data) {
     }
 
   })
+
+  var __this__data = null;
+
+  if(typeof str_data !== "string") {
+
+    __this__data = str_data;
+    str_data = "__this__data";
+
+  }
+
 
   res += ".entries(" + str_data + ")";
 
@@ -514,6 +581,80 @@ function cross(a, b) {
 
 // Key press interactions
 
+function setKeys() {
+
+  d3.select("body")
+     .on("keydown", function(d) {
+      var k = d3.event.keyCode;
+
+      if(k === 82) {
+        // add
+        data = d3.range(data.length + 1);
+
+        // repeat
+        if(lastAction === "add") {
 
 
+        } else if(lastAction === "rem") {
 
+
+        }
+
+      } else if(k === 85) {
+
+        // rem
+        data = d3.range(data.length - 1);
+      }
+
+      update();
+      console.log("KEY", k);
+
+     });
+
+
+}
+
+// http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+// http://stackoverflow.com/questions/5999118/add-or-update-query-string-parameter
+function updateQueryStringParameter(key, value, uri) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");
+
+  if (!uri) {
+    uri = window.location.href;
+  }
+
+  if( value === undefined ) {
+    if (uri.match(re)) {
+        return uri.replace(re, '$1$2');
+    } else {
+        return uri;
+    }
+  } else {
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    } else {
+      var hash =  '';
+      if( uri.indexOf('#') !== -1 ){
+          hash = uri.replace(/.*#/, '#');
+          uri = uri.replace(/#.*/, '');
+      }
+      var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+
+      var ret =  uri + separator + key + "=" + value + hash;
+
+      return ret;
+    }
+  }
+}

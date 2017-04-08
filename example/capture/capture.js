@@ -30,10 +30,11 @@ var figures = [{
     filename: "modes-permutation.png",
     timeout: 400
   }, {
-    url: "example/modes-permutation.html",
+    url: "example/modes-utils-extensions.html",
     format: "png",
-    filename: "modes-permutation.png",
-    timeout: 400
+    filename: "modes-extensions.png",
+    timeout: 400,
+    size: [400, 200]
   }, {
     url: "example/histogram.html",
     format: "png",
@@ -55,6 +56,11 @@ var figures = [{
     filename: "grid-barchart-overlap.png",
     timeout: 500
   }, {
+    url: "example/corner-vertical-overlap.html",
+    format: "png",
+    filename: "corner-vertical-overlap.png",
+    timeout: 500
+  }, {
     url: "example/barchart-stacked.html",
     format: "png",
     filename: "grid-barchart-stacked.png",
@@ -69,11 +75,6 @@ var figures = [{
     format: "png",
     filename: "grid-barchart-population.png",
     timeout: 500
-  }, {
-    url: "example/bar-chart-treemap/index-gridding.html",
-    format: "png",
-    filename: "grid-bar-chart-treemap2.png",
-    timeout: 1000
   }, {
     url: "example/treemap-utils.html",
     format: "png",
@@ -90,7 +91,17 @@ var figures = [{
     filename: "grid-scatterplot-barchart.png",
     timeout: 500
   }, {
-    url: "example/grid-order.html",
+    url: "example/scatterplot-connected.html",
+    format: "png",
+    filename: "grid-scatterplot-connected.png",
+    timeout: 500
+  }, {
+    url: "example/treemap-connected.html",
+    format: "png",
+    filename: "grid-treemap-connected.png",
+    timeout: 500
+  }, {
+    url: "example/grid-order-numbers.html",
     format: "png",
     filename: "grid-order.png",
     timeout: 500,
@@ -108,9 +119,9 @@ var figures = [{
     timeout: 500,
     size: [400, 300]
   }, {
-    url: "example/grid-orient-left.html",
+    url: "example/grid-orient-bottom.html",
     format: "png",
-    filename: "grid-orient-left.png",
+    filename: "grid-orient-bottom.png",
     timeout: 500,
     size: [400, 300]
   }, {
@@ -119,14 +130,9 @@ var figures = [{
     filename: "grid-canvas.png",
     timeout: 500
   }, {
-    url: "example/scatterdice/scatterdice.html",
-    format: "png",
-    filename: "grid-scatterdice.png",
-    timeout: 500,
-  }, {
     url: "example/divide.html",
     format: "png",
-    filename: "divide.png",
+    filename: "grid-divide.png",
     timeout: 500
   }, {
     url: "example/chess.html",
@@ -174,9 +180,19 @@ var figures = [{
     filename: "grid-lineup.png",
     timeout: 500
   }, {
-    url: "example/vertical-treemap.html",
+    url: "example/vertical-treemap-grouped.html",
     format: "png",
     filename: "grid-vertical-treemap.png",
+    timeout: 500
+  }, {
+    url: "example/vertical-treemap-grouped-horizontal.html",
+    format: "png",
+    filename: "grid-vertical-treemap-horizontal.png",
+    timeout: 500
+  }, {
+    url: "example/treemap-group.html",
+    format: "png",
+    filename: "grid-treemap-group.png",
     timeout: 500
   }, {
     url: "example/vertical-items.html",
@@ -199,6 +215,16 @@ var figures = [{
     filename: "grid-vertical-width-height.png",
     timeout: 500
   }, {
+    url: "example/vertical-dense.html",
+    format: "png",
+    filename: "grid-vertical-dense.png",
+    timeout: 500
+  }, {
+    url: "example/vertical-vertical.html",
+    format: "png",
+    filename: "grid-vertical-vertical.png",
+    timeout: 500
+  }, {
     url: "example/horizontal-utils.html",
     format: "png",
     filename: "grid-horizontal.png",
@@ -219,14 +245,46 @@ var figures = [{
     filename: "horror-barchart-grouped-top.png",
     timeout: 500
   }, {
+    url: "example/barchart-staggered.html",
+    format: "png",
+    filename: "horror-barchart-staggered.png",
+    timeout: 500
+  }, {
     url: "example/layout-all.html",
     format: "png",
     filename: "layout-all.png",
     timeout: 500
   }, {
+    url: "example/layout-extensions.html",
+    format: "png",
+    filename: "layout-extensions.png",
+    timeout: 500,
+    size: [400, 120]
+  }, {
+    url: "example/layout-additions.html",
+    format: "png",
+    filename: "layout-additions.png",
+    timeout: 500,
+    size: [400, 210]
+  }, {
     url: "example/layout-marginal.html",
     format: "png",
     filename: "layout-marginal.png",
+    timeout: 500
+  }, {
+    url: "example/layout-adjacency.html",
+    format: "png",
+    filename: "layout-adjacency.png",
+    timeout: 500
+  }, {
+    url: "example/layout-scatterdice.html",
+    format: "png",
+    filename: "layout-scatterdice.png",
+    timeout: 500
+  }, {
+    url: "example/layout-upset.html",
+    format: "png",
+    filename: "layout-upset.png",
     timeout: 500
   }, {
     url: "example/parallel-coordinates.html",
@@ -241,6 +299,12 @@ var figures = [{
     timeout: 500,
     size: [400, 100]
   }, {
+    url: "example/parallel-slope.html",
+    format: "png",
+    filename: "parallel-slope.png",
+    timeout: 500,
+    size: [200, 100]
+  }, {
     url: "example/test-textures.html",
     format: "png",
     filename: "test-textures.png",
@@ -252,17 +316,126 @@ var figures = [{
     filename: "scatterplot-matrix.png",
     timeout: 500
   }, {
-    url: "example/treemap-double.html",
+    url: "example/treemap-corner-double.html",
     format: "png",
-    filename: "treemap-double.png",
+    filename: "treemap-corner-double.png",
     timeout: 500
   }, {
-    url: "example/stacked.html",
+    url: "example/corner-variable.html",
     format: "png",
-    filename: "grid-horizontal-stack.png",
+    filename: "grid-corner-variable.png",
     timeout: 500
+  }, {
+    url: "example/table-grid.html",
+    format: "png",
+    filename: "table-grid.png",
+    timeout: 500
+  }, {
+    url: "example/table-vertical.html",
+    format: "png",
+    filename: "table-vertical.png",
+    timeout: 500
+  }, {
+    url: "example/table-horizontal.html",
+    format: "png",
+    filename: "table-horizontal.png",
+    timeout: 500
+  }, {
+    url: "example/table-quantities.html",
+    format: "png",
+    filename: "table-quantities.png",
+    timeout: 500,
+    size: [400, 200]
+  }, {
+    url: "example/scatterplot-grid-map.html",
+    format: "png",
+    filename: "scatterplot-grid-map.png",
+    timeout: 500
+  }, {
+    url: "example/mosaic-level2.html",
+    format: "png",
+    filename: "mosaic-level2.png",
+    timeout: 500
+  }, {
+    url: "example/mosaic-level3.html",
+    format: "png",
+    filename: "mosaic-level3.png",
+    timeout: 500
+  }, {
+    url: "example/vertical-corner.html",
+    format: "png",
+    filename: "vertical-corner.png",
+    timeout: 500,
+    size: [300, 100]
   }
+
+// OTHER
+, {
+    url: "example/all.html",
+    format: "png",
+    filename: "other-all.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/checkboxes.html",
+    format: "png",
+    filename: "other-checkboxes.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/chess.html",
+    format: "png",
+    filename: "other-chess.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/demo-reel.html",
+    format: "png",
+    filename: "other-demo-reel.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/grid-canvas.html",
+    format: "png",
+    filename: "other-grid-canvas.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/layout-responsive.html",
+    format: "png",
+    filename: "other-layout-responsive.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/letters.html",
+    format: "png",
+    filename: "other-letters.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+    url: "example/modes-utils.html",
+    format: "png",
+    filename: "other-modes-utils.png",
+    timeout: 500,
+    size: [400, 600]
+  }
+, {
+  url: "example/nested-grid.html",
+  format: "png",
+  filename: "other-nested-grid.png",
+  timeout: 500,
+  size: [400, 600]
+}
 ];
+
+
 
 capture(figures, 0);
 
@@ -294,9 +467,15 @@ function capture(fig, index) {
 
             page.render(output, {format: f.format, quality: '50'});
 
-            console.log("rendering...", address);
+            console.log("rendering...", index + "/" + (fig.length - 1), address);
 
-            displayPageContent += "<a href='../../" + f.url + "'><div style='width:200px; float:left; border: 1px solid black'><img src='" + output + "' style='width: 100%;'></div></a>";
+            displayPageContent += "<a href='../../" + f.url + "'><div style='width:230px; float:left; border: 1px solid black'><img src='" + output + "' style='object-fit: cover; width:230px; height:230px;'></div></a>";
+
+            if(index === 67) {
+
+            displayPageContent += "<p style='clear:both;'></p><h1>Other wireframes</h1>";
+
+            }
 
             if(index === fig.length - 1) { // last one
 

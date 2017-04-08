@@ -3,8 +3,13 @@ import * as d3Shape from "d3-shape";
 
 export default function(nodes, v) {
 
+  if(v.sort) {
+    nodes = nodes.sort(v.sort);
+  }
+
   var stack = d3Shape.stack()
       .keys(nodes.map(function(d, i) { return i + "_"; })) // Creates unique ids for nodes
+      .order(d3Shape.stackOrderDescending)
       .value(function(d, key) { return nodes.indexOf(d[key]); });
 
   v.y.domain([0, d3Array.sum(d3Array.range(nodes.length)) + nodes.length]).range([0, v.size[1]]);

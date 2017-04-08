@@ -76,7 +76,7 @@ function update() {
   d3.selectAll(".index").remove();//.each(function(d, i) { console.log("DDD", d, i); pos[d.dim].push(d); })
 
   data.forEach(function(d) {
-    d.cx += 15;
+    d.cx -= 15;
     d.cy =  d.cy;
     pos[d.col].push(d);
   })

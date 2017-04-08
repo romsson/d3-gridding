@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+
+var width = 400,
+    height = 300;
+
+var data = [];
+
+var nb_rows = 5;
+var nb_cols = 3;
+
+d3.range(nb_rows).map(function(d, i) {
+  d3.range(nb_cols).map(function(e, j) {
+    data.push({"index": d, "attr": e, "val": i * 10 + j})
+  });
+});
+
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "padding": 2,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "horizontal",
+  "padding": 10,
+  "level": 1
+}];
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var svgSquares = svg.append("g");
+
+function update() {
+
+  nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return d.length; }, accessor: function(d) { return d; }},
+    {groupBy: "attr", fn: function(d) { return d.length; }, accessor: function(d) { return d; }}
+  ], "data");
+
+
+ // var nested_data = generate_nesting(["", "index", "attr", "val"], "data")
+
+  var grid = draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  svg.attr("width", grid.size()[0])
+      .attr("height", grid.size()[1]);
+
+  svgSquares.selectAll(".index")
+      .text(function(d, i) {
+        if(typeof d.values[0].values === "undefined") {
+          return d.key;
+        }
+      });
+
+}
+
+update();
+
+</script>

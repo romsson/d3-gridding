@@ -38,7 +38,7 @@ var cross_dimensions = cross(dimensions, dimensions);
 
 cross_dimensions.map(function(d) {
   d3.range(25).map(function(e) {
-    return data.push({"dimension": d.value, "value": e});
+    return data.push({"dimension": d.value, "value": e*Math.random()});
   });
 });
 
@@ -51,6 +51,7 @@ var params = [{
 }, {
   "size": function(d) { return [d.width, d.height]; },
   "offset": function(d) { return [d.x, d.y]; },
+  "orient": "up",
   "mode": function(d) {
     if(d.key[0] === d.key[2]) {
       return "vertical"
@@ -80,6 +81,12 @@ function update() {
   var nested_data = generate_nesting(["", "dimension"], "data")
 
   draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  d3.selectAll(".index0_").remove()
+  d3.selectAll(".index0__1_0").remove()
+  d3.selectAll(".index0__1_5").remove()
+  d3.selectAll(".index0__1_10").remove()
+  d3.selectAll(".index0__1_15").remove()
 
 }
 

@@ -33,6 +33,7 @@ export default function() {
     height: d3Scale.scaleLinear(),
     id: function(d, i) { return i; },
     layout: identity,
+    margin: 0,
     mode: "identity",
     modes: {
       "brick": {
@@ -146,7 +147,7 @@ export default function() {
     radius: null,
     rows: null,
     size: [1, 1],
-    sort: function(a, b) { return a - b; },
+    sort: null,
     value: function(d) { return d; },
     valueHeight: null,
     valueWidth: null,
@@ -230,7 +231,6 @@ export default function() {
     if(typeof _valueX === "string") {
       vars.valueX = function(d) { return d[_valueX]; }
     } else {
-      console.log("SET valueX", _valueX)
       vars.valueX = _valueX;
     }
     return gridding;
@@ -275,6 +275,12 @@ export default function() {
   gridding.padding = function(_padding) {
     if(!arguments.length) return vars.padding;
     vars.padding = _padding;
+    return gridding;
+  }
+
+  gridding.margin = function(_margin) {
+    if(!arguments.length) return vars.margin;
+    vars.margin = _margin;
     return gridding;
   }
 

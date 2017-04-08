@@ -49,13 +49,7 @@ var params = [{
   "offset": function(d) { return [d.x, d.y]; },
   "mode": "vertical",
   "valueWidth": "__agg", // HERE
-  "padding": 2,
-  "level": 1
-}, {
-  "size": function(d) { return [d.width, d.height]; },
-  "offset": function(d) { return [d.x, d.y]; },
-  "mode": "vertical",
-  "padding": 2,
+  "padding": 2  ,
   "level": 1
 }];
 
@@ -64,13 +58,14 @@ var svg = d3.select("body").append("svg")
     .attr("height", height);
 
 var svgSquares = svg.append("g");
-
+a = 100;
+b = 100;
 function update() {
 
   nested_data = generate_nesting_agg([
     {groupBy: "", fn: function(d) { return d.length; }, accessor: function(d) { return d; }},
-    {groupBy: "index", fn: function(d) { return Math.random(); }, accessor: function(d) { return d.att; }, sortBy: "__agg"},
-    {groupBy: "attr", fn: function(d) { return Math.random(); }, accessor: function(d) { return d.val; }},
+    {groupBy: "index", fn: function(d, i) {  return a--; }, accessor: function(d) { return d.att; }, sortBy: "__agg"},
+    {groupBy: "attr", fn: function(d) { return b--; }, accessor: function(d) { return d.val; }},
     {groupBy: "val", fn: d3.sum, accessor: function(d) { return d.val; }}
   ], "data");
 
@@ -85,6 +80,8 @@ function update() {
           return d.key;
         }
       });
+
+  d3.selectAll(".index").remove();
 
 }
 

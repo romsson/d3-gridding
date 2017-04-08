@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+.square0_, .square0__1_0, .square0__1_1 {
+  stroke: white;
+}
+</style>
+<body>
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var nb = 10;
+
+var data = [];
+
+d3.range(3).map(function(d) {
+  d3.range(4).map(function(e) {
+    d3.range(5).map(function(f) {
+      d3.range(3).map(function(g) {
+        data.push({"level1": d, "level2": e, "level3": f, "level4": g});
+      });
+    });
+  });
+});
+
+
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "padding": 2,
+  "valueWidth": "__agg",
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "horizontal",
+  "valueY": "__agg",
+  "padding": 2,
+  "level": 1
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "vertical",
+  "valueWidth": "__agg",
+  "padding": 2,
+  "level": 1
+}];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  var nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return Math.random();}, accessor: function(d) { return d; }},
+    {groupBy: "level1", fn: function(d) { return Math.random();}, accessor: function(d) { return d.value; }},
+    {groupBy: "level2", fn: function(d) { return Math.random();}, accessor: function(d) { return d.value; }},
+    {groupBy: "level3", fn: function(d) { return Math.random();}, accessor: function(d) { return d.value; }},
+    {groupBy: "level4", fn: function(d) { return Math.random();}, accessor: function(d) { return d.value; }}
+    ], "data");
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  svgSquares.selectAll(".index").remove();
+
+}
+
+update();
+
+</script>

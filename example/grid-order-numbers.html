@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, path {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+
+* {
+  font-family: sans-serif;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var data = [];
+
+d3.range(1).map(function(root) {
+  d3.range(4).map(function(year) {
+    d3.range(4).map(function(category) {
+      data.push({"root": root, "year": year, "category": category});
+    });
+  });
+});
+
+var line = d3.line()
+    .x(function(d) { return d.cx; })
+    .y(function(d) { return d.cy; });
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "grid",
+  "padding": 10,
+  "level": 0
+}
+];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  nested_data = generate_nesting([""], "data")
+
+  grid = draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  svgSquares.selectAll("path")
+      .data([nested_data[0].values.map(function(d) { return d; })])
+    .enter().append("path")
+      .attr("d", line);
+
+  var i = 0;
+
+  d3.selectAll(".index").remove();
+
+  svgSquares.selectAll(".indexNumber")
+      .data(nested_data[0].values.map(function(d) {
+        return d;
+      }))
+    .enter().append("text")
+      .attr("class", "indexNumber")
+      .attr("x", function(d, i) { return d.cx; })
+      .attr("y", function(d, i) { return d.cy; })
+      .text(function(d, i) { return i + 1; })
+      .style('text-anchor', 'middle')
+      .attr('fill','gray')
+      .style('dominant-baseline', 'central')
+      .style("font-size", 30)
+ //     .attr('stroke','#FFF')
+ //     .attr('stroke-width',8)
+//      .attr('stroke-linejoin','round')
+//      .style('dominant-baseline', 'central')
+
+}
+
+update();
+
+</script>

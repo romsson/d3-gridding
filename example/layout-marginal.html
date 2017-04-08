@@ -55,7 +55,8 @@ bins.forEach(function(d) {
 
 })
 
-d3.range(20).map(function() {
+// SCATTERPLOT
+d3.range(200).map(function() {
 
   var e = {};
   e.value = 1;
@@ -101,6 +102,8 @@ var params = [{
   "valueHeight": function(d) {
     if(d.key === "3") {
       return "value";
+    } else if(d.key === "1") {
+      return 10;
     } else {
       return null;
     }
@@ -108,6 +111,8 @@ var params = [{
   "valueWidth": function(d) {
     if(d.key === "2") {
       return "value";
+    } else if(d.key === "1") {
+      return 10;
     } else {
       return null;
     }

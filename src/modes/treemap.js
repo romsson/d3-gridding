@@ -7,24 +7,31 @@ export default function(nodes, v) {
       .padding(v.padding);
 
   var stratify = d3Hierarchy.stratify()
-      .id(v.id)
-      .parentId(v.parentId);
+    //  .id(function(d) { return d.___id; })
+      .parentId(function(d) { return d.___parent_id; });
 
-  var root = stratify([{}].concat(nodes))
-      .sum(function() { return 1; });
+  nodes.forEach(function(d, i) {
+    d.id = "_" + i;
+    d.___parent_id = "_x";
+  })
+
+  var extra = [{"id": "_x", "___parent_id": ""}];
+
+  var root = stratify(nodes.concat(extra))
+      .sum(function(d) { return d.___parent_id === "" ? 0: 1; });
 
   var tree = treemap(root);
 
-  nodes.forEach(function(n, i) {
+  tree.leaves().forEach(function(t, i) {
 
-    n[v.__x] = tree.descendants()[i].x0 + v.offset[0];
-    n[v.__y] = tree.descendants()[i].y0 + v.offset[1];
+    t.data[v.__x] = t.x0 + v.offset[0];
+    t.data[v.__y] = t.y0 + v.offset[1];
 
-    n[v.__width] = tree.descendants()[i].x1 - tree.descendants()[i].x0;
-    n[v.__height] = tree.descendants()[i].y1 - tree.descendants()[i].y0;
+    t.data[v.__width] = t.x1 - t.x0;
+    t.data[v.__height] = t.y1 - t.y0;
 
-    n[v.__cx] = n[v.__x] + n[v.__width] / 2;
-    n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+    t.data[v.__cx] = nodes[i][v.__x] + nodes[i][v.__width] / 2;
+    t.data[v.__cy] = nodes[i][v.__y] + nodes[i][v.__height] / 2;
 
   });
 

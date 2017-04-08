@@ -2,9 +2,13 @@ import * as d3Array from "d3-array";
 
 export default function(nodes, v) {
 
+  if(v.sort) {
+    nodes = nodes.sort(v.sort);
+  }
+
   v.rows = nodes.length;
 
-  if(typeof v.cellSize !== "undefined" && v.cellSize !== null) {
+  if(v.cellSize) {
     v.size[0] = v.cellSize[0] * 2;
     v.size[1] = v.cellSize[1] * v.rows;
   }
@@ -31,19 +35,18 @@ export default function(nodes, v) {
     v.width.domain(d3Array.extent(nodes, _valueWidth)).range([0, v.size[0] - 2 * v.padding]);
   }
 
-  nodes[0].y0 = 0;
+  nodes[0].y0 = v.padding;
 
   nodes.forEach(function(n, i) {
 
-    n[v.__y] = n.y0 + v.offset[1] + v.padding;
+    n[v.__y] = n.y0 + v.offset[1] + v.margin;
 
     if(v.orient === "right") {
-      n[v.__x] = 0 + v.offset[0] + v.padding;
+      n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
     } else if(v.orient === "left") {
-      n[v.__x] = v.size[0] - v.width(_valueWidth(n))  + v.offset[0] + v.padding;
-      console.log(v.width(_valueWidth(n)))
+      n[v.__x] = v.size[0] - v.width(_valueWidth(n))  + v.offset[0] + v.margin - v.padding;
     } else { // defaut right
-      n[v.__x] = 0 + v.offset[0] + v.padding;
+      n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
     }
 
     n[v.__width] = v.width(_valueWidth(n));

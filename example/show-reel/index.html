@@ -25,6 +25,8 @@ svg {
 // [ ] Use stack layout to calculate vaues y0, y0_differentOffset
 // [ ] Show units in bar chart and pie chart?
 // [ ] What can be better done than it currently is?
+// Show as units
+// Transitio
 
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
     width = 900 - margin.left - margin.right,
@@ -173,6 +175,12 @@ setTimeout(function() {
       .mode("cascade")
       .sort(d3.ascending)
       .padding(10);
+  update();
+}, duration * timing++);
+
+setTimeout(function() {
+  gridding
+      .mode("grid")
   update();
 }, duration * timing++);
 

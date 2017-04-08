@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, line {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script src="utils/layouts.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var data = layouts[8].values;
+
+var dataMarginal = d3.range(1000).map(d3.randomBates(10));
+
+var x = d3.scaleLinear()
+    .rangeRound([0, width]);
+
+var bins = d3.histogram()
+    .domain(x.domain())
+    .thresholds(x.ticks(10))
+    (dataMarginal);
+
+//bins.forEach(function(d) {
+//
+//  var e = {};
+//  e.value = d.length;
+//  e.index = "3";
+//  data.push(e);
+//
+//})
+
+//bins.forEach(function(d) {
+//
+//  var e = {};
+//  e.value = d.length;
+//  e.index = "2";
+//  data.push(e);
+//
+//})
+
+// MATRIX
+d3.range(16).map(function(d) {
+  d3.range(24).map(function(f, i) {
+    var e = {};
+    e.value = f.length;
+    e.index = "2";
+    e.index2 = "2_" + (i+1);
+    data.push(e);
+  });
+});
+
+// SCATTERPLOT
+d3.range(250).map(function(d) {
+  var e = {};
+  e.value = d.length;
+  e.index = "3";
+  e.__width = 20;
+  e.__height = 20;
+  e.index2 = "undefined";
+  data.push(e);
+});
+
+// HISTORY
+d3.range(3).map(function(d) {
+  var e = {};
+  e.value = d.length;
+  e.index = "4";
+  e.index2 = "undefined";
+  data.push(e);
+});
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "coordinate",
+  "valueX": "__x",
+  "valueY": "__y",
+  "valueWidth": "__width",
+  "valueHeight": "__height",
+  "padding": 5,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "valueWidth": function(d) {
+    if(d.key === "3") {
+      return 150;
+    } else {
+      return null;
+    }
+  },
+  "valueHeight": function(d) {
+    if(d.key === "3") {
+      return 150;
+    } else {
+      return null;
+    }
+  },
+  "mode": function(d) {
+    if(d.key === "3") {
+      return "central";
+    } else if(d.key === "2") {
+      return "grid";
+    } else {
+      return "central";
+    }
+  },
+ // "valueHeight": function(d) {
+ //   if(d.key === "3") {
+ //     return "value";
+ //   } else {
+ //     return null;
+ //   }
+ // },
+ // "valueWidth": function(d) {
+ //   if(d.key === "2") {
+ //     return "value";
+ //   } else {
+ //     return null;
+ //   }
+ // },
+ // "orient": function(d) {
+ //   if(d.key === "3") {
+ //     return "up";
+ //   } else {
+ //     return null;
+ //   }
+ // },
+  "padding": 2,
+  "level": 1
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "valueWidth": function(d) {
+    if(d.__parent_key === "3") {
+      return 10;
+    } else if(d.__parent_key === "4") {
+      return null;
+    } else {
+      return 10;
+    }
+  },
+  "valueHeight": function(d) {
+    if(d.__parent_key === "3") {
+      return 10;
+    } else if(d.__parent_key === "4") {
+      return null;
+    } else {
+      return 10;
+    }
+  },
+  "mode": function(d) {
+    if(d.__parent_key === "4") {
+      return "vertical";
+    } else {
+      return "coordinate";
+    }
+  },
+  "padding": 2,
+  "level": 1
+}];
+
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+    {groupBy: "index", fn: function(d) { return d.length}},
+    {groupBy: "index2", fn: function(d) { return d.length}}
+  ], "data");
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  d3.selectAll(".index").remove();
+  // Get all the rects and create groups?
+
+  //
+
+}
+
+update();
+
+</script>

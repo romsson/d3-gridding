@@ -29,7 +29,7 @@ var data = [];
 
 d3.range(10).map(function(d, i) {
   d3.range(2).map(function(e, j) {
-    data.push({"index": i, "value": j, "size": i*(j+1)});
+    data.push({"index": i, "value": j, "size": i *(j+1) + i*Math.random()});
   });
 });
 
@@ -37,7 +37,7 @@ var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
   "mode": "grid",
-  "padding": 2,
+  "padding": 0,
   "level": 0
 }, {
   "size": function(d) { return [d.width, d.height]; },
@@ -45,7 +45,7 @@ var params = [{
   "mode": "horizontal",
   "valueWidth": "size",
   "orient": function(d) { return +d.key === 0 ? "left": "right";},
-  "padding": 2,
+  "padding": 10,
   "level": 1
 }
 ];
@@ -66,6 +66,11 @@ function update() {
   console.log("NESTED", nested_data)
 
   draw(svgSquares, nested_data[0], params, 0, "0_", false);
+
+
+  d3.selectAll(".index").remove();
+
+
 
 }
 

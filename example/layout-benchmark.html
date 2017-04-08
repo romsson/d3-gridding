@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, line {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script src="utils/layouts.js"></script>
+<script>
+
+var width = 400,
+    height = 400;
+
+var nb_set = 15;
+var cell_width = 10;
+
+var data = layouts[3].values;
+
+var dataMarginal = d3.range(1000).map(d3.randomBates(10));
+
+var x = d3.scaleLinear()
+    .rangeRound([0, width]);
+
+var bins = d3.histogram()
+    .domain(x.domain())
+    .thresholds(x.ticks(25))
+    (dataMarginal);
+
+
+// PERMUTATIONS
+d3.range(10).map(function(a) {
+
+  d3.range(10).map(function(_, j) {
+    var f = {};
+    f.__width = 10; //cell_width;
+    f.__height = a + 10; //nb_set * cell_width;
+    f.index = j + "";
+    data.push(f);
+  });
+
+});
+
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "coordinate",
+  "valueX": "__x",
+  "valueY": "__y",
+  "valueWidth": "__width",
+  "valueHeight": "__height",
+  "padding": 2,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "vertical",
+  "orient": "up",
+  "valueHeight": "__height",
+  "padding": 10,
+  "level": 1
+}];
+
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+    {groupBy: "index", fn: function(d) { return Math.random();}},
+  //  {groupBy: "index2", fn: function(d) { return d.length;}}
+  ], "data");
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  d3.selectAll(".index").remove();
+  // Get all the rects and create groups?
+
+//  d3.selectAll(".square0_").remove();
+
+}
+
+update();
+
+</script>

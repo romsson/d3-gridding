@@ -28,9 +28,9 @@
     "postpublish": "zip -j build/d3-gridding.zip -- LICENSE README.md build/d3-gridding.js build/d3-gridding.min.js"
   },
   "devDependencies": {
-    "rollup": "0.27",
-    "rollup-plugin-commonjs": "^2.2.1",
-    "rollup-plugin-node-resolve": "^1.4.0",
+    "rollup": "0.41",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^2.0.0",
     "tape": "4",
     "uglify-js": "2",
     "watch": "^1.0.0",
@@ -38,9 +38,9 @@
     "package-preamble": "0.0.2"
   },
   "dependencies": {
-    "d3": "^4.7.2",
+    "d3": "^4.7.4",
     "d3-array": "^1.0.2",
-    "d3-hierarchy": "^1.0.2",
+    "d3-hierarchy": "^1.1.4",
     "d3-scale": "^1.0.1",
     "d3-shape": "^1.0.2"
   }

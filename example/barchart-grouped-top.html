@@ -26,27 +26,33 @@ rect, circle {
 var width = 400,
     height = 300;
 
-var data = d3.range(50).map(function(d, i) {
-    return {"index": i, "value": Math.floor(Math.random()*120 / 7), "prop": "static", "v": Math.random()};
+var data = [];
+
+d3.range(4).map(function(flow) {
+  d3.range(2).map(function(d) {
+    d3.range(10).map(function(e) {
+      data.push({"flow": flow, "level1": d, "level2": e, "index": Math.random()});
+    });
   });
+});
 
 var params = [{
   "size": function() { return [width, height]; },
   "offset": function(d) { return [0, 0]; },
-  "mode": "vertical",
+  "mode": "grid",
   "valueHeight": "__agg",
   "orient": "up",
   "padding": 2,
   "level": 0
-}, {
-  "size": function(d) { return [d.width, d.height]; },
-  "offset": function(d) { return [d.x, d.height - d.y]; },
-  "mode": "vertical",
-  "valueHeight": function(d) { return d["v"]; },
-  "valueY": "index",
-  "orient": "up",
-  "padding": 2,
-  "level": 1
+//}, {
+//  "size": function(d) { return [d.width, d.height]; },
+//  "offset": function(d) { return [d.x, height - d.y]; },
+//  "mode": "vertical",
+////  "valueHeight": function(d) { return d["v"]; },
+//  "valueY": "index",
+//  "orient": "up",
+//  "padding": 2,
+//  "level": 1
 }
 ];
 
@@ -59,7 +65,7 @@ function update() {
 
   nested_data = generate_nesting_agg([
     {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
-    {groupBy: "value", fn: d3.sum, accessor: function(d) { return d.value; }, sortBy: "year"}
+    {groupBy: "level1", fn: d3.sum, accessor: function(d) { return d.value; }, sortBy: "year"}
     ], "data");
 
   draw(svgSquares, nested_data[0], params, 0, "0_");

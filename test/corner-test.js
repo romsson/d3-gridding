@@ -9,14 +9,14 @@ tape("corner layout should return full dimension when alone", function(test) {
 
   test.deepEqual(grid(nodes)[0]["x"], 0);
   test.deepEqual(grid(nodes)[0]["y"], 0);
-  test.deepEqual(grid(nodes)[0]["width"], 10);
-  test.deepEqual(grid(nodes)[0]["height"], 20);
+  test.deepEqual(grid(nodes)[0]["width"], 0);
+  test.deepEqual(grid(nodes)[0]["height"], 0);
 
   test.end();
 });
 
 
-tape("corner layout should return split the canvas in two identical parts", function(test) {
+tape("corner layout should split the canvas in two identical parts", function(test) {
 
   var nodes = ["A", "B"];
 
@@ -24,8 +24,8 @@ tape("corner layout should return split the canvas in two identical parts", func
 
   test.deepEqual(grid(nodes)[0]["x"], 0);
   test.deepEqual(grid(nodes)[0]["y"], 0);
-  test.deepEqual(grid(nodes)[0]["width"], 10);
-  test.deepEqual(grid(nodes)[0]["height"], 20);
+  test.deepEqual(grid(nodes)[0]["width"], 0);
+  test.deepEqual(grid(nodes)[0]["height"], 0);
 
   test.deepEqual(grid(nodes)[1]["x"], 0);
   test.deepEqual(grid(nodes)[1]["y"], 0);
