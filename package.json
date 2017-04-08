@@ -1,6 +1,6 @@
 {
   "name": "d3-gridding",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Grid partitions for visual representation.",
   "keywords": [
     "d3",
