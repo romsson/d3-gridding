@@ -30,7 +30,6 @@ export default function(nodes, v) {
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
-
     // n[v.__width] = v.width(_valueWidth(n));
     // n[v.__height] = v.height(_valueHeight(n));
 
@@ -39,6 +38,12 @@ export default function(nodes, v) {
 
     if(v.orient == "up") {
       n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
+    } else if(v.orient == "down") {
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
+    } else if(v.orient == "left") {
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
+    } else if(v.orient == "right") {
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
     } else { // default up
       n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
     }
