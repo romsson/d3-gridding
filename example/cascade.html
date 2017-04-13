@@ -93,8 +93,8 @@ function update(fn, n) {
 var timing = 0, duration = 500;
 
 setTimeout(function() { update(function() { gridding.mode("cascade").sort(d3.ascending).padding(10); }, 2); }, timing++ * duration);
-//setTimeout(function() { update(function() { gridding.mode("horizontal").orient("down"); }, 10); }, timing++ * duration);
-//setTimeout(function() { update(function() { gridding.mode("diagonal"); }, 10); }, timing++ * duration);
+setTimeout(function() { update(function() { gridding.mode("horizontal").orient("down"); }, 10); }, timing++ * duration);
+setTimeout(function() { update(function() { gridding.mode("diagonal"); }, 10); }, timing++ * duration);
 
 
 </script>

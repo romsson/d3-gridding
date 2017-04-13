@@ -39,7 +39,8 @@ export default function() {
       "brick": {
         "layout": brick,
         "properties": [
-          {"key": "orient", "value": "top"}
+          {"key": "orient", "value": "left"},
+          {"key": "orient", "value": "right", "default": true}
         ]
       },
       "cascade": {

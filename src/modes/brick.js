@@ -21,7 +21,7 @@ export default function(nodes, v) {
       if(row % 2 === 1) {
         n[v.__x] += n[v.__width] / 2;
       }
-    } else {
+    } else { // default right
       if(row % 2 === 0) {
         n[v.__x] += n[v.__width] / 2;
       }

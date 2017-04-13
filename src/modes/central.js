@@ -3,6 +3,7 @@ export default function(nodes, v) {
   v.cols = v.rows = 1;
 
   nodes.forEach(function(n) {
+
     n[v.__x] = 0 + v.padding + v.offset[0];
     n[v.__y] = 0 + v.padding + v.offset[1];
 
@@ -20,7 +21,6 @@ export default function(nodes, v) {
 
     n[v.__rx] = n[v.__cx] - v.padding / 2;
     n[v.__ry] = n[v.__yx] / 2;
-
   });
 
   return nodes;
