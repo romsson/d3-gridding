@@ -12,6 +12,7 @@ import identity from "./modes/identity";
 import pack from "./modes/pack";
 import pyramid from "./modes/pyramid";
 import radial from "./modes/radial";
+import rotation from "./modes/rotation";
 import stack from "./modes/stack";
 import step from "./modes/step";
 import tree from "./modes/tree";
@@ -28,6 +29,7 @@ export default function() {
     __height: "",
     __cx: "",
     __cy: "",
+    __r: "",
     cellSize: null,
     cols: null,
     height: d3Scale.scaleLinear(),
@@ -106,6 +108,12 @@ export default function() {
           {"key": "orient", "value": "top"}
         ]
       },
+      "rotation": {
+        "layout": rotation,
+        "properties": [
+          {"key": "orient", "value": "top"}
+        ]
+      },
       "stack": {
         "layout": stack,
         "properties": [
@@ -146,6 +154,7 @@ export default function() {
     parentId: function(d, i) { return i === 0 ? null: 0; },
     padding: 0,
     radius: null,
+    rotate: 45,
     rows: null,
     size: [1, 1],
     sort: null,
@@ -167,6 +176,7 @@ export default function() {
     vars.__height = vars.__prefix + "height";
     vars.__cx = vars.__prefix + "cx";
     vars.__cy = vars.__prefix + "cy";
+    vars.__r = vars.__prefix + "r";
 
     if(typeof nodes === "undefined" || nodes === "" || nodes === null) {
 
@@ -186,6 +196,10 @@ export default function() {
 
       nodes = vars.value(nodes);
     }
+
+    nodes.forEach(function(n) {
+      n[vars.__r] = 0;
+    })
 
     return vars.layout(nodes, vars);
   }
