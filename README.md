@@ -7,7 +7,7 @@ Grid partitions for visual representation.
 
 <p align="center">
   <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
-    <img src="https://raw.githubusercontent.com/romsson/d3-gridding/master/img/modes.png" width="403" height="296" alt="modes">
+    <img src="https://romsson.github.io/d3-gridding/example/capture/figures/modes.png" width="403" height="296" alt="modes">
   </a>
 </p>
 

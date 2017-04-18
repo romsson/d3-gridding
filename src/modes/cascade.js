@@ -4,6 +4,7 @@ export default function(nodes, v) {
   var shiftY = v.size[1] / (2 * nodes.length);
 
   nodes.forEach(function(n, i) {
+
     n[v.__x] = 0 + v.offset[0] + shiftX * i;
     n[v.__y] = 0 + v.offset[1] + shiftY * i;
 

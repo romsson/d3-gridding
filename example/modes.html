@@ -39,7 +39,7 @@ function render(el, griddingData, id) {
     .attr("class", ".square" + "_" + id)
     .attr("width", function(d) { return d.width; })
     .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")rotate(" + d.r + ")"; })
     .style("fill", function() {
       if(id === "all") {
         return "none";
@@ -54,7 +54,7 @@ function render(el, griddingData, id) {
   squares.transition().delay(function(d, i) { return i * 10; })
     .attr("width", function(d) { return d.width; })
     .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")rotate(" + d.r + ")"; });
 
   var connection = el.selectAll(".connection" + "_" + id)
     .data(griddingData, function(d) { return d.index; });
