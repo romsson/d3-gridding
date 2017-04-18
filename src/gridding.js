@@ -114,6 +114,12 @@ export default function() {
           {"key": "orient", "value": "top"}
         ]
       },
+      "triangle": {
+        "layout": triangle,
+        "properties": [
+          {"key": "orient", "value": "top"}
+        ]
+      },
       "stack": {
         "layout": stack,
         "properties": [
