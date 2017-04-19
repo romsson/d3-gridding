@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, polygon {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+// var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+var data =  d3.range(25).map(function(d, i) {
+  return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+});
+    
+var angle=60
+
+var griddingData = gridding(data);
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width*2)
+    .attr("height", height*2)
+    .append("g");
+
+svgSquares.selectAll("polygon")
+    .data(griddingData, function(d) { return d.index; })
+    .enter().append("polygon")
+    .attr("class", "square")
+
+//    .attr("points", function(d) {
+//    var pitchbar=1
+//    var a=0 + "," + 100
+//    var b=75 + "," + 200
+//    var c=75 + "," + 200
+//    var d=150 + "," + 100
+//    return  (a + " " + b + " " + c + " " + d);})
+
+    .attr("points", function(d) {
+    var pitchbar=1
+    var a=0 + "," + d.index*5
+    var b=(-1)*d.index*4 + "," + d.index*12
+    var c=d.index*4 + "," + d.index*12
+    return  (a + " " + b + " " + c);})
+
+    .attr("transform", function(d) { return "translate(" + (100+d.x) + "," + d.y + ")"; })   
+    .style("fill", function(d, i) { return d3.rgb(d.index,d.index,d.index); })
+    .style("fill-opacity", .3)
+
+svgSquares.selectAll(".index")
+    .data(griddingData)
+  .enter().append("text")
+    .attr("class", "index")
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+    .text(function(d, i) { return d.__value; });
+
+</script>
