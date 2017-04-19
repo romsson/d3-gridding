@@ -2,16 +2,15 @@
 
 [![npm version](https://badge.fury.io/js/d3-gridding.svg)](https://badge.fury.io/js/d3-gridding)
 [![Build Status](https://circleci.com/gh/romsson/d3-gridding/tree/master.png?style=shield)](https://circleci.com/gh/romsson/d3-gridding)
+[![dependencies Status](https://david-dm.org/romsson/d3-gridding/status.svg)](https://david-dm.org/romsson/d3-gridding)
 
-Grid partitions for visual representation.
+D3 charts mock-ups using data-driven grids 
 
 <p align="center">
   <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
     <img src="https://romsson.github.io/d3-gridding/example/capture/figures/modes.png" width="403" height="296" alt="modes">
   </a>
 </p>
-
-> Be aware this is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts. Once this will be done, it should be reflected with a major version upgrade.
 
 ## Installing
 
