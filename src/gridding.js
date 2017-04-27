@@ -170,6 +170,7 @@ export default function() {
 
   function gridding(nodes) {
 
+    // In case a prefix has been set
     vars.__x = vars.__prefix + "x";
     vars.__y = vars.__prefix + "y";
     vars.__width = vars.__prefix + "width";

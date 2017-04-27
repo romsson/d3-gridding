@@ -17,6 +17,7 @@ export default function(nodes, v) {
   var arcs = pie(nodes);
 
   nodes.forEach(function(n, i) {
+
     n[v.__width] = v.size[0] / nodes.length;
     n[v.__height] = v.size[1] / nodes.length;
 
