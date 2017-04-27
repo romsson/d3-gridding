@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-
-<!--
-Example taken from the tutorial:
-https://threejs.org/examples/webgl_geometry_shapes.html
--->
 <html lang="en">
 	<head>
 		<title>three.js webgl - geometry - shapes</title>
@@ -22,23 +17,33 @@ https://threejs.org/examples/webgl_geometry_shapes.html
 
 		<script src="./build/three.js"></script>
 		<script src="./build/stats.min.js"></script>
+		<script src="../../build/d3-gridding.js"></script>
+        <script src="../../node_modules/d3/build/d3.js"></script>
 
 		<script>
 
 			var container, stats;
 			var camera, scene, renderer;
 			var group;
-			var targetRotation = 0;
-			var targetRotationOnMouseDown = 0;
-			var mouseX = 0;
-			var mouseXOnMouseDown = 0;
-			var windowHalfX = window.innerWidth / 2;
-			var windowHalfY = window.innerHeight / 2;
+            var width = 400,
+            height = 300;
 
+            var gridding = d3.gridding()
+            .size([width, height])
+            .mode("grid");
+
+            var data =  d3.range(250).map(function(d, i) {
+            return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+            });
+
+            var griddingData = gridding(data);
+            
 			init();
 			animate();
 
 			function init() {
+                
+                console.log(griddingData[0])
 
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
@@ -48,7 +53,7 @@ https://threejs.org/examples/webgl_geometry_shapes.html
 				info.style.top = '10px';
 				info.style.width = '100%';
 				info.style.textAlign = 'center';
-				info.innerHTML = 'WebGL Drawing Example<br/>';
+				info.innerHTML = 'WebGL Drawing / Simple <br/>';
 				container.appendChild( info );
 
 				scene = new THREE.Scene();
@@ -87,17 +92,9 @@ https://threejs.org/examples/webgl_geometry_shapes.html
 					group.add( line );
 				}
 
-				// Triangle
-
-//				var triangleShape = new THREE.Shape();
-//				triangleShape.moveTo(  80, 20 );
-//				triangleShape.lineTo(  40, 80 );
-//				triangleShape.lineTo( 120, 80 );
-//				triangleShape.lineTo(  80, 20 ); // close path
-
 				// Square
 
-				var sqLength = 30;
+				var sqLength = 10;
 				var squareShape = new THREE.Shape();
 				squareShape.moveTo( 0,0 );
 				squareShape.lineTo( 0, sqLength );
@@ -105,102 +102,34 @@ https://threejs.org/examples/webgl_geometry_shapes.html
 				squareShape.lineTo( sqLength, 0 );
 				squareShape.lineTo( 0, 0 );
 
-				// Circle
-
-//				var circleRadius = 20;
-//				var circleShape = new THREE.Shape();
-//				circleShape.moveTo( 0, circleRadius );
-//				circleShape.quadraticCurveTo( circleRadius, circleRadius, circleRadius, 0 );
-//				circleShape.quadraticCurveTo( circleRadius, -circleRadius, 0, -circleRadius );
-//				circleShape.quadraticCurveTo( -circleRadius, -circleRadius, -circleRadius, 0 );
-//				circleShape.quadraticCurveTo( -circleRadius, circleRadius, 0, circleRadius );
-
 				var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 
 //				 addShape( shape, color, x, y, z, rx, ry,rz, s );
-
-                var numObjects = 200;
-                    for (var ii = 0; ii < numObjects; ++ii) {
-//                        addShape( triangleShape, extrudeSettings, 0x8080f0, -180, 0, 0, 0, 0, 0, 1 );
-                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*30, 20, 0, 0, 0, 0, 1 );
-                        addShape( squareShape, extrudeSettings, 0x0040f0, -300+ii*30, -40, 0, ii*0.3, 0, 0, 1 );
-                        addShape( squareShape, extrudeSettings, 0x0040f0, -300+ii*40, -100, 0, 0, ii*0.3, 0, 1 );
-                        addShape( squareShape, extrudeSettings, 0x0040f0, -300+ii*40, -160, 0, 0, 0, ii*0.3, 1 );
-//                        addShape( squareShape, extrudeSettings, 0x0040f0,  0,  0, 0, 0, 0, 0, 1 );
-//				addShape( circleShape, extrudeSettings, 0x00f000,  120,  250, 0, 0, 0, 0, 1 );
-				//
+                
+                    for (var ii = 0; ii < griddingData.length; ++ii) {
+                        addShape( squareShape, extrudeSettings, 0x000000, -200+griddingData[ii].x*1, -200+griddingData[ii].y*1, 0, 0, 0, 0, 1 );
+//                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*30, -40, 0, ii*0.3, 0, 0, 1 );
+//                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*40, -100, 0, 0, ii*0.3, 0, 1 );
+//                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*40, -160, 0, 0, 0, ii*0.3, 1 );
                     }
+                
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setClearColor( 0xf0f0f0 );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer.domElement );
-
 				stats = new Stats();
 				container.appendChild( stats.dom );
-
-//				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-//				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-//				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-				//
-				window.addEventListener( 'resize', onWindowResize, false );
 			}
-
-			function onWindowResize() {
-
-				windowHalfX = window.innerWidth / 2;
-				windowHalfY = window.innerHeight / 2;
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
-			}
-
-			//
-
-			function onDocumentMouseDown( event ) {
-
-				event.preventDefault();
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-				document.addEventListener( 'mouseout', onDocumentMouseOut, false );
-				mouseXOnMouseDown = event.clientX - windowHalfX;
-				targetRotationOnMouseDown = targetRotation;
-			}
-
-			function onDocumentTouchStart( event ) {
-
-				if ( event.touches.length == 1 ) {
-					event.preventDefault();
-					mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
-					targetRotationOnMouseDown = targetRotation;
-				}
-			}
-
-			function onDocumentTouchMove( event ) {
-
-				if ( event.touches.length == 1 ) {
-					event.preventDefault();
-					mouseX = event.touches[ 0 ].pageX - windowHalfX;
-					targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.05;
-				}
-			}
-
-			//
 
 			function animate() {
-//				requestAnimationFrame( animate );
 				render();
-//				stats.update();
-
 			}
 
 			function render() {
-//				group.rotation.y += ( targetRotation - group.rotation.y ) * 0.05;
-				renderer.render( scene, camera );
-
+				renderer.render( scene, camera )
 			}
 
 		</script>
-
 	</body>
 </html>
