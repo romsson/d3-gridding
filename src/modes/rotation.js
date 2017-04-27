@@ -18,7 +18,6 @@ export default function(nodes, v) {
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
 
     n[v.__r] = shiftRotate * i;
-
   });
 
   return nodes;
