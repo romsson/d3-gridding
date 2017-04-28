@@ -111,6 +111,14 @@ function draw(el, data, params, level, id, show_cross) {
     grid.cellSize(params[level].cellSize);
   }
 
+  if(typeof params[level].shiftX !== "undefined") {
+    grid.shiftX(params[level].shiftX);
+  }
+
+  if(typeof params[level].shiftY !== "undefined") {
+    grid.shiftY(params[level].shiftY);
+  }
+
   if(typeof params[level].rows !== "undefined") {
     grid.rows(params[level].rows);
   }
