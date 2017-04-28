@@ -12,7 +12,7 @@ export default function(nodes, v) {
   v.rows = Math.ceil(nodes.length / v.cols);
 
   v.x.domain([0, v.cols]).range([0, v.size[0] - v.size[0] / v.cols]);
-  v.y.domain([0, v.rows]).range([0, v.size[1]]);
+  v.y.domain([0, v.rows]).range([0, v.size[1] - v.size[1] / v.rows]);
 
   nodes.forEach(function(n, i) {
 
