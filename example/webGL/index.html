@@ -27,10 +27,11 @@
 			var group;
             var width = 400,
             height = 300;
+            var modegrid="treemap"
 
             var gridding = d3.gridding()
             .size([width, height])
-            .mode("grid");
+            .mode(modegrid);
 
             var data =  d3.range(250).map(function(d, i) {
             return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
@@ -53,7 +54,7 @@
 				info.style.top = '10px';
 				info.style.width = '100%';
 				info.style.textAlign = 'center';
-				info.innerHTML = 'WebGL Drawing / Simple <br/>';
+				info.innerHTML = 'WebGL Drawing / ' + modegrid + '<br/>';
 				container.appendChild( info );
 
 				scene = new THREE.Scene();
