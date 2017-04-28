@@ -42,7 +42,9 @@ export default function() {
         "layout": brick,
         "properties": [
           {"key": "orient", "value": "left"},
-          {"key": "orient", "value": "right", "default": true}
+          {"key": "orient", "value": "right", "default": true},
+          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "bottom"}
         ]
       },
       "cascade": {
@@ -156,6 +158,8 @@ export default function() {
     radius: null,
     rotate: 45,
     rows: null,
+    shiftX: null,
+    shiftY: null,
     size: [1, 1],
     sort: null,
     value: function(d) { return d; },
@@ -345,6 +349,18 @@ export default function() {
   gridding.parentId = function(_parentId) {
     if(!arguments.length) return vars.parentId;
     vars.parentId = _parentId;
+    return gridding;
+  }
+
+  gridding.shiftX = function(_shiftX) {
+    if(!arguments.length) return vars.shiftX;
+    vars.shiftX = _shiftX;
+    return gridding;
+  }
+
+  gridding.shiftY = function(_shiftY) {
+    if(!arguments.length) return vars.shiftY;
+    vars.shiftY = _shiftY;
     return gridding;
   }
 

@@ -97,7 +97,6 @@ function draw(el, data, params, level, id, show_cross) {
       grid.valueHeight(params[level].valueHeight(data));
     } else {
       grid.valueHeight(params[level].valueHeight);
-      console.log("SET HEIGH", grid.valueHeight(), params[level].valueHeight);
     }
   }
 
@@ -109,6 +108,14 @@ function draw(el, data, params, level, id, show_cross) {
 
   if(typeof params[level].cellSize !== "undefined") {
     grid.cellSize(params[level].cellSize);
+  }
+
+  if(typeof params[level].shiftX !== "undefined") {
+    grid.shiftX(params[level].shiftX);
+  }
+
+  if(typeof params[level].shiftY !== "undefined") {
+    grid.shiftY(params[level].shiftY);
   }
 
   if(typeof params[level].rows !== "undefined") {

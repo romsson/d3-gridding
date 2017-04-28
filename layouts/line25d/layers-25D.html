@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  stroke: black;
+  stroke-width: 1;
+}
+
+.square:hover {
+  fill: red;
+}
+
+path {
+  fill: none;
+}
+
+</style>
+<body>
+<script src="../../node_modules/d3/build/d3.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<script>
+
+// TODO
+// [X] Add third layer
+
+var width = 800,
+    height = 600;
+
+var margin = {top: 100, right: 100, bottom: 100, left: 100};
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+var data = [];
+
+d3.range(100).map(function(f, k) {
+  data.push({r: 0, g: 0, b: k});
+});
+
+var gridding2 = d3.gridding()
+  .size([width, height])
+  .mode("vertical");
+
+var data2 = [];
+
+d3.range(10).map(function(f, k) {
+  data2.push({r: 0, g: 0, b: k});
+});
+
+var gridding3 = d3.gridding()
+  .size([width, height])
+  .mode("horizontal");
+
+var data3 = [];
+
+d3.range(10).map(function(f, k) {
+  data3.push({r: 0, g: 0, b: k});
+});
+
+
+var is_down = false;
+var posX = 0
+
+var dx = 300;
+var dy = 100;
+
+var dx2 = 1400;
+var dy2 = 2500;
+
+var dx3 = 2200;
+var dy3 = 4100;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var svgSquares = svg.append("g")
+    .attr("transform", "translate(" + dx + "," + dy + ")rotate(318)skewX(-40)skewY(0)translate(" + -dx + "," + -dy + ")scale(.5)");
+
+var svgSquares2 = svg.append("g")
+    .attr("transform", "translate(" + dx2 + "," + dy2 + ")rotate(318)skewX(-40)skewY(0)translate(" + -dx2 + "," + -dy2 + ")scale(.5)");
+
+var svgSquares3 = svg.append("g")
+    .attr("transform", "translate(" + dx3 + "," + dy3 + ")rotate(318)skewX(-40)skewY(0)translate(" + -dx3 + "," + -dy3 + ")scale(.5)");
+
+var squares = svgSquares.selectAll(".square")
+  .data(gridding(data), function(d) { return d.index; });
+
+squares.enter()
+  .append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return "white"; })
+    .style("fill-opacity", 1);
+
+
+var squares2 = svgSquares2.selectAll(".square")
+  .data(gridding2(data2), function(d) { return d.index; });
+
+squares2.enter()
+  .append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return "white"; })
+    .style("fill-opacity", 1);
+
+
+var squares3 = svgSquares3.selectAll(".square")
+  .data(gridding3(data3), function(d) { return d.index; });
+
+squares3.enter()
+  .append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .style("fill", function(d, i) { return "white"; })
+    .style("fill-opacity", .8);
+
+</script>
