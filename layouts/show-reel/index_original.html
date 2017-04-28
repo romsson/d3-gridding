@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style type="text/css">
+
+svg {
+  font-family: "Helvetica Neue", Helvetica;
+}
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+</style>
+<body>
+<script src="../../node_modules/d3/build/d3.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<script>
+
+// Original: http://bl.ocks.org/mbostock/1256572
+// TODO
+// [X] Draw a line chart with the loaded dataset
+// [X] Test using some grid for each line
+// [ ] Use stack layout to calculate vaues y0, y0_differentOffset
+// [ ] Show units in bar chart and pie chart?
+// [ ] What can be better done than it currently is?
+// Show as units
+// Transitio
+
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 900 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+var x,
+    y,
+    duration = 1500,
+    delay = 500;
+
+//var color = d3.scale.category10();
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+// Adds the svg canvas
+var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var stocks,
+    symbols;
+
+// A line generator, for the dark stroke.
+var line = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.price); });
+
+// A line generator, for the dark stroke.
+var axis = d3.line()
+   // .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(height);
+
+// A area generator, for the dark stroke.
+var area = d3.area()
+  //  .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y1(function(d) { return y(d.price); });
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("horizontal")
+  .sort(d3.descending);
+
+d3.csv("stocks.csv", function(data) {
+  var parse = d3.timeParse("%b %Y");
+
+  // Nest stock values by symbol.
+  symbols = d3.nest()
+      .key(function(d) { return d.symbol; })
+      .entries(stocks = data);
+
+  // Parse dates and numbers. We assume values are sorted by date.
+  // Also compute the maximum price per symbol, needed for the y-domain.
+  symbols.forEach(function(s) {
+    s.values.forEach(function(d) { d.date = parse(d.date); d.price = +d.price; });
+    s.maxPrice = d3.max(s.values, function(d) { return d.price; });
+    s.sumPrice = d3.sum(s.values, function(d) { return d.price; });
+  });
+
+  // Sort by maximum price, descending.
+  symbols.sort(function(a, b) { return b.maxPrice - a.maxPrice; });
+
+  x = d3.scaleTime().range([0, width]);
+  y = d3.scaleLinear().range([height, 0]);
+
+  // Compute the minimum and maximum date across symbols.
+  x.domain([
+    d3.min(symbols, function(d) { return d.values[0].date; }),
+    d3.max(symbols, function(d) { return d.values[d.values.length - 1].date; })
+  ]);
+
+  y.domain([
+    0,
+    d3.max(symbols, function(d) { return d.maxPrice; })
+  ]);
+
+  update();
+});
+
+function update() {
+
+  var gLine = svg.selectAll(".gLine")
+        .data(gridding(symbols));
+
+  var gLineEnter = gLine.enter()
+        .append("g")
+        .attr("class", "gLine");
+
+  gLineEnter
+      .append("path")
+      .attr("class", "line")
+      .style("stroke", function(d, i) { return color(d.key); })
+      .attr("d", function(d) {
+        y.range([d.height, 0]);
+        line.y(function(d) { return y(d.price); });
+        return line(d.values);
+      })
+      .attr("transform", function(d) { return "translate(" + d.x + ", " + d.y + ")"; });
+
+  gLine.selectAll(".line")
+      .transition()
+      .attr("d", function(d) {
+        x.range([d.width, 0]);
+        y.range([d.height, 0]);
+        line
+          .x(function(d) { return x(d.date); })
+          .y(function(d) { return y(d.price); });
+        return line(d.values);
+      })
+      .attr("transform", function(d) { return "translate(" + d.x + ", " + d.y + ")"; });
+
+  gLineEnter
+    .append("text")
+    .text(function(d) {return d.key; })
+    .attr("transform", function(d) { return "translate(" + d.cx + ", " + d.cy + ")"; });
+
+  gLine.selectAll("text")
+    .transition()
+    .text(function(d) {return d.key; })
+    .attr("transform", function(d) { return "translate(" + d.cx + ", " + d.cy + ")"; });
+
+}
+
+var timing = 0, duration = 500;
+
+setTimeout(function() {
+  gridding
+      .mode("horizontal")
+      .sort(d3.ascending)
+      .padding(10);
+  update();
+}, duration * timing++);
+
+setTimeout(function() {
+  gridding
+      .mode("central")
+      .sort(d3.ascending)
+      .padding(10);
+  update();
+}, duration * timing++);
+
+setTimeout(function() {
+  gridding
+      .mode("cascade")
+      .sort(d3.ascending)
+      .padding(10);
+  update();
+}, duration * timing++);
+
+setTimeout(function() {
+  gridding
+      .mode("grid")
+  update();
+}, duration * timing++);
+
+</script>
