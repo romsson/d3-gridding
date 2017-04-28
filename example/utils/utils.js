@@ -97,7 +97,6 @@ function draw(el, data, params, level, id, show_cross) {
       grid.valueHeight(params[level].valueHeight(data));
     } else {
       grid.valueHeight(params[level].valueHeight);
-      console.log("SET HEIGH", grid.valueHeight(), params[level].valueHeight);
     }
   }
 
