@@ -20,6 +20,6 @@ export default function(nodes, v) {
     n[v.__r] = shiftRotate * i;
 
   });
-
+    
   return nodes;
 }
