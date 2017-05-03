@@ -14,7 +14,7 @@ Write the code from your mode, using [identity mode](https://github.com/romsson/
 
 Create a test file `test/NEW-MODE-test.js`
 
-Write tests for your mode
+Write [new tests](add-new-test.md) for your mode
 
 Create a simple example named `example/NEW-MODE.html`
 
