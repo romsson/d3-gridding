@@ -7,8 +7,8 @@
 D3 charts mock-ups using data-driven grids 
 
 <p align="center">
-  <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
-    <img src="https://romsson.github.io/d3-gridding/example/capture/figures/modes.png" width="403" height="296" alt="modes">
+  <a href="https://romsson.github.io/d3-gridding/example/modes.html">
+    <img src="img/modes.png" width="403" height="296" alt="modes">
   </a>
 </p>
 
