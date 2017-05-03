@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+
+<!--Modified script from:
+
+https://threejs.org/examples/webgl_geometry_shapes.html
+
+-->
 <html lang="en">
 	<head>
 		<title>three.js webgl - geometry - shapes</title>
@@ -34,7 +40,6 @@
             .mode(modegrid);
 
             var data =  d3.range(25).map(function(d, i) {
-//            return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
             return {x: d, y: i, r: Math.random(), index: i, group: i %10};
             });
 
@@ -95,17 +100,6 @@
 					group.add( line );
 				}
 
-				// Square
-
-//				var sqLength = 10;
-//				var sqLength = griddingData[0].width/10;
-//				var squareShape = new THREE.Shape();
-//				squareShape.moveTo( 0,0 );
-//				squareShape.lineTo( 0, sqLength );
-//				squareShape.lineTo( sqLength, sqLength );
-//				squareShape.lineTo( sqLength, 0 );
-//				squareShape.lineTo( 0, 0 );
-
 				var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
 
 //				 addShape( shape, color, x, y, z, rx, ry,rz, s );
@@ -114,8 +108,6 @@
                     
                 var sqLengthW = griddingData[ii].width;
                 var sqLengthH = griddingData[ii].height;
-//                var sqLengthW = griddingData[ii].x/10;
-//                var sqLengthH = griddingData[ii].y/10;
                     
 				var squareShape = new THREE.Shape();
 				squareShape.moveTo( 0,0 );
@@ -125,9 +117,7 @@
 				squareShape.lineTo( 0, 0 );    
                     
                 addShape( squareShape, extrudeSettings, 0x000000, +griddingData[ii].x, +griddingData[ii].y, 0, 0, 0, 0, 1 );
-//                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*30, -40, 0, ii*0.3, 0, 0, 1 );
-//                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*40, -100, 0, 0, ii*0.3, 0, 1 );
-//                        addShape( squareShape, extrudeSettings, 0x000000, -300+ii*40, -160, 0, 0, 0, ii*0.3, 1 );
+                    
                 }
                 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
