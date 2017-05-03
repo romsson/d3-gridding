@@ -20,7 +20,7 @@ D3 charts mock-ups using data-driven grids
 
 In both cases, you then have to include the `d3-gridding.js` JavaScript file in your HTML code.
 
-## API
+## HOWTO
 
 The code snippet below lets you create dots organized as a grid:
 
@@ -70,6 +70,8 @@ var points = svgPoints.selectAll(".point")
 ```
 
 That's pretty much what you need to know at this point to get started. Below is a list of functions that will let you customize the layouts and retrieve internal values.
+
+## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
 
