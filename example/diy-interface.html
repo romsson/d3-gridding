@@ -161,7 +161,8 @@ p.plaintext {
     /*    position: relative;*/
 }
 
-
+ 
+    
 </style>
 <body>
     
@@ -188,7 +189,7 @@ p.plaintext {
 </div>
 
 <div class="central-div"><p class="author">Flavours
-
+ <div id="mapping-modes-grid-flavours"></div>
 </div>
 
 <div class="right-div"><p class="author">Preview
@@ -215,7 +216,7 @@ p.plaintext {
 
 <!--
 <div>Nested data<br>
-  <textarea rows="25" cols="50" id="nested-data-textarea" oninput='update();'></textarea>
+  
 </div>
 -->
 
@@ -233,6 +234,7 @@ p.plaintext {
 
     <textarea rows="5" cols="50"  style="background-color:#004957;color:white;border:none"  id="nesting-textarea" oninput='update();'></textarea>
     <br>
+    <textarea rows="25" cols="50" style="background-color:#004957;color:white;border:none" id="nested-data-textarea" oninput='update();'></textarea>
 </div>
 <div style="clear: both"></div>
 
@@ -568,6 +570,34 @@ create_modes_matrix(d3.select("#mapping-modes-grid"), 100, 1200, function(d) {
   update_mapping_tree_properties(d.value);
 
 })
+
+create_modes_matrix_flavours(d3.select("#mapping-modes-grid-flavours"), 650, 600, function(d) {
+
+  // TOFIX: if first layer in mapping tree do something
+  //var last_params = JSONfn.parse(JSONfn.stringify(params[params.length - 1]));
+  //params = params.concat(last_params);
+  params[params.length - 1].mode = d.value;
+  fill_mapping_area(JSONfn.stringify(params));
+  update_flavours();
+
+  // Update the mappingTreeProperties
+
+  update_mapping_tree_properties(d.value);
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // LOAD DATA
 
