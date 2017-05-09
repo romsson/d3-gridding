@@ -571,7 +571,7 @@ function create_modes_matrix(root_el, width, height, callback) {
 }
 
 
-function create_modes_matrix_flavours(root_el, width, height, callback) {
+function create_modes_matrix_flavours(root_el, width, height, flavour, callback) {
 
   var gridding = d3.gridding()
     .size([width, height])
@@ -672,16 +672,17 @@ function create_modes_matrix_flavours(root_el, width, height, callback) {
         .size([d.width, d.height])
         .offset([d.x, d.y])
   //      .value(function(d) { return d.index; })
-        .mode(d.value)
+        .mode(flavour)
+//        .mode(d.value)
         .padding(0);
 
-      render(svgSquares, grid(d3.range(10).map(function() { return {}; })), d.value)
+      render(svgSquares, grid(d3.range(6).map(function() { return {}; })), d.value)
       return d;
     });
 
   }
 
-  update("treemap", gridding.modes().length);
+  update("vertical", gridding.modes().length);
 
 }
 
