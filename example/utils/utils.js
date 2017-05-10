@@ -579,6 +579,7 @@ function create_modes_matrix_flavours(root_el, width, height, flavour, callback)
   var svgSquares = root_el.append("svg")
       .attr("width", width)
       .attr("height", height)
+       .on("click", callback)
     .append("g");
 
   function render(el, griddingData, id) {
@@ -617,34 +618,39 @@ function create_modes_matrix_flavours(root_el, width, height, flavour, callback)
 
 
     // Only show titles for modes cells
-//    if(id === "all") {
-//
-//    var titles = el.selectAll(".title")
+    if(id === "all") {
+
+    var titles = el.selectAll(".title")
 //      .data(griddingData, function(d) { return d.index; });
-//
-//      titles.enter().append("rect")
-////        .attr("x", function(d) { return d.cx - 25; })
-//        .attr("x", function(d) { return d.x; })
-//        .attr("y", function(d) { return d.y + d.height - 10; })
-//        .attr("width", function(d) { return d.width; })
-//        .attr("height", function(d) { return 10; })
-//        .style("stroke", "none")
-//        .style("fill", "white")
-//        .on("click", callback);
-//
+      .data(griddingData, function(d) { return flavour; });
+
+       
+      titles.enter().append("rect")
+//        .attr("x", function(d) { return d.cx - 25; })
+        .attr("x", function(d) { return d.x; })
+        .attr("y", function(d) { return d.y + d.height - 100; })
+        .attr("width", function(d) { return d.width; })
+        .attr("height", function(d) { return 100; })
+        .style("stroke", "none")
+        .style("fill", "white")
+          .attr("opacity",function(d){return 0;})
+//        .on("click",callback)
+      .on("click",   
+          callback);
+
 //      titles.enter().append("text")
 //        .attr("class", "title")
 //        .attr("text-anchor", "left")
 //        .attr("transform", function(d) { return "translate(" + (d.x+5) + "," + (d.y+d.height-1) + ")"; })
-//        .text(function(d) { return d.value; })
+//        .text(function(d) { return flavour; })
 //        .on("click", callback);
-//
-//      titles.exit().remove();
-//
-//      titles.transition().delay(function(d, i) { return i * 10; })
-//        .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
-//
-//    }
+
+      titles.exit().remove();
+
+      titles.transition().delay(function(d, i) { return i * 10; })
+        .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
+
+    }
   }
 
   function update(mode, n, sort) {
@@ -652,9 +658,12 @@ function create_modes_matrix_flavours(root_el, width, height, flavour, callback)
     sort = sort || d3.ascending;
 
     var data = gridding.modes().map(function(d, i) {
-      return {"value": d, "index": i};
-    });
+      return {"value": flavour, "index": i, 'something': d.value};
+        
+          });
+        
 
+        
     // Global layout
     gridding
       .mode(mode)
@@ -666,17 +675,17 @@ function create_modes_matrix_flavours(root_el, width, height, flavour, callback)
     render(svgSquares, griddingData, "all")
 
     var griddings = griddingData.map(function(d, i) {
-
       // Local layout
       var grid = d3.gridding()
         .size([d.width, d.height])
         .offset([d.x, d.y])
-  //      .value(function(d) { return d.index; })
+//        .value(function(d) { return d.index; })
         .mode(flavour)
 //        .mode(d.value)
         .padding(0);
 
-      render(svgSquares, grid(d3.range(6).map(function() { return {}; })), d.value)
+//      render(svgSquares, grid(d3.range(6).map(function() { return {}; })), d.value)
+      render(svgSquares, grid(d3.range(6).map(function() { return {}; })),d.index)
       return d;
     });
 

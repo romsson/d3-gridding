@@ -585,19 +585,17 @@ function generate_flavours () {
 
           // TOFIX: if first layer in mapping tree do something
           //var last_params = JSONfn.parse(JSONfn.stringify(params[params.length - 1]));
-          //params = params.concat(last_params);
+          //params = params.concat(last_params);            
           params[params.length - 1].mode = d.value;
           fill_mapping_area(JSONfn.stringify(params));
-          update_flavours();
-
+          update();
+            
           // Update the mappingTreeProperties
 
           update_mapping_tree_properties(d.value);
 
         })
-
     }
-
 }
 
 
