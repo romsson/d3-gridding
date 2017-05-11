@@ -5,7 +5,10 @@ body {
   font-family: Helvetica;
   font-size: 10px;
     margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
     background: #004957
+/*    background: white*/
 }
 .point {
   fill: white;
@@ -30,7 +33,7 @@ div {
     height: 150px;
     margin-right: 0px;
     margin-left: 190px;
-    margin-top: 45px;
+    margin-top: 40px;
     background-color: none;
     text-align: left;
     opacity: 1.0;
@@ -64,13 +67,13 @@ div {
     
 div#header {
     float:left;
-    width: 2130px;
+    width: 100%;
     height: 100px;
     position:relative;
     margin-left: 0px;
     margin-top: 0px;
     top: 0px;
-    background-color: none;
+    background-color: #FAB230;
 }
     
 .left-div {
@@ -92,7 +95,7 @@ div#header {
     width: 700px;
     height: 800px;
     margin-right: 8px;
-    margin-left: 0px;
+    margin-left: 220px;
     margin-top: 40px;
     background-color: none;
     opacity: 1.0;
@@ -127,15 +130,27 @@ div#header {
     
 p.title {
     font-family: Arial, Gill Sans, Century Gothic, Verdana, sans-serif;
-    font-size: 18px;
+    font-size: 22px;
+    letter-spacing: 0px;
+        font-weight: bold;
+    line-height: 0px;
+    position: relative;
+    color: saddlebrown;
+    margin-left: 30px;
+    margin-top: 40px;
+}
+    
+p.title2 {
+    font-family: Arial, Gill Sans, Century Gothic, Verdana, sans-serif;
+    font-size: 22px;
     letter-spacing: 0px;
     top: 0;
-    /*    font-weight: bold;*/
-    line-height: 14px;
+        font-weight: bold;
+    line-height: 0px;
     position: relative;
-    color: white;
+    color: brown;
     margin-left: 30px;
-    margin-top: 45px;
+    margin-top: 0px;
 }
 
 p.author {
@@ -169,13 +184,16 @@ p.plaintext {
     </div>
 
 <div id="header">
-<p class="title">D3-Gridding</p>
+    <p class="title">D3</p>
+    <p class="title2">Gridding</p>
+
 </div>
 
 <div class="option">
-<p class="plaintext">Morbi platea iaculis a maecenas est lacinia bibendum eu netus adipiscing elit consectetur a a nam sed parturient. Dapibus eleifend lobortis mi libero scelerisque class mi a nisl magnis aliquet ut malesuada a tempor id nullam. </p><br>
+    <div id="mapping-modes-grid"></div>
 </div> 
 
+<!--
 <div class="option2">
 <p class="plaintext">Dis cursus parturient vestibulum ut ante viverra quisque tempor venenatis etiam inceptos inceptos nam suspendisse eros vel cursus blandit ac condimentum a elit commodo tincidunt.</p><br>
 </div> 
@@ -183,13 +201,11 @@ p.plaintext {
 <div class="option3">
 <p class="plaintext">Dis cursus parturient vestibulum ut ante viverra quisque tempor venenatis etiam inceptos inceptos nam suspendisse eros vel cursus blandit ac condimentum a elit commodo tincidunt.</p><br>
 </div> 
+-->
 
-<div class="left-div"><p class="author">Mapping Tree
-    <div id="mapping-modes-grid"></div>
-</div>
-
-<div class="central-div"><p class="author">Flavours
- <div id="mapping-modes-grid-flavours"></div>
+<div class="left-div"><p class="author">
+<!--    Mapping Tree-->
+<!--    <div id="mapping-modes-grid"></div>-->
 </div>
 
 <div class="right-div"><p class="author">Preview
@@ -212,6 +228,11 @@ p.plaintext {
     <br>
     <div id="nesting-tree"></div>
     <br>
+</div>
+
+<div class="central-div"><p class="author">
+<!--    Flavours-->
+ <div id="mapping-modes-grid-flavours"></div>
 </div>
 
 <!--
@@ -268,8 +289,8 @@ var current_mapping_property = null
 var current_mapping_property_value = null;
 
 var margin = { top: 10, right: 15, bottom: 10, left: 10 }
-var width = 400 - margin.left - margin.right
-var height = 400 - margin.top - margin.bottom
+var width = 450 - margin.left - margin.right
+var height = 450 - margin.top - margin.bottom
 
 var years = [1985, 1995, 2005, 2015];
 var flows = ["import", "export"];
@@ -553,10 +574,10 @@ function update() {
   svgSquares.selectAll("rect").on("click", function(d) {
     console.log("Data leve", +d3.select(this).attr("data-leve"))
   })
-
 }
 
-create_modes_matrix(d3.select("#mapping-modes-grid"), 100, 1200, function(d) {
+create_modes_matrix(d3.select("#mapping-modes-grid"), 600, 30, function(d) {
+//create_modes_matrix(d3.select("#option"), 1200, 100, function(d) {
 
   // TOFIX: if first layer in mapping tree do something
   //var last_params = JSONfn.parse(JSONfn.stringify(params[params.length - 1]));

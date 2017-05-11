@@ -464,6 +464,7 @@ function create_modes_matrix(root_el, width, height, callback) {
   var svgSquares = root_el.append("svg")
       .attr("width", width)
       .attr("height", height)
+         .on("click", callback)
     .append("g");
 
   function render(el, griddingData, id) {
@@ -477,7 +478,7 @@ function create_modes_matrix(root_el, width, height, callback) {
       .attr("width", function(d) { return d.width; })
       .attr("height", function(d) { return d.height; })
 //      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("transform", function(d) { return "translate(" + (d.x) + "," + d.y + ")"; })
       .style("fill", function() {
         if(id === "all") {
           return "none";
@@ -486,7 +487,7 @@ function create_modes_matrix(root_el, width, height, callback) {
         }
       })
       .style("fill-opacity", .9)
-      .style("stroke", "white");
+      .style("stroke", "brown");
 
     squares.exit().remove();
 
@@ -502,34 +503,33 @@ function create_modes_matrix(root_el, width, height, callback) {
 
 
     // Only show titles for modes cells
-    if(id === "all") {
-
-    var titles = el.selectAll(".title")
-      .data(griddingData, function(d) { return d.index; });
-
-      titles.enter().append("rect")
-//        .attr("x", function(d) { return d.cx - 25; })
-        .attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y + d.height - 10; })
-        .attr("width", function(d) { return d.width; })
-        .attr("height", function(d) { return 10; })
-        .style("stroke", "none")
-        .style("fill", "white")
-        .on("click", callback);
-
-      titles.enter().append("text")
-        .attr("class", "title")
-        .attr("text-anchor", "left")
-        .attr("transform", function(d) { return "translate(" + (d.x+5) + "," + (d.y+d.height-1) + ")"; })
-        .text(function(d) { return d.value; })
-        .on("click", callback);
-
-      titles.exit().remove();
-
-      titles.transition().delay(function(d, i) { return i * 10; })
-        .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
-
-    }
+//    if(id === "all") {
+//
+//    var titles = el.selectAll(".title")
+//      .data(griddingData, function(d) { return d.index; });
+//
+//      titles.enter().append("rect")
+////        .attr("x", function(d) { return d.cx - 25; })
+//        .attr("x", function(d) { return d.x; })
+//        .attr("y", function(d) { return d.y + d.height - 10; })
+//        .attr("width", function(d) { return d.width; })
+//        .attr("height", function(d) { return 10; })
+//        .style("stroke", "none")
+//        .style("fill", "none")
+//        .on("click", callback);
+//
+//      titles.enter().append("text")
+//        .attr("class", "title")
+//        .attr("text-anchor", "left")
+//        .attr("transform", function(d) { return "translate(" + (d.x+5) + "," + (d.y+d.height-1) + ")"; })
+//        .text(function(d) { return d.value; })
+//        .on("click", callback);
+//
+//      titles.exit().remove();
+//
+//      titles.transition().delay(function(d, i) { return i * 10; })
+//        .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
+//    }
   }
 
   function update(mode, n, sort) {
@@ -566,7 +566,7 @@ function create_modes_matrix(root_el, width, height, callback) {
 
   }
 
-  update("horizontal", gridding.modes().length);
+  update("vertical", gridding.modes().length);
 
 }
 
