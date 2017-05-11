@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 <!--Modified script from:
 
@@ -56,8 +56,8 @@ https://threejs.org/examples/webgl_geometry_shapes.html
 
 				scene = new THREE.Scene();
 
-				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1400 );
-				camera.position.set( 0, 0, 1300 );
+				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 2400 );
+				camera.position.set( 1400, -500, 2300 );
 				scene.add( camera );
 
 				var light = new THREE.PointLight( 0xffffff, 0.8 );
@@ -75,51 +75,8 @@ https://threejs.org/examples/webgl_geometry_shapes.html
 				texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 				texture.repeat.set( 0.008, 0.008 );
 
-				function addShape( shape, extrudeSettings, color, x, y, z, rx, ry, rz, s ) {
+               draw(); 
 
-					// lines
-					shape.autoClose = true;
-					var points = shape.createPointsGeometry();
-					var spacedPoints = shape.createSpacedPointsGeometry( 50 );
-
-					// solid line
-					var line = new THREE.Line( points, new THREE.LineBasicMaterial( { color: color, linewidth: 3 } ) );
-					line.position.set( x, y, z - 25 );
-					line.rotation.set( rx, ry, rz );
-					line.scale.set( s, s, s );
-					group.add( line );
-				}
-
-				var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
-                
-                
-
-                themodes=['brick','pyramid']
-                
-                for (var k = 0; k < themodes.length; ++k) {
-                    
-                    var modegrid=themodes[k]
-                    var thegrid = multiple(modegrid);
-                                        
-                    for (var ii = 0; ii < thegrid.length; ++ii) {
-                    
-                    var sqLengthW = thegrid[ii].width;
-                    var sqLengthH = thegrid[ii].height;
-
-                    var squareShape = new THREE.Shape();
-                    squareShape.moveTo( 0,0 );
-                    squareShape.lineTo( 0, sqLengthW );
-                    squareShape.lineTo( sqLengthH, sqLengthW );
-                    squareShape.lineTo( sqLengthH, 0 );
-                    squareShape.lineTo( 0, 0 );  
-
-    //	addShape( shape, color, x, y, z, rx, ry,rz, s );
-
-                    addShape( squareShape, extrudeSettings, 0x000000, +thegrid[ii].x, +thegrid[ii].y-500*k, 0, 0, 0, 0, 1 );
-                    
-                    }
-                }
-                
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setClearColor( 0xf0f0f0 );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -144,6 +101,67 @@ https://threejs.org/examples/webgl_geometry_shapes.html
                     return griddingData;
                 }
             
+                function global(modename) {
+                    
+                    var gridding = d3.gridding()
+                    .size([width, height])
+                    .mode(modename);
+
+                    var data =  d3.range(17).map(function(d, i) {
+                    return {x: d, y: i, r: Math.random(), index: i, group: i %10};
+                    });
+
+                    var griddingGlobal = gridding(data);   
+                    return griddingGlobal;
+                }
+            
+            function draw(){
+                
+                function addShape( shape, extrudeSettings, color, x, y, z, rx, ry, rz, s ) {
+
+					// lines
+					shape.autoClose = true;
+					var points = shape.createPointsGeometry();
+					var spacedPoints = shape.createSpacedPointsGeometry( 50 );
+
+					// solid line
+					var line = new THREE.Line( points, new THREE.LineBasicMaterial( { color: color, linewidth: 3 } ) );
+					line.position.set( x, y, z - 25 );
+					line.rotation.set( rx, ry, rz );
+					line.scale.set( s, s, s );
+					group.add( line );
+				}
+                
+				var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+                
+                themodes=['brick','cascade', 'central', 'corner','diagonal','grid','horizontal','pack', 'pyramid','radial','rotation','stack','step','tree','treemap','vertical']
+                
+                var globaldis=global('grid')
+                
+                for (var k = 0; k < themodes.length; ++k) {
+                    
+                    var modegrid=themodes[k]
+                    var thegrid = multiple(modegrid);
+                                        
+                    for (var ii = 0; ii < thegrid.length; ++ii) {
+                    
+                    var sqLengthW = thegrid[ii].width;
+                    var sqLengthH = thegrid[ii].height;
+
+                    var squareShape = new THREE.Shape();
+                    squareShape.moveTo( 0,0 );
+                    squareShape.lineTo( 0, sqLengthW );
+                    squareShape.lineTo( sqLengthH, sqLengthW );
+                    squareShape.lineTo( sqLengthH, 0 );
+                    squareShape.lineTo( 0, 0 );  
+
+    //	addShape( shape, color, x, y, z, rx, ry,rz, s );
+
+                    addShape( squareShape, extrudeSettings, 0x000000, thegrid[ii].x+7*globaldis[k].x, +thegrid[ii].y-7*globaldis[k].y, 0, 0, 0, 0, 1 );
+                    
+                    }
+                }  
+            }
             
 			function animate() {
 				render();
