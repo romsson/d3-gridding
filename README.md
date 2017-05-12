@@ -16,8 +16,11 @@ D3 charts mock-ups using data-driven grids
 
 **To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
 
+* Simple [grid example](http://blockbuilder.org/romsson/a2e9ff5f7dafe12cc97d2cc286dad733)
 
-**List of tutorials** is available 
+* Search for [code examples](http://blockbuilder.org/search#d3modules=d3-gridding) using `d3-gridding`  on blockbuilder.org.
+
+* List of [tutorials](tutorial/) 
 
 ## How does it work?
 
