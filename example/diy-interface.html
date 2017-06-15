@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    background: #004957
+/*    background: white*/
+}
+.point {
+  fill: white;
+}
+
+rect, circle {
+  fill: #004957;
+  stroke: white;
+  stroke-width: 1;
+}
+
+div {
+  float:left;
+  position:relative;
+    margin-left: 0px;
+}
+    
+.option {
+    float: left;
+    position: fixed;
+    width: 300px;
+    height: 150px;
+    margin-right: 0px;
+    margin-left: 190px;
+    margin-top: 40px;
+    background-color: none;
+    text-align: left;
+    opacity: 1.0;
+}
+    
+.option2 {
+    float: left;
+    position: fixed;
+    width: 300px;
+    height: 150px;
+    margin-right: 0px;
+    margin-left: 900px;
+    margin-top: 45px;
+    background-color: none;
+    text-align: left;
+    opacity: 1.0;
+}
+    
+.option3 {
+    float: left;
+    position: fixed;
+    width: 300px;
+    height: 150px;
+    margin-right: 0px;
+    margin-left: 1300px;
+    margin-top: 45px;
+    background-color: none;
+    text-align: left;
+    opacity: 1.0;
+}
+    
+div#header {
+    float:left;
+    width: 100%;
+    height: 100px;
+    position:relative;
+    margin-left: 0px;
+    margin-top: 0px;
+    top: 0px;
+    background-color: #FAB230;
+}
+    
+.left-div {
+    float: left;
+    position: relative;
+    width: 150px;
+    height: 800px;
+    margin-right: 8px;
+    margin-left: 30px;
+    margin-top: 40px;
+    background-color: none;
+    opacity: 1.0;
+/*    text-align: right;*/
+}  
+    
+.central-div {
+    float: left;
+    position: relative;
+    width: 700px;
+    height: 800px;
+    margin-right: 8px;
+    margin-left: 220px;
+    margin-top: 40px;
+    background-color: none;
+    opacity: 1.0;
+/*    text-align: right;*/
+}
+    
+.right-div {
+    float: left;
+    position: relative;
+    width: 400px;
+    height: 800px;
+    margin-right: 8px;
+    margin-left: 0px;
+    margin-top: 40px;
+    background-color: none;
+    opacity: 1.0;
+/*    text-align: right;*/
+}
+    
+.farright-div {
+    float: left;
+    position: relative;
+    width: 300px;
+    height: 800px;
+    margin-right: 8px;
+    margin-left: 0px;
+    margin-top: 40px;
+    background-color: none;
+    opacity: 1.0;
+/*    text-align: right;*/
+}
+    
+p.title {
+    font-family: Arial, Gill Sans, Century Gothic, Verdana, sans-serif;
+    font-size: 22px;
+    letter-spacing: 0px;
+        font-weight: bold;
+    line-height: 0px;
+    position: relative;
+    color: saddlebrown;
+    margin-left: 30px;
+    margin-top: 40px;
+}
+    
+p.title2 {
+    font-family: Arial, Gill Sans, Century Gothic, Verdana, sans-serif;
+    font-size: 22px;
+    letter-spacing: 0px;
+    top: 0;
+        font-weight: bold;
+    line-height: 0px;
+    position: relative;
+    color: brown;
+    margin-left: 30px;
+    margin-top: 0px;
+}
+
+p.author {
+    font-family: Arial, Gill Sans, Century Gothic, Verdana, sans-serif;
+    font-size: 8pt;
+    line-height: 8pt;
+    margin-left: 0px;
+    top: 0;
+    color: gold;
+    position: relative;
+}
+    
+p.plaintext {
+    /*    font-family: Garamond, sans-serif;*/
+    font-family: Arial, Verdana;
+    font-size: 8pt;
+    line-height: 10pt;
+    color: #d2d2d2;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    text-align: left;
+    /*    position: relative;*/
+}
+
+ 
+    
+</style>
+<body>
+    
+    </div>
+
+<div id="header">
+    <p class="title">D3</p>
+    <p class="title2">Gridding</p>
+
+</div>
+
+<div class="option">
+    <div id="mapping-modes-grid"></div>
+</div> 
+
+<!--
+<div class="option2">
+<p class="plaintext">Dis cursus parturient vestibulum ut ante viverra quisque tempor venenatis etiam inceptos inceptos nam suspendisse eros vel cursus blandit ac condimentum a elit commodo tincidunt.</p><br>
+</div> 
+
+<div class="option3">
+<p class="plaintext">Dis cursus parturient vestibulum ut ante viverra quisque tempor venenatis etiam inceptos inceptos nam suspendisse eros vel cursus blandit ac condimentum a elit commodo tincidunt.</p><br>
+</div> 
+-->
+
+<div class="left-div"><p class="author">
+<!--    Mapping Tree-->
+<!--    <div id="mapping-modes-grid"></div>-->
+</div>
+
+<div class="right-div"><p class="author">Preview
+        <input type="button" id="inflation-adjusted" value="update" onclick='update();' />
+    </br>
+    <div id="gridding-div"></div> </br></br></br>
+    <p class="author">Nesting Tree
+    <input type="button" id="mapping-root-button" value="root"/>
+    <input type="button" id="mapping-minus-button" value="-"/>
+    <input type="button" id="mapping-duplicate-button" value="duplicate"/></p></br>  </br>  </br>   
+    <br>
+    <span id="mapping-tree"></span>
+<!--
+    <span id="mapping-tree-properties"></span>
+    <span id="mapping-tree-properties-values"></span>
+-->
+    <br>
+    <input type="button" id="nesting-root-button" value="root"/>
+    <input type="button" id="nesting-minus-button" value="-"/>
+    <br>
+    <div id="nesting-tree"></div>
+    <br>
+</div>
+
+<div class="central-div"><p class="author">
+<!--    Flavours-->
+ <div id="mapping-modes-grid-flavours"></div>
+</div>
+
+<!--
+<div>Nested data<br>
+  
+</div>
+-->
+
+<div class="farright-div">
+    <p class="author">Raw data  
+    <input type="button" id="iris-data-button" value="iris"/>
+    <input type="button" id="titanic-data-button" value="titanic"/>
+    <input type="button" id="cars-data-button" value="cars"/>
+    <input type="button" id="rand-root-button" value="rand"/>
+       </br> </br>url: <input type="text" id="url-data-text" style="width: 170px" value="https://media.githubusercontent.com/media/metmuseum/openaccess/master/MetObjects.csv">
+    <input type="button" id="load-url-data-button" value="load"/>  </br>
+    </br>
+    <textarea rows="25" cols="50"  style="background-color:#004957;color:white;border:none"  id="raw-data-textarea" oninput='update();'></textarea>    </br>  </br>  </br>
+    <textarea rows="15" cols="50" id="mapping-textarea" style="background-color:#004957;color:white;border:none"  oninput='update();'></textarea></br>  </br>  </br>
+
+    <textarea rows="5" cols="50"  style="background-color:#004957;color:white;border:none"  id="nesting-textarea" oninput='update();'></textarea>
+    <br>
+    <textarea rows="25" cols="50" style="background-color:#004957;color:white;border:none" id="nested-data-textarea" oninput='update();'></textarea>
+</div>
+<div style="clear: both"></div>
+
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="./utils/utils.js"></script>
+<script>
+
+// TODO
+// Layout: text editor, preview
+// Random data, cars data, ..
+// Config templates?
+// List all dimensions as buttons?? (add.. )
+// [X] Modes preview matrix
+// [ ] Show selected modes for each layer
+// [X] Random dataset
+// [ ] Load IRIS data
+// [ ] Load CARS data
+// How to show dimensions for nesting??
+// [ ] Graph data? Connections?
+// [ ] How to query derived data (__x, ..)
+// [ ] Aggregate, sum, count, ..
+// [ ] Fix edge cases with minus / add reach certain level
+// [ ] Preview table
+// [ ] Aggregation functions
+
+// CURRENT VARIABLES
+var current_preview_level = 0;
+var current_mapping_element = null
+var current_mapping_property = null
+var current_mapping_property_value = null;
+
+var margin = { top: 10, right: 15, bottom: 10, left: 10 }
+var width = 450 - margin.left - margin.right
+var height = 450 - margin.top - margin.bottom
+
+var years = [1985, 1995, 2005, 2015];
+var flows = ["import", "export"];
+var categories = ["import", "export"];
+var continents = ['Asia', 'North America', 'Europe', 'South America', 'Africa', 'Australia']
+
+var data = [];
+
+d3.range(1).map(function(root) {
+  years.map(function(year) {
+    flows.map(function(flow) {
+        categories.map(function(category) {
+          continents.map(function(continent) {
+            data.push({"root": root, "year": year, "flow": flow, "category": category, "continent": continent});
+          });
+        });
+    });
+  });
+});
+
+var default_params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "grid",
+  "padding": 2,
+  "level": 0
+}];
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "padding": 2,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "vertical",
+  "padding": 2,
+  "level": 1
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "diagonal",
+  "padding": 2,
+  "level": 2
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": "treemap",
+  "padding": 2,
+  "level": 3
+}];
+
+var nesting = ["root", "year", "flow", "category"];
+
+var aggregation = ["max", "sum", "mean", "count", "first", "min"];
+
+var nested_data = generate_nesting(nesting, "data")
+
+var svgSquares = d3.select("#gridding-div").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var nestingTree = d3.select("#nesting-tree").append("svg")
+    .attr("width", 400)
+    .attr("height", 200)
+  .append("g");
+
+var mappingTree = d3.select("#mapping-tree").append("svg")
+    .attr("width", 400)
+    .attr("height", 200)
+  .append("g");
+
+var mappingTreeProperties = d3.select("#mapping-tree-properties").append("svg")
+    .attr("width", 400)
+    .attr("height", 200)
+  .append("g");
+
+var mappingTreePropertiesValues = d3.select("#mapping-tree-properties-values").append("svg")
+    .attr("width", 400)
+    .attr("height", 200)
+  .append("g");
+
+
+draw(svgSquares, nested_data[0], params, 0, "0_");
+
+function fill_raw_data_area(data) {
+  d3.select('#raw-data-textarea').html(data);
+}
+
+function fill_nested_data_area(data) {
+  d3.select('#nested-data-textarea').html(data);
+}
+
+function fill_nesting_area(data) {
+  d3.select('#nesting-textarea').html(data);
+}
+
+function fill_mapping_area(data) {
+  d3.select('#mapping-textarea').html(data);
+}
+
+// Draws the nesting tree
+function update_nesting_tree() {
+
+  var width = 150, height = 150;
+
+  var data = nesting.map(function(d) { return [d]; })
+
+  var params = [{
+    "size": function() { return [width, height]; },
+    "offset": function(d) { return [0, 0]; },
+    "mode": "tree",
+    "padding": 4,
+    "level": 0
+  }];
+
+  var nested_data = d3.nest()
+      .key(function(d, i) { return i; })
+      .entries(data);
+
+  draw(nestingTree, nested_data[0], params, 0, "0_");
+
+  nestingTree.selectAll(".index")
+      .text(function(d, i) { return d[0]; })
+    .attr("opacity",.9);
+
+}
+
+// Draws the nesting tree
+// TODO: callback when clicked on
+function update_mapping_tree() {
+
+  var width = 150, height = 150;
+
+  var data = params;
+
+  // MAPPING TREE
+
+  var params2 = [{
+    "size": function() { return [width, height]; },
+    "offset": function(d) { return [0, 0]; },
+    "mode": "tree",
+    "padding": 2,
+    "level": 0
+  }];
+
+  var nested_data = d3.nest()
+      .key(function(d, i) { return i; })
+      .key(function(d, i) { return d["mode"]; })
+      .entries(data);
+
+  draw(mappingTree, nested_data[0], params2, 0, "0_");
+
+  mappingTree.selectAll(".index").on("click", function(d) {
+    update_mapping_tree_properties(d.key);
+  });
+
+}
+
+
+// Draws the nesting tree
+function update_mapping_tree_properties(mode) {
+
+  var width = 100, height = 1200;
+
+  var data = d3.gridding().modes(mode);
+
+  // MAPPING TREE
+
+  var params2 = [{
+    "size": function() { return [width, height]; },
+    "offset": function(d) { return [0, 0]; },
+    "mode": "horizontal",
+    "padding": 2,
+    "level": 0
+  }, {
+    "size": function(d) { return [d.width, d.height]; },
+    "offset": function(d) { return [d.x, d.y]; },
+    "mode": "vertical"
+  }];
+
+  var nested_data = d3.nest()
+      .key(function(d, i) { return i; })
+      .key(function(d, i) { return d["key"]; })
+ //     .key(function(d, i) { return d["value"]; })
+      .entries(data);
+
+  draw(mappingTreeProperties, nested_data[0], params2, 0, "0_");
+
+  mappingTreeProperties.selectAll(".index").on("click", function(d) {
+
+    var data = [];
+
+    if(d.key === "orient") {
+      data = ["up", "right", "down"].map(function(d) { return [d]; });
+    } else {
+      data = nesting.map(function(d) { return [d]; });
+    }
+
+    update_mapping_tree_properties_values(data);
+  });
+
+}
+
+// Draws the nesting tree
+function update_mapping_tree_properties_values(data) {
+
+  var width = 100, height = 200;
+
+  var params2 = [{
+    "size": function() { return [width, height]; },
+    "offset": function(d) { return [0, 0]; },
+    "mode": "grid",
+    "padding": 2,
+    "level": 0
+  }];
+
+  var nested_data = d3.nest()
+      .key(function(d, i) { return i; })
+      .entries(data);
+
+  draw(mappingTreePropertiesValues, nested_data[0], params2, 0, "0_");
+
+  mappingTreePropertiesValues.selectAll(".index").on("click", function(d) {
+
+    // TODO
+    // Redraw the preview chart with new mapping
+    console.log("REDRAW", d)
+
+    var params = JSONfn.parse(document.getElementById("mapping-textarea").value)
+
+    // TOFIX: capture currentlu selected LEVEL
+    params[0].orient = d[0];
+
+    fill_mapping_area(JSONfn.stringify(params));
+
+    update();
+  });
+
+  mappingTreePropertiesValues.selectAll(".index")
+      .text(function(d, i) { return d[0]; });
+
+}
+
+fill_raw_data_area(JSON.stringify(data));
+
+fill_nested_data_area(JSON.stringify(nested_data));
+
+fill_nesting_area(JSON.stringify(nesting));
+
+fill_mapping_area(JSONfn.stringify(params));
+
+update_nesting_tree();
+update_mapping_tree();
+
+function update() {
+
+  data = eval(document.getElementById("raw-data-textarea").value);
+
+  nesting = eval(document.getElementById("nesting-textarea").value)
+
+  params = JSONfn.parse(document.getElementById("mapping-textarea").value)
+
+  nested_data = generate_nesting(nesting, "data")
+
+  d3.select("#gridding-div").select("svg").remove();
+
+  var svgSquares = d3.select("#gridding-div").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g");
+
+  update_nesting_tree();
+  update_mapping_tree();
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  svgSquares.selectAll("rect").on("click", function(d) {
+    console.log("Data leve", +d3.select(this).attr("data-leve"))
+  })
+}
+
+create_modes_matrix(d3.select("#mapping-modes-grid"), 600, 30, function(d) {
+//create_modes_matrix(d3.select("#option"), 1200, 100, function(d) {
+
+  // TOFIX: if first layer in mapping tree do something
+  //var last_params = JSONfn.parse(JSONfn.stringify(params[params.length - 1]));
+  //params = params.concat(last_params);
+  params[params.length - 1].mode = d.value;
+  fill_mapping_area(JSONfn.stringify(params));
+  update();
+
+  // Update the mappingTreeProperties
+
+  update_mapping_tree_properties(d.value);
+
+})
+
+generate_flavours();
+
+function generate_flavours () {
+    
+    var data = d3.gridding().modes();
+
+    for (i = 0; ++i < data.length;) {    
+
+        var flavour = data[i]
+
+        create_modes_matrix_flavours(d3.select("#mapping-modes-grid-flavours"), 650, 68, flavour, function(d) {
+
+          // TOFIX: if first layer in mapping tree do something
+          //var last_params = JSONfn.parse(JSONfn.stringify(params[params.length - 1]));
+          //params = params.concat(last_params);            
+          params[params.length - 1].mode = d.value;
+          fill_mapping_area(JSONfn.stringify(params));
+          update();
+            
+          // Update the mappingTreeProperties
+
+          update_mapping_tree_properties(d.value);
+
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// LOAD DATA
+
+// load random data
+d3.select("#rand-root-button")
+  .on("click", function() {
+
+    // generate random data
+    var nb = 4;
+
+    var data = d3.range(nb).map(function(d, i) {
+      var v = {"value": d, "index": i};
+      if(i > nb/2) {
+        v.cat = "A";
+      } else {
+        v.cat = "B";
+      }
+      return v;
+    });
+
+    // fill the code space
+    fill_raw_data_area(JSON.stringify(data));
+
+    fill_nesting_area(JSON.stringify(["root"]));
+
+    fill_mapping_area(JSONfn.stringify(default_params));
+
+    update();
+  });
+
+// load iris data
+d3.select("#iris-data-button")
+  .on("click", function() {
+
+    function type(d){
+      console.log(d)
+      d.sepal_length = +d.sepal_length;
+      d.sepal_width  = +d.sepal_width;
+      d.petal_length = +d.petal_length;
+      d.petal_width  = +d.petal_width;
+      return d;
+    }
+
+    d3.json("data/iris.json", render);
+
+    function render(data){
+
+      console.log("DATA", data)
+      fill_raw_data_area(JSON.stringify(data));
+
+      fill_nesting_area(JSON.stringify(["root"]));
+
+      fill_mapping_area(JSONfn.stringify(default_params));
+
+      update();
+    }
+
+  });
+
+
+// load titanic data
+d3.select("#titanic-data-button")
+  .on("click", function() {
+
+    function type(d){
+
+      return d;
+    }
+
+    d3.csv("data/titanic.csv", render);
+
+    function render(data){
+
+      console.log("DATA", data)
+      fill_raw_data_area(JSON.stringify(data));
+
+      fill_nesting_area(JSON.stringify(["root"]));
+
+      fill_mapping_area(JSONfn.stringify(default_params));
+
+      update();
+    }
+
+  });
+
+
+// load cars data
+d3.select("#cars-data-button")
+  .on("click", function() {
+
+    function type(d){
+
+      return d;
+    }
+
+    d3.csv("data/cars.csv", render);
+
+    function render(data) {
+
+      fill_raw_data_area(JSON.stringify(data));
+
+      fill_nesting_area(JSON.stringify(["root"]));
+
+      fill_mapping_area(JSONfn.stringify(default_params));
+
+      update();
+    }
+
+  });
+
+
+d3.select("#load-url-data-button")
+  .on("click", function() {
+    var url = document.getElementById("url-data-text").value
+    // d3.csv(url, fill_raw_data_area)
+    // update();
+  });
+
+
+// NESTING
+
+d3.select("#nesting-root-button")
+  .on("click", function() {
+    nesting = ["root"];
+    fill_nesting_area(JSON.stringify(nesting));
+    update();
+  });
+
+d3.select("#nesting-minus-button")
+  .on("click", function() {
+    nesting.pop();
+    fill_nesting_area(JSON.stringify(nesting));
+    update_nesting_tree();
+    update();
+  });
+
+
+// MAPPING
+
+d3.select("#mapping-root-button")
+  .on("click", function() {
+
+    params = [{
+      "size": function() { return [width, height]; },
+      "offset": function(d) { return [0, 0]; },
+      "mode": "vertical",
+      "padding": 2,
+      "level": 0
+    }];
+
+    fill_mapping_area(JSONfn.stringify(params));
+
+    update();
+  });
+
+d3.select("#mapping-duplicate-button")
+  .on("click", function() {
+
+    console.log("CURRENT PARAMS", params)
+
+
+    params = params.concat(params[params.length - 1]);
+
+    if(params.length === 0) {
+      params = [{
+        "size": function() { return [width, height]; },
+        "offset": function(d) { return [0, 0]; },
+        "mode": "vertical",
+        "padding": 2,
+        "level": 0
+      }]
+    }
+
+    if(params.length === 2) {
+      params[1].size = function(d) { return [d.width, d.height]; };
+      params[1].offset = function(d) { return [d.x, d.y]; };
+    }
+
+    fill_mapping_area(JSONfn.stringify(params));
+
+    update();
+  })
+
+d3.select("#mapping-minus-button")
+  .on("click", function() {
+    params.pop();
+    fill_mapping_area(JSONfn.stringify(params));
+    update();
+  });
+
+/*
+var layout = [
+
+  {
+    name: "code+preview",
+    mode: "vertical",
+    children: [{
+      name: "code"
+    }, {
+      name: "preview"
+    }],
+  }, {
+    name: "parameters",
+    mode: "horizontal",
+    height: 100,
+    children: []
+  }
+]
+
+var gridLayer0 = gridding(layout)
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+svgSquares.selectAll(".square")
+    .data(gridLayer0)
+  .enter().append("rect")
+    .attr("class", "square")
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+svgSquares.selectAll(".index")
+    .data(gridLayer0)
+  .enter().append("text")
+    .attr("class", "index")
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+    .text(function(d, i) { return d.__index; });
+
+
+function update() {
+
+  svgSquares.selectAll(".square")
+      .data(gridLayer0)
+      .transition().duration(0)
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+  svgSquares.selectAll(".index")
+      .data(gridLayer0)
+      .transition().duration(0)
+      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .text(function(d, i) { return d.__index; });
+
+}
+
+
+
+*/
+// dataset = eval(d3.select('#data-textarea').html());
+// dataset = JSON.parse(d3.select('#data-textarea').html())
+
+
+
+// d3.csv("data/cars.csv", function(error, csv) {
+//   result = {"name": "flare", "children": []};
+//   // JSON.stringify(csv)
+//   result.children = csv.map(function(d, i) { d.size = parseInt(d.weight); return d;});
+//   c = csv;
+//   callback(JSON.stringify(result));
+// })
+
+</script>
+
+
+
+

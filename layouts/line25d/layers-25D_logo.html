@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, line {
+  stroke: black;
+  stroke-width: 1;
+}
+
+.square:hover {
+  fill: red;
+}
+
+path {
+  fill: none;
+}
+
+</style>
+<body>
+<script src="../../node_modules/d3/build/d3.js"></script>
+<script src="../../build/d3-gridding.js"></script>
+<script>
+
+// TODO
+// [X] Add third layer
+
+var width = 800,
+    height = 600;
+
+var margin = {top: 100, right: 100, bottom: 100, left: 100};
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+var data = [];
+
+d3.range(100).map(function(f, k) {
+  data.push({r: 0, g: 0, b: k});
+});
+
+var gridding2 = d3.gridding()
+  .size([width, height])
+  .mode("vertical");
+
+var data2 = [];
+
+d3.range(10).map(function(f, k) {
+  data2.push({r: 0, g: 0, b: k});
+});
+
+var gridding3 = d3.gridding()
+  .size([width, height])
+  .mode("horizontal");
+
+var data3 = [];
+
+d3.range(10).map(function(f, k) {
+  data3.push({r: 0, g: 0, b: k});
+});
+
+
+var is_down = false;
+var posX = 0
+
+var dx = 300;
+var dy = 100;
+
+var dx2 = 1400;
+var dy2 = 2500;
+
+var dx3 = 2200;
+var dy3 = 4100;
+
+//var svg = d3.select("body").append("svg")
+//    .attr("width", width)
+//    .attr("height", height);
+//
+//var svgSquares = svg.append("g")
+//    .attr("transform", "translate(" + dx + "," + dy + ")rotate(318)skewX(-40)skewY(0)translate(" + -dx + "," + -dy + ")scale(.5)");
+
+//var svgSquares2 = svg.append("g")
+//    .attr("transform", "translate(" + dx2 + "," + dy2 + ")rotate(318)skewX(-40)skewY(0)translate(" + -dx2 + "," + -dy2 + ")scale(.5)");
+//
+//var svgSquares3 = svg.append("g")
+//    .attr("transform", "translate(" + dx3 + "," + dy3 + ")rotate(318)skewX(-40)skewY(0)translate(" + -dx3 + "," + -dy3 + ")scale(.5)");
+
+   
+// Adding lines--------------------------------------------------------------
+    
+    var width = 1200,
+    height = 800;
+    
+
+    
+console.log(width)    
+var x = d3.scaleLinear().range([0, width/2]);
+var y = d3.scaleLinear().range([0, height/2]);
+
+var xAxis = d3.axisBottom().scale(x).ticks(10);
+var yAxis = d3.axisRight().scale(y).ticks(10);
+
+var theline = d3.line()
+    .curve(d3.curveBasis)
+.x(function(d) { return x(d.month); })
+.y(function(d) { return y(d.con);});   
+//----------------------------------------------------------------------------
+    
+  
+
+    
+//var bnu=s.append("g")
+var reg='Australia_NewZealand'
+var model=10 
+
+    var svg = d3.select("body")
+//    .selectAll("svg")
+//    .data(data)
+//    .enter()
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("./seajson/AA_Counter_1_24.json", function(error,data) {
+    
+    for (var i = 0; i < data.length; i++) {
+        var obj = data[i]
+        for (var key in obj) {
+            console.log(key+"="+obj[key]);
+            
+            d3.json("./seajson/"+reg+"_"+obj[key]+"_test.json", function(error, data) { 
+            console.log(data[0].mod);
+
+            var svgSquares = svg.append("g")
+                .attr("transform", function(d) {
+                return "translate(" + (200+data[0].mod*20) + "," + (data[0].mod*10) + ")rotate(318)skewX(-45)skewY(10)translate(" + -dx + "," + -dy + ")scale(.5)";
+                });
+                
+            x.domain([data[0].month, data[data.length - 1].month])
+//            y.domain([d3.max(data, function(d) {return (d.con); }), d3.min(data, function(d) {return (d.con); })]);
+            y.domain([0.25, -0.25]);
+                
+            svgSquares.append("path")
+            .attr("class", "line")
+//            .attr("clip-path", "url(#clip)")
+            .style("stroke-width","2px")
+//            .attr("id",key[obj])
+            .attr("id", function(d) { return ("model"+data[0].mod); })
+            .attr("opacity",1)
+//            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+//            .style("stroke",function(d) { return d3.rgb(255-10*data[0].mod,10*data[0].mod,255);})
+            .style("stroke",function(d) { return d3.rgb(25,25,25);})
+            .attr("d", theline(data))
+            });
+        } 
+    } 
+});
+    
+
+//
+//squares.enter()
+//  .append("rect")
+//    .attr("class", "square")
+//    .attr("width", function(d) { return d.width; })
+//    .attr("height", function(d) { return d.height; })
+//    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+//    .style("fill", function(d, i) { return "white"; })
+//    .style("fill-opacity", 1);
+
+
+//var squares2 = svgSquares2.selectAll(".square")
+//  .data(gridding2(data2), function(d) { return d.index; });
+//
+//squares2.enter()
+//  .append("rect")
+//    .attr("class", "square")
+//    .attr("width", function(d) { return d.width; })
+//    .attr("height", function(d) { return d.height; })
+//    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+//    .style("fill", function(d, i) { return "white"; })
+//    .style("fill-opacity", 1);
+//
+//
+//var squares3 = svgSquares3.selectAll(".square")
+//  .data(gridding3(data3), function(d) { return d.index; });
+//
+//squares3.enter()
+//  .append("rect")
+//    .attr("class", "square")
+//    .attr("width", function(d) { return d.width; })
+//    .attr("height", function(d) { return d.height; })
+//    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+//    .style("fill", function(d, i) { return "white"; })
+//    .style("fill-opacity", .8);
+
+</script>
