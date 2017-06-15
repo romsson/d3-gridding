@@ -17,8 +17,8 @@ rect, circle {
 <script src="../build/d3-gridding.js"></script>
 <script>
 
-var width = 600,
-    height = 500;
+var width = 100,
+    height = 1200;
 
 var gridding = d3.gridding()
   .size([width, height])
@@ -54,7 +54,7 @@ function render(el, griddingData, id) {
   squares.transition().delay(function(d, i) { return i * 10; })
     .attr("width", function(d) { return d.width; })
     .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")rotate(" + d.r + ")"; });
+    .attr("transform", function(d) { return "translate(" + (d.x+10) + "," + d.y + ")rotate(" + d.r + ")"; });
 
   var connection = el.selectAll(".connection" + "_" + id)
     .data(griddingData, function(d) { return d.index; });
@@ -118,12 +118,12 @@ function update(mode, n, sort) {
       .mode(d.value)
       .padding(0);
 
-    render(svgSquares, grid(d3.range(10).map(function() { return {}; })), d.value)
+    render(svgSquares, grid(d3.range(15).map(function() { return {}; })), d.value)
     return d;
   });
 
 }
 
-update("grid", gridding.modes().length);
+update("horizontal", gridding.modes().length);
 
 </script>
