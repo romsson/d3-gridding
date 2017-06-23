@@ -30,11 +30,11 @@ var gridding = d3.gridding()
 
 // var abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-var data =  d3.range(5).map(function(d, i) {
+var data =  d3.range(15).map(function(d, i) {
   return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
 });
     
-var angle=45
+var angle=60    
 
 var griddingData = gridding(data);
 
@@ -47,21 +47,21 @@ svgSquares.selectAll(".square")
     .data(griddingData, function(d) { return d.index; })
   .enter().append("rect")
     .attr("class", "square")
-//    .attr("width", function(d) { return width; })
-    .attr("width", function(d) { return width/data.length; })
-//    .attr("height", function(d) { return height; })
-    .attr("height", function(d) { return height/data.length; })
+    .attr("width", function(d) { return width; })
+//    .attr("width", function(d) { return width/data.length; })
+    .attr("height", function(d) { return height; })
+//    .attr("height", function(d) { return height/data.length; })
 //    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
     .attr("transform", function(d) { 
       console.log(data.length)
       console.log("x_"+d.x)
       console.log("y_"+d.y)
-      if (d.index ==0) return "translate(" + (width/2) + "," + (height/2) + ")rotate(" + 0 + "," + width/(data.length*2) + ","+ height/(data.length*2) +")";
+      if (d.index ==0) return "translate(" + (width/2) + "," + (height/2) + ")rotate(" + 0 + "," + width + ","+ height +")";
 //      if (d.index ==0) return "rotate(" + 0 + "," + width/(data.length*2) + ","+ height/(data.length*2) +")";
 //      else return "translate(" + 0+ "," + 0 + ")rotate(" + 45/d.index + "," + width/2 + ","+ height/2 +")";
 //      else return "translate(" + (width/2-d.x/2) + "," + (height/2+d.y/2) + ")rotate(" + 45/d.index + "," + d.y + ","+ d.x +")";
 //      else return "rotate(" + angle/d.index + "," + width/(data.length*2) + ","+ height/(data.length*2) +")";
-      else return "translate(" + (width/2) + "," + (height/2) + ")rotate(" + angle/d.index + "," + width/(data.length*2) + ","+ height/(data.length*2) +")";
+      else return "translate(" + (width/2) + "," + (height/2) + ")rotate(" + angle/d.index + "," + width/(2) + ","+ height/(2) +")";
  
 
 })    
