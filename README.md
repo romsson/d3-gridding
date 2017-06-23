@@ -7,20 +7,22 @@
 D3 charts mock-ups using data-driven grids 
 
 <p align="center">
-  <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
-    <img src="https://romsson.github.io/d3-gridding/example/capture/figures/modes.png" width="403" height="296" alt="modes">
+  <a href="https://romsson.github.io/d3-gridding/example/modes.html">
+    <img src="img/modes.png" width="403" height="296" alt="modes">
   </a>
 </p>
 
-## Installing
+**To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
 
-* If you use NPM, `npm install d3-gridding`. 
+**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
 
-* Otherwise, download the [latest release](https://github.com/romsson/d3-gridding/releases/latest).
+* Simple [grid example](http://blockbuilder.org/romsson/a2e9ff5f7dafe12cc97d2cc286dad733)
 
-In both cases, you then have to include the `d3-gridding.js` JavaScript file in your HTML code.
+* Search for [code examples](http://blockbuilder.org/search#d3modules=d3-gridding) using `d3-gridding`  on blockbuilder.org.
 
-## API
+* List of [tutorials](tutorial/) 
+
+## How does it work?
 
 The code snippet below lets you create dots organized as a grid:
 
@@ -70,6 +72,8 @@ var points = svgPoints.selectAll(".point")
 ```
 
 That's pretty much what you need to know at this point to get started. Below is a list of functions that will let you customize the layouts and retrieve internal values.
+
+## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
 
