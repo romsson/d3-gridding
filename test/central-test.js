@@ -1,6 +1,20 @@
 var tape = require("tape"),
     gridding = require("../");
 
+tape("cascade layout should return one central grid", function(test) {
+
+  var nodes = ["A"];
+
+  var grid = gridding.gridding().mode("central").size([10, 20]);
+
+  test.deepEqual(grid(nodes)[0]["x"], 0);
+  test.deepEqual(grid(nodes)[0]["y"], 0);
+  test.deepEqual(grid(nodes)[0]["width"], 10);
+  test.deepEqual(grid(nodes)[0]["height"], 20);
+  test.end();
+});
+
+
 tape("central layout should return identical grids", function(test) {
 
   var nodes = [{}, {}, {}, {}];

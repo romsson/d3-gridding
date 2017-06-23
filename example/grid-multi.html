@@ -21,18 +21,28 @@ rect, circle {
 <script src="../build/d3-gridding.js"></script>
 <script>
 
-var width = 300,
-    height = 300;
+var width = 450,
+    height = 450;
 
 var gridding = d3.gridding()
   .size([width, height])
-  .mode("rotation");
+  .mode("coordinate")
+  .valueX("posX")
+  .valueY("posY")
+  .valueWidth("posW")
+  .valueHeight("posH")
 
-var data =  d3.range(15).map(function(d, i) {
-  return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+var total = d3.range(10).reduce(function(sum, v) { return sum + v; })
+
+var data = [];
+
+d3.range(10).map(function(d, i) {
+  d3.range(10).map(function(e, j) {
+    data.push({posX: (width / 10) * e, posY: (i % 10) * 10, posW: d, posH: 10, value: d * e});
+  });
 });
 
-var griddingData = gridding(data);
+var griddingData = gridding(data)
 
 var svgSquares = d3.select("body").append("svg")
     .attr("width", width)
@@ -45,7 +55,7 @@ svgSquares.selectAll(".square")
     .attr("class", "square")
     .attr("width", function(d) { return d.width; })
     .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")rotate(" + d.r + "," + d.x + "," + d.y + ")"; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
 svgSquares.selectAll(".index")
     .data(griddingData)
@@ -54,6 +64,6 @@ svgSquares.selectAll(".index")
     .style('text-anchor', 'middle')
     .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.__value; });
+    .text(function(d, i) { return d.value; });
 
 </script>
