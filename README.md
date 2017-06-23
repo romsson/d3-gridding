@@ -2,26 +2,27 @@
 
 [![npm version](https://badge.fury.io/js/d3-gridding.svg)](https://badge.fury.io/js/d3-gridding)
 [![Build Status](https://circleci.com/gh/romsson/d3-gridding/tree/master.png?style=shield)](https://circleci.com/gh/romsson/d3-gridding)
+[![dependencies Status](https://david-dm.org/romsson/d3-gridding/status.svg)](https://david-dm.org/romsson/d3-gridding)
 
-Grid partitions for visual representation.
+D3 charts mock-ups using data-driven grids 
 
 <p align="center">
-  <a href="http://bl.ocks.org/romsson/4e03f6a915c713cf8fe8482d685c8c0b">
-    <img src="https://romsson.github.io/d3-gridding/example/capture/figures/modes.png" width="403" height="296" alt="modes">
+  <a href="https://romsson.github.io/d3-gridding/example/modes.html">
+    <img src="img/modes.png" width="403" height="296" alt="modes">
   </a>
 </p>
 
-> Be aware this is very much work-in-progress. The API is subject to major changes. My plan is to figure out the best abstraction for d3 layouts. Once this will be done, it should be reflected with a major version upgrade.
+**To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
 
-## Installing
+**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
 
-* If you use NPM, `npm install d3-gridding`. 
+* Simple [grid example](http://blockbuilder.org/romsson/a2e9ff5f7dafe12cc97d2cc286dad733)
 
-* Otherwise, download the [latest release](https://github.com/romsson/d3-gridding/releases/latest).
+* Search for [code examples](http://blockbuilder.org/search#d3modules=d3-gridding) using `d3-gridding`  on blockbuilder.org.
 
-In both cases, you then have to include the `d3-gridding.js` JavaScript file in your HTML code.
+* List of [tutorials](tutorial/) 
 
-## API
+## How does it work?
 
 The code snippet below lets you create dots organized as a grid:
 
@@ -71,6 +72,8 @@ var points = svgPoints.selectAll(".point")
 ```
 
 That's pretty much what you need to know at this point to get started. Below is a list of functions that will let you customize the layouts and retrieve internal values.
+
+## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
 

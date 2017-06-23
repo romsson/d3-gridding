@@ -62,6 +62,7 @@ export default function(nodes, v) {
   v.height.range([0, v.size[1] - v.height(_valueHeight(nodes[0]))]);
 
   nodes.forEach(function(n) {
+
     n[v.__x] = v.x(v.valueX(n)) + v.offset[0] + v.padding;
     n[v.__y] = v.y(v.valueY(n)) + v.offset[1] + v.padding;
 

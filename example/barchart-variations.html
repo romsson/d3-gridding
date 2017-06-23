@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var flow = "in";
+
+var data = [
+  {"flow": 1, "level1": 1},
+  {"flow": 2, "level1": 2},
+  {"flow": 3, "level1": 1},
+  {"flow": 4, "level1": 3},
+  {"flow": 5, "level1": 52},
+  {"flow": 6, "level1": 1}
+]
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "vertical",
+  "valueHeight": "__agg",
+  "orient": "up",// TODO invertX(x)
+  "padding": 10,
+//  "margin": 10,
+  "level": 0
+}];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+    {groupBy: "flow", fn: function(d) { console.log("DDD", d[0].values[0].level1); return d[0].values[0].level1;}},
+    {groupBy: "level1", fn: function(d) { return d.length}, sortBy: "year"}
+    ], "data");
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  svgSquares.selectAll(".index").remove();
+//  svgSquares.selectAll(".square0_").remove();
+
+}
+
+update();
+
+</script>

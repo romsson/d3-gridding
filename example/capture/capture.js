@@ -5,14 +5,6 @@ var page = webPage.create();
 var input_folder = "http://127.0.0.1/dev/d3-gridding/";
 var output_folder = "figures/";
 
-// TODO
-// [X] Fixed timeouts
-// [ ] Viewport dimensions
-// [ ] Clipping?
-// [ ] Resolution with PNG?
-// [ ] Generate HTML page with all the figures and clickable
-// [ ]
-
 var figures = [{
     url: "example/placeholder-utils.html",
     format: "png",
