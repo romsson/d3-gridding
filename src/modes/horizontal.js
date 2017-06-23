@@ -8,6 +8,8 @@ export default function(nodes, v) {
 
   v.rows = nodes.length;
 
+  var _size = JSON.parse(JSON.stringify(v.size));
+
   if(v.cellSize) {
     v.size[0] = v.cellSize[0] * 2;
     v.size[1] = v.cellSize[1] * v.rows;
@@ -40,11 +42,13 @@ export default function(nodes, v) {
   nodes.forEach(function(n, i) {
 
     n[v.__y] = n.y0 + v.offset[1] + v.margin;
-
     if(v.orient === "right") {
       n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
     } else if(v.orient === "left") {
       n[v.__x] = v.size[0] - v.width(_valueWidth(n))  + v.offset[0] + v.margin - v.padding;
+   } else if(v.orient === "up") {
+      n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
+      n[v.__y] = _size[1] - n.y0 + v.offset[1] + v.margin;
     } else { // defaut right
       n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
     }
