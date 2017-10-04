@@ -59,7 +59,7 @@ var params = [{
   "offset": function(d) { return [d.x, d.y]; },
   "mode": "grid",
   "padding": 2,
-  "level": 1
+  "level": 2
 }];
 
 var nest = [];
@@ -79,7 +79,7 @@ var nested_data = d3.nest()
     .key(function(d) { return d["a"]; })
     .entries(nest);
 
-draw(svgSquares2, nested_data[0], 0, "0_");
+draw(svgSquares2, nested_data[0], params, 0, "0_");
 
 var griddingDataGroups = gridding(data);
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+
+rect, circle {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+
+var nb_frames = 10;
+
+d3.range(nb_frames).map(function(d) {
+
+
+  d3.select("body").append("iframe")
+    .attr("url", "http://127.0.0.1/dev/d3-gridding/example/histogram-distribs.html")
+    .attr("width", "800")
+    .attr("height", "600")
+
+})
+
+
+
+
+</script>
