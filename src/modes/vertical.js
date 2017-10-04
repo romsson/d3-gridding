@@ -36,6 +36,8 @@ export default function(nodes, v) {
       n[v.__y] = 0 + v.offset[1] + v.margin + v.padding;
     } else if(v.orient === "up") {
       n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
+    } else if(v.orient === "center") {
+      n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + v.margin - v.padding;
     } else { // defaut down
       n[v.__y] = 0 + v.offset[1] + v.margin + v.padding;
     }

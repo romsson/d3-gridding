@@ -146,6 +146,7 @@ export default function() {
           {"key": "orient", "value": "top"},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
+          {"key": "orient", "value": "center"},
           {"key": "valueHeight", "value": null},
           {"key": "valueY", "value": null}
         ]

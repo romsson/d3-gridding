@@ -34,7 +34,7 @@ export default function(nodes, v) {
     v.width.domain([0, 1]).range([0, v.size[0] - 2 * v.padding]);
   } else {
     _valueWidth = v.valueWidth;
-    v.width.domain(d3Array.extent(nodes, _valueWidth)).range([0, v.size[0] - 2 * v.padding]);
+    v.width.domain([0, d3Array.max(nodes, _valueWidth)]).range([0, v.size[0] - 2 * v.padding]);
   }
 
   nodes[0].y0 = v.padding;
@@ -49,6 +49,8 @@ export default function(nodes, v) {
    } else if(v.orient === "up") {
       n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
       n[v.__y] = _size[1] - n.y0 + v.offset[1] + v.margin;
+    } else if(v.orient === "center") {
+      n[v.__x] = (v.size[0] / 2) - v.width(_valueWidth(n)) / 2 + v.offset[0] + v.margin - v.padding;
     } else { // defaut right
       n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
     }
