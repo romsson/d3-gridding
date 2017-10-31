@@ -7,9 +7,19 @@
 D3 charts mock-ups using data-driven grids 
 
 <p align="center">
-  <a href="https://romsson.github.io/d3-gridding/example/modes.html">
-    <img src="img/modes.png" width="403" height="296" alt="modes">
-  </a>
+  <table>
+    <tr>
+      <td>
+        <a href="https://romsson.github.io/d3-gridding/example/modes.html">
+          <img src="img/modes.png" width="300" alt="modes">
+        </a>
+      </td><td>
+        <a href="https://romsson.github.io/d3-gridding/example/layout-all.html">
+          <img src="img/layouts.png" width="300" alt="layouts">
+        </a>
+      </td>
+    </tr>
+  </table>
 </p>
 
 **To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
@@ -79,7 +89,7 @@ That's pretty much what you need to know at this point to get started. Below is 
 
 The `mode` parameter sets the layout:
 
-* `vertical` - vertical partitioning
+* [`vertical`](https://romsson.github.io/d3-gridding/example/vertical.html) - vertical partitioning
 * `horizontal` - horizontal partitioning, can be proportional to `.valueY()`
 * `central` - overlapping partitioning
 * `grid` - classic grid partitioning

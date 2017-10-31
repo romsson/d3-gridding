@@ -88,6 +88,10 @@ export default function() {
       "horizontal": {
         "layout": horizontal,
         "properties": [
+          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "left"},
+          {"key": "orient", "value": "right"},
+          {"key": "orient", "value": "center"},
           {"key": "valueY", "value": null},
           {"key": "valueWidth", "value": null}
         ]
@@ -147,8 +151,7 @@ export default function() {
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
-          {"key": "valueHeight", "value": null},
-          {"key": "valueY", "value": null}
+          {"key": "valueHeight", "value": null}
         ]
       }
     },
