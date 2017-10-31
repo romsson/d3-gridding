@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+.point {
+  fill: black;
+}
+
+rect, circle, line {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="../node_modules/d3/build/d3.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script src="utils/utils.js"></script>
+<script src="utils/layouts.js"></script>
+<script>
+
+// TODO
+// [ ] Navigate with keys
+// [ ] Highlight current view
+// [ ] Add module in view when key press
+// [ ]
+// [ ]
+// [ ]
+
+var width = 400,
+    height = 300;
+
+var data = layouts[5].values;
+
+var dataMarginal = d3.range(1000).map(d3.randomBates(10));
+
+var x = d3.scaleLinear()
+    .rangeRound([0, width]);
+
+var bins = d3.histogram()
+    .domain(x.domain())
+    .thresholds(x.ticks(10))
+    (dataMarginal);
+
+bins.forEach(function(d) {
+
+  var e = {};
+  e.value = d.length;
+  e.index = "3";
+  data.push(e);
+
+})
+
+bins.forEach(function(d) {
+
+  var e = {};
+  e.value = d.length;
+  e.index = "2";
+  data.push(e);
+
+})
+
+// SCATTERPLOT
+d3.range(200).map(function() {
+
+  var e = {};
+  e.value = 1;
+  e.index = "1";
+  data.push(e);
+
+});
+
+var params = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "coordinate",
+  "valueX": "__x",
+  "valueY": "__y",
+  "valueWidth": "__width",
+  "valueHeight": "__height",
+  "padding": 0,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": function(d) {
+    if(d.key === "1") {
+      return "coordinate";
+    } else if(d.key === "2") {
+      return "horizontal";
+    } else {
+      return "vertical";
+    }
+  },
+  "valueHeight": function(d) {
+    if(d.key === "3") {
+      return "value";
+    } else if(d.key === "1") {
+      return 10;
+    } else {
+      return null;
+    }
+  },
+  "valueWidth": function(d) {
+    if(d.key === "2") {
+      return "value";
+    } else if(d.key === "1") {
+      return 10;
+    } else {
+      return null;
+    }
+  },
+  "orient": function(d) {
+    if(d.key === "3") {
+      return "up";
+    } else {
+      return null;
+    }
+  },
+  "padding": 2,
+  "level": 1
+}];
+
+
+var params2 = [{
+  "size": function() { return [width, height]; },
+  "offset": function(d) { return [0, 0]; },
+  "mode": "coordinate",
+  "valueX": "__x",
+  "valueY": "__y",
+  "valueWidth": "__width",
+  "valueHeight": "__height",
+  "padding": 0,
+  "level": 0
+}, {
+  "size": function(d) { return [d.width, d.height]; },
+  "offset": function(d) { return [d.x, d.y]; },
+  "mode": function(d) {
+    if(d.key === "1") {
+      return "coordinate";
+    } else if(d.key === "2") {
+      return "horizontal";
+    } else {
+      return "vertical";
+    }
+  },
+  "valueHeight": function(d) {
+    if(d.key === "3") {
+      return "value";
+    } else if(d.key === "1") {
+      return 10;
+    } else {
+      return null;
+    }
+  },
+  "valueWidth": function(d) {
+    if(d.key === "2") {
+      return "value";
+    } else if(d.key === "1") {
+      return 10;
+    } else {
+      return null;
+    }
+  },
+  "orient": function(d) {
+    if(d.key === "3") {
+      return "up";
+    } else {
+      return null;
+    }
+  },
+  "padding": 2,
+  "level": 1
+}];
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+function update() {
+
+  nested_data = generate_nesting_agg([
+    {groupBy: "", fn: function(d) { return d.length}, accessor: function(d) { return d; }},
+    {groupBy: "index", fn: function(d) { return d.length}}
+  ], "data");
+
+  draw(svgSquares, nested_data[0], params, 0, "0_");
+
+  d3.selectAll(".index").remove();
+  // Get all the rects and create groups?
+
+  //
+
+}
+
+update();
+
+var current_view = 0;
+
+
+d3.select("body")
+   .on("keydown", function(d) {
+
+    var k = d3.event.keyCode;
+
+    if(k === 82) {
+      // add
+      data = d3.range(data.length + 1);
+
+      // repeat
+      if(lastAction === "add") {
+
+
+      } else if(lastAction === "rem") {
+
+
+      }
+
+    // L change laoyut
+    } else if(k === 91) {
+
+    // →
+    } else if(k === 39) {
+
+      current_view++;
+
+      // Reset
+      d3.selectAll(".square0_")
+        .style("stroke-width", 2)
+
+      // Filter current view
+      d3.selectAll(".square0_")
+        .filter(function(d, i) {
+          return current_view === i;
+        })
+        .style("stroke-width", 10)
+
+    // ← // ↑ · → · ↓
+    } else if(k === 37) {
+
+      current_view--;
+
+      // Reset
+      d3.selectAll(".square0_")
+        .style("stroke-width", 2)
+
+      // Filter current view
+      d3.selectAll(".square0_")
+        .filter(function(d, i) {
+          return current_view === i;
+        })
+        .style("stroke-width", 10)
+
+    // DEL
+    } else if(k === 8) {
+
+      // Remove current layout
+
+
+    } else if(k === 91) {
+
+
+    } else if(k === 85) {
+
+      // rem
+      data = d3.range(data.length - 1);
+    }
+
+    update();
+    console.log("KEY", k);
+
+   });
+
+
+
+</script>
