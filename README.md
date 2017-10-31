@@ -7,15 +7,15 @@
 D3 charts mock-ups using data-driven grids 
 
 <p align="center">
-  <table>
+  <table style="border: none;">
     <tr>
       <td>
         <a href="https://romsson.github.io/d3-gridding/example/modes.html">
-          <img src="img/modes.png" width="300" alt="modes">
+          <img src="img/modes.png" width="400" alt="modes">
         </a>
       </td><td>
         <a href="https://romsson.github.io/d3-gridding/example/layout-all.html">
-          <img src="img/layouts.png" width="300" alt="layouts">
+          <img src="img/layouts.png" width="400" alt="layouts">
         </a>
       </td>
     </tr>
@@ -83,6 +83,17 @@ var points = svgPoints.selectAll(".point")
 
 That's pretty much what you need to know at this point to get started. Below is a list of functions that will let you customize the layouts and retrieve internal values.
 
+Note that parameters can also be set as group, using a JSON object:
+
+```
+var gridding = d3.gridding()
+  .params({
+    "size": [800, 600],
+    "mode": "vertical",
+    "offset": function(d) { return [d.x, d.y]; }
+  });
+```
+
 ## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
@@ -90,8 +101,8 @@ That's pretty much what you need to know at this point to get started. Below is 
 The `mode` parameter sets the layout:
 
 * [`vertical`](https://romsson.github.io/d3-gridding/example/vertical.html) - vertical partitioning
-* `horizontal` - horizontal partitioning, can be proportional to `.valueY()`
-* `central` - overlapping partitioning
+* [`horizontal`](https://romsson.github.io/d3-gridding/example/vertical.html) - horizontal partitioning, can be proportional to `.valueWidth()` and have an horizontal offset set by `.valueY()`
+* [`central`](https://romsson.github.io/d3-gridding/example/central.html) - overlapping partitioning
 * `grid` - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
@@ -161,3 +172,4 @@ Radius for radial layout.
 * https://d3js.org/
 * http://bl.ocks.org/mbostock
 * https://github.com/interactivethings/d3-grid
+* http://blockbuilder.org/

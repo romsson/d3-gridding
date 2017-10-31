@@ -19,10 +19,17 @@ rect {
 var width = 400,
     height = 300;
 
+//var gridding = d3.gridding()
+//  .size([width, height])
+//  .orient("up")
+//  .mode("vertical");
+
 var gridding = d3.gridding()
-  .size([width, height])
-  .orient("up")
-  .mode("horizontal");
+  .params({
+    "size": [width, height],
+    "orient": "up",
+    "mode": "vertical"
+  });
 
 var data =  d3.range(10).map(function(d, i) {
   return {index: i};

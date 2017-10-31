@@ -12,7 +12,7 @@ rect {
 }
 </style>
 <body>
-<script src="//d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
 <script src="../build/d3-gridding.js"></script>
 <script>
 
@@ -34,7 +34,7 @@ var svgSquares = d3.select("body").append("svg")
   .append("g");
 
 svgSquares.selectAll(".square")
-    .data(gridding(data), function(d) { return d.index; })
+    .data(gridding(data))
   .enter().append("rect")
     .attr("class", "square")
       .attr("width", function(d) { return d.width; })

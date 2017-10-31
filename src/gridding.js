@@ -213,14 +213,14 @@ export default function() {
     return vars.layout(nodes, vars);
   }
 
-  gridding.mode = function(value) {
+  gridding.mode = function(_mode) {
 
     if (!arguments.length) return vars.mode;
-    vars.mode = value;
+    vars.mode = _mode;
 
     if(vars.mode === "identity") {
       vars.layout = identity;
-    } else if(Object.keys(vars.modes).indexOf(value) >= 0) {
+    } else if(Object.keys(vars.modes).indexOf(_mode) >= 0) {
       vars.layout = vars.modes[vars.mode].layout;
     }
 
@@ -347,6 +347,20 @@ export default function() {
   gridding.id = function(_id) {
     if(!arguments.length) return vars.id;
     vars.id = _id;
+    return gridding;
+  }
+
+  gridding.params = function(_params) {
+    if(!arguments.length) return vars;
+    for(var key in _params) {
+      if (_params.hasOwnProperty(key)) {
+        if(key === "mode") {
+          gridding.mode(_params[key]);
+        } else {
+          vars[key] = _params[key];
+        }
+      }
+    }
     return gridding;
   }
 
