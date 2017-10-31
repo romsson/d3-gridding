@@ -83,6 +83,17 @@ var points = svgPoints.selectAll(".point")
 
 That's pretty much what you need to know at this point to get started. Below is a list of functions that will let you customize the layouts and retrieve internal values.
 
+Note that parameters can also be set as group, using a JSON object:
+
+```
+var gridding = d3.gridding()
+  .params({
+    "size": [800, 600],
+    "mode": "vertical",
+    "offset": function(d) { return [d.x, d.y]; }
+  });
+```
+
 ## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
