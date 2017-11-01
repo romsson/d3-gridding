@@ -2,27 +2,37 @@ import * as d3Array from "d3-array";
 
 export default function(nodes, v) {
 
-  var _valueX;
+  var _valueX, _valueXmax;
 
   // Create random data if no value function has been set
   if(!v.valueX) {
     _valueX = function() { return Math.random(); }
-    v.x.domain([0, 1]).range([0, v.size[0]]);
+    _valueXmax = 1;
+  } else if(typeof v.valueX === "string") {
+    _valueX = function(d) { return d[v.valueX]; }
+    _valueXmax = d3Array.max(nodes, _valueX);
   } else {
     _valueX = v.valueX;
-    v.x.domain([0, d3Array.max(nodes, v.valueX)]).range([0, v.size[0]]);
+    _valueXmax = d3Array.max(nodes, _valueX);
   }
 
-  var _valueY;
+    v.x.domain([0, _valueXmax]).range([0, v.size[0]]);
+
+  var _valueY, _valueYmax;
 
   // Same as for X, create random data for vertical axis
   if(!v.valueY) {
     _valueY = function() { return Math.random(); }
-    v.y.domain([0, 1]).range([0, v.size[1]]);
+    _valueYmax = 1;
+  } else if(typeof v.valueY === "string") {
+    _valueY = function(d) { return d[v.valueY]; }
+    _valueYmax = d3Array.max(nodes, _valueY)
   } else {
     _valueY = v.valueY;
-    v.y.domain([0, d3Array.max(nodes, v.valueY)]).range([0, v.size[1]]);
+    _valueYmax = d3Array.max(nodes, v.valueY);
   }
+
+  v.y.domain([0, _valueYmax]).range([0, v.size[1]]);
 
   var _valueWidth;
 
@@ -35,9 +45,9 @@ export default function(nodes, v) {
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueWidth = function() { return v.valueWidth; }
     v.width.domain([0, v.size[0]]).range([0, v.size[0] - 2 * v.padding]);
-  } else {
+  } else { // function
     _valueWidth = v.valueWidth;
-    v.width.domain(d3Array.extent(nodes, v.valueX)).range([0, v.size[0]]);
+    v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
   }
 
   var _valueHeight;
@@ -51,9 +61,9 @@ export default function(nodes, v) {
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueHeight = function() { return v.valueHeight; }
     v.height.domain([0, v.size[0]]).range([0, v.size[1] - 2 * v.padding]);
-  } else {
+  } else { // function
     _valueHeight = v.valueHeight;
-    v.height.domain(d3Array.extent(nodes, v.valueY)).range([0, v.size[1]]);
+    v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   }
 
   // Preveting overflows
@@ -63,10 +73,9 @@ export default function(nodes, v) {
   // v.height.range([0, v.size[1] - v.height(_valueHeight(nodes[0]))]);
 
   nodes.forEach(function(n) {
-
     n[v.__x] = v.x(_valueX(n)) + v.offset[0] + v.padding;
     n[v.__y] = v.y(_valueY(n)) + v.offset[1] + v.padding;
-
+    console.log(_valueWidth(n), n)
     n[v.__width] = v.width(_valueWidth(n)) - 2 * v.padding;
     n[v.__height] = v.height(_valueHeight(n)) - 2 * v.padding;
 
