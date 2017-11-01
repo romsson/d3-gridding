@@ -103,7 +103,7 @@ The `mode` parameter sets the layout:
 * [`vertical`](https://romsson.github.io/d3-gridding/example/vertical.html) - vertical partitioning
 * [`horizontal`](https://romsson.github.io/d3-gridding/example/vertical.html) - horizontal partitioning, can be proportional to `.valueWidth()` and have an horizontal offset set by `.valueY()`
 * [`central`](https://romsson.github.io/d3-gridding/example/central.html) - overlapping partitioning
-* `grid` - classic grid partitioning
+* [`grid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
 * `treemap` - using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
