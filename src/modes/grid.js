@@ -52,8 +52,8 @@ export default function(nodes, v) {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
     } else if(v.orient == "right") {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
-    } else { // default up
-      n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
+    } else { // default down
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
     }
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
