@@ -5,18 +5,14 @@ body {
   font-family: Helvetica;
   font-size: 10px;
 }
-.point {
-  fill: black;
-}
 
-rect, circle {
+rect {
   fill: none;
   stroke: black;
   stroke-width: 1;
 }
 </style>
 <body>
-<!-- <script src="http://d3js.org/d3.v4.js"></script> -->
 <script src="../node_modules/d3/build/d3.js"></script>
 <script src="../build/d3-gridding.js"></script>
 <script>
@@ -26,13 +22,14 @@ var width = 400,
 
 var gridding = d3.gridding()
   .size([width, height])
+  .valueHeightWidth(function(d) { return d["r"]; })
   .mode("treemap");
 
-var data = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+// var data = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-//var data =  d3.range(250).map(function(d, i) {
-//  return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i//)};
-//});
+var data =  d3.range(250).map(function(d, i) {
+  return {x: d, y: i, r: Math.random(), index: i, value: String.fromCharCode(i)};
+});
 
 var griddingData = gridding(data);
 
@@ -56,6 +53,6 @@ svgSquares.selectAll(".index")
     .style('text-anchor', 'middle')
     .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.__value; });
+    .text(function(d, i) { return d.value; });
 
 </script>
