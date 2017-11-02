@@ -22,6 +22,12 @@ D3 charts mock-ups using data-driven grids
   </table>
 </p>
 
+**To include** in a webpage, use the following:
+
+```html
+<script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
+```
+
 **To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
 
 **To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
@@ -106,8 +112,8 @@ The `mode` parameter sets the layout:
 * [`grid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
-* `treemap` - using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#treemap) layout
-* `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/* README.md#pack)
+* `treemap` - using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
+* `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
 * `stack` - using [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
 * `diagonal`  - aligned on the diagonal
 * `cascade` - like diagonal but with larger and overlapping cells 
