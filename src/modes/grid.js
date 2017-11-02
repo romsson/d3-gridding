@@ -61,7 +61,6 @@ export default function(nodes, v) {
 
     n.tx = n[v.__x] + n[v.__width] / 2;
     n.ty = v.padding / 2;
-
   });
 
   return nodes;

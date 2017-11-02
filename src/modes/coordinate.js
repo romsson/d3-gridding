@@ -75,7 +75,7 @@ export default function(nodes, v) {
   nodes.forEach(function(n) {
     n[v.__x] = v.x(_valueX(n)) + v.offset[0] + v.padding;
     n[v.__y] = v.y(_valueY(n)) + v.offset[1] + v.padding;
-    console.log(_valueWidth(n), n)
+
     n[v.__width] = v.width(_valueWidth(n)) - 2 * v.padding;
     n[v.__height] = v.height(_valueHeight(n)) - 2 * v.padding;
 

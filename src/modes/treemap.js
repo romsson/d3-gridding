@@ -23,7 +23,6 @@ export default function(nodes, v) {
   var tree = treemap(root);
 
   tree.leaves().forEach(function(t, i) {
-
     t.data[v.__x] = t.x0 + v.offset[0];
     t.data[v.__y] = t.y0 + v.offset[1];
 
@@ -32,7 +31,6 @@ export default function(nodes, v) {
 
     t.data[v.__cx] = nodes[i][v.__x] + nodes[i][v.__width] / 2;
     t.data[v.__cy] = nodes[i][v.__y] + nodes[i][v.__height] / 2;
-
   });
 
   return nodes;

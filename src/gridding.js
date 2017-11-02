@@ -80,7 +80,7 @@ export default function() {
         "layout": grid,
         "properties": [
           {"key": "orient", "value": "up"},
-          {"key": "orient", "value": "down"},
+          {"key": "orient", "value": "down", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"}
         ]
@@ -214,16 +214,13 @@ export default function() {
   }
 
   gridding.mode = function(_mode) {
-
     if (!arguments.length) return vars.mode;
     vars.mode = _mode;
-
     if(vars.mode === "identity") {
       vars.layout = identity;
     } else if(Object.keys(vars.modes).indexOf(_mode) >= 0) {
       vars.layout = vars.modes[vars.mode].layout;
     }
-
     return gridding;
   }
 
