@@ -28,9 +28,7 @@ D3 charts mock-ups using data-driven grids
 <script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
 ```
 
-**To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
-
-**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
+## Examples
 
 * Gallery of [examples](https://romsson.github.io/d3-gridding/example/capture/display.html)
 
@@ -40,7 +38,11 @@ D3 charts mock-ups using data-driven grids
 
 * List of [tutorials](tutorial/) 
 
-## How does it work?
+## How to use it
+
+**To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
+
+**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
 
 The code snippet below lets you create dots organized as a grid:
 
