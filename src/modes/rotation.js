@@ -1,7 +1,5 @@
 export default function(nodes, v) {
 
-  v.cols = v.rows = 1;
-
   var shiftRotate = v.rotate / nodes.length;
 
   var shiftX = v.size[0]/4, shiftY = v.size[1]/4;
@@ -19,6 +17,6 @@ export default function(nodes, v) {
 
     n[v.__r] = shiftRotate * i;
   });
-    
+
   return nodes;
 }

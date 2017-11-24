@@ -6,16 +6,16 @@ export default function(nodes, v) {
     nodes = nodes.sort(v.sort);
   }
 
-  v.rows = nodes.length;
+  var _rows = nodes.length;
 
   var _size = JSON.parse(JSON.stringify(v.size));
 
   if(v.cellSize) {
     v.size[0] = v.cellSize[0] * 2;
-    v.size[1] = v.cellSize[1] * v.rows;
+    v.size[1] = v.cellSize[1] * _rows;
   }
 
-  v.y.domain([0, v.rows]).range([0, v.size[1] - 2 * v.padding]);
+  v.y.domain([0, _rows]).range([0, v.size[1] - 2 * v.padding]);
 
   var _valueY;
 

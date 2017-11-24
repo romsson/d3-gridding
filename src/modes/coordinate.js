@@ -16,7 +16,7 @@ export default function(nodes, v) {
     _valueXmax = d3Array.max(nodes, _valueX);
   }
 
-    v.x.domain([0, _valueXmax]).range([0, v.size[0]]);
+  v.x.domain([0, _valueXmax]).range([0, v.size[0]]);
 
   var _valueY, _valueYmax;
 
