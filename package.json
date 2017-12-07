@@ -1,7 +1,7 @@
 {
   "name": "d3-gridding",
-  "version": "0.0.10",
-  "description": "Grid partitions for visual representation.",
+  "version": "0.0.11",
+  "description": "Grids for rapid d3 charts mock-ups",
   "keywords": [
     "d3",
     "d3-module",

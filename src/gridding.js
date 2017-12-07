@@ -168,6 +168,7 @@ export default function() {
     shiftY: null,
     size: [1, 1],
     sort: null,
+    sortAsc: true,
     value: function(d) { return d; },
     valueHeight: null,
     valueWidth: null,
@@ -291,7 +292,17 @@ export default function() {
 
   gridding.sort = function(_sort) {
     if(!arguments.length) return vars.sort;
-    vars.sort = _sort;
+    if(typeof _sort === "string") {
+      vars.sort = function(d) { return d[_sort]; }
+    } else {
+      vars.sort = _sort;
+    }
+    return gridding;
+  }
+
+  gridding.sortAsc = function(_sortAsc) {
+    if(!arguments.length) return vars.sortAsc;
+    vars.sortAsc = _sortAsc;
     return gridding;
   }
 

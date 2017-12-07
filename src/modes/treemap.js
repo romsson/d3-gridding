@@ -24,7 +24,11 @@ export default function(nodes, v) {
   }
 
   if(v.sort) {
-    root.sort(v.sort);
+    if(v.sortAsc) {
+      root.sort(function(a, b) { return a.value - b.value; });
+    } else {
+      root.sort(function(a, b) { return b.value - a.value; });
+    }
   }
 
   var tree = treemap(root);
