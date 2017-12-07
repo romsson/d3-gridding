@@ -22,15 +22,51 @@ D3 charts mock-ups using data-driven grids
   </table>
 </p>
 
-**To include** in a webpage, use the following:
+## Example
 
-```html
+```js
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="http://d3js.org/d3.v4.js"></script>
 <script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+var data = d3.range(250);
+
+var griddingData = gridding(data);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.selectAll(".square")
+    .data(griddingData)
+  .enter().append("rect")
+    .style("fill", "none")
+    .style("stroke", "black")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    
+  </script>
+</body>
 ```
 
-**To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
+Checkout the [live version](http://blockbuilder.org/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a)
 
-**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
+<p align="center">
+  <img src="https://gist.githubusercontent.com/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a/raw/03ec156d88ebbc21d8545771f8d84a5fe19c9629/tumbnail.png" width="400" alt="minimalistic grid">
+</p>
+
+## More Examples
 
 * Gallery of [examples](https://romsson.github.io/d3-gridding/example/capture/display.html)
 
@@ -40,7 +76,17 @@ D3 charts mock-ups using data-driven grids
 
 * List of [tutorials](tutorial/) 
 
-## How does it work?
+## How to use it
+
+**To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
+
+**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
+
+**To include** in a webpage, use the following:
+
+```html
+<script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
+```
 
 The code snippet below lets you create dots organized as a grid:
 
@@ -114,8 +160,9 @@ The `mode` parameter sets the layout:
 * [`grid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
-* `treemap` - using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
+* [`treemap`](https://romsson.github.io/d3-gridding/example/treemap.html)- using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
 * `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
+* [`pyramid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
 * `stack` - using [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
 * `diagonal`  - aligned on the diagonal
 * `cascade` - like diagonal but with larger and overlapping cells 

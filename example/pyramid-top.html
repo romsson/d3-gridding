@@ -21,7 +21,8 @@ var width = 400,
 
 var gridding = d3.gridding()
   .size([width, height])
-  .mode("pyramid");
+  .mode("pyramid")
+  .orient("top");
 
 var data =  d3.range(10).map(function(d, i) {
   return {index: i};

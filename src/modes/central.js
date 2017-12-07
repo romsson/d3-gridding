@@ -1,7 +1,5 @@
 export default function(nodes, v) {
 
-  v.cols = v.rows = 1;
-
   nodes.forEach(function(n) {
 
     n[v.__x] = 0 + v.padding + v.offset[0];

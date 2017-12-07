@@ -7,7 +7,6 @@ export default function(nodes, v) {
       .padding(v.padding);
 
   var stratify = d3Hierarchy.stratify()
-    //  .id(function(d) { return d.___id; })
       .parentId(function(d) { return d.___parent_id; });
 
   nodes.forEach(function(d, i) {
@@ -19,6 +18,14 @@ export default function(nodes, v) {
 
   var root = stratify(nodes.concat(extra))
       .sum(function(d) { return d.___parent_id === "" ? 0: 1; });
+
+  if(v.valueHeight) {
+    root.sum(function(d) { return v.valueHeight(d); });
+  }
+
+  if(v.sort) {
+    root.sort(v.sort);
+  }
 
   var tree = treemap(root);
 

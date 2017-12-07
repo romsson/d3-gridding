@@ -105,7 +105,9 @@ export default function() {
       "pyramid": {
         "layout": pyramid,
         "properties": [
-          {"key": "orient", "value": "top"}
+          {"key": "orient", "value": "center", "default": true},
+          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "bottom"}
         ]
       },
       "radial": {
