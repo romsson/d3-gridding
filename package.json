@@ -32,7 +32,7 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^2.0.0",
     "tape": "4",
-    "uglify-js": "2.6.0",
+    "uglify-js": "^2.8.11",
     "watch": "^1.0.0",
     "eslint": "^3.13.0",
     "package-preamble": "0.0.2"
