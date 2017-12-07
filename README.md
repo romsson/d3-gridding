@@ -162,6 +162,7 @@ The `mode` parameter sets the layout:
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
 * [`treemap`](https://romsson.github.io/d3-gridding/example/treemap.html)- using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
 * `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
+* [`pyramid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
 * `stack` - using [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
 * `diagonal`  - aligned on the diagonal
 * `cascade` - like diagonal but with larger and overlapping cells 
