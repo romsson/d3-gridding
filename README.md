@@ -224,6 +224,14 @@ Orients the `grid` & `diagonal` layouts either upwards or downwards when adding 
 
 Radius for radial layout.
 
+<a name="gridding_sort" href="#gridding_sort">#</a> <i>d3.sort()</i>.<b>sort</b>(<i>value || function</i>)
+
+Sort by attribute value (or function if value is a function.
+
+<a name="gridding_sortAsc" href="#gridding_sortAsc">#</a> <i>d3.sortAsc()</i>.<b>sortAsc</b>(<i>true || false</i>)
+
+By default, ascending sorting by sort attribute || function defined previously.
+
 ## Credits
 
 * https://d3js.org/
