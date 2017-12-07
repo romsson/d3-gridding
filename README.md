@@ -4,7 +4,7 @@
 [![Build Status](https://circleci.com/gh/romsson/d3-gridding/tree/master.png?style=shield)](https://circleci.com/gh/romsson/d3-gridding)
 [![dependencies Status](https://david-dm.org/romsson/d3-gridding/status.svg)](https://david-dm.org/romsson/d3-gridding)
 
-D3 charts mock-ups using data-driven grids 
+Rapid mock-ups for D3 charts, using data-driven grids.
 
 <p align="center">
   <table style="border: none;">
@@ -21,6 +21,8 @@ D3 charts mock-ups using data-driven grids
     </tr>
   </table>
 </p>
+
+*Left: grids available in the toolkits; Right: layouts for page partition to nest grids within*
 
 ## Example
 
@@ -60,7 +62,7 @@ svg.selectAll(".square")
 </body>
 ```
 
-Checkout the [live version](http://blockbuilder.org/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a)
+Output below; checkout a [live coding version](http://blockbuilder.org/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a).
 
 <p align="center">
   <img src="https://gist.githubusercontent.com/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a/raw/03ec156d88ebbc21d8545771f8d84a5fe19c9629/tumbnail.png" width="400" alt="minimalistic grid">
@@ -154,15 +156,15 @@ var gridding = d3.gridding()
 
 The `mode` parameter sets the layout:
 
-* [`vertical`](https://romsson.github.io/d3-gridding/example/vertical.html) - vertical partitioning
-* [`horizontal`](https://romsson.github.io/d3-gridding/example/vertical.html) - horizontal partitioning, can be proportional to `.valueWidth()` and have an horizontal offset set by `.valueY()`
+* [`vertical`](https://romsson.github.io/d3-gridding/example/vertical.html) - vertical partitioning of value `.valueHeight()` and vertical offset `.valueX()`
+* [`horizontal`](https://romsson.github.io/d3-gridding/example/vertical.html) - horizontal partitioning of value `.valueWidth()` and vertical offset `.valueY()`
 * [`central`](https://romsson.github.io/d3-gridding/example/central.html) - overlapping partitioning
 * [`grid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
 * `coordinate` - absolute position by `.valueX()` and `.valueY()`
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
 * [`treemap`](https://romsson.github.io/d3-gridding/example/treemap.html)- using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
 * `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
-* [`pyramid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
+* [`pyramid`](https://romsson.github.io/d3-gridding/example/pyramid.html) - centered grids overlays
 * `stack` - using [d3.stack()](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
 * `diagonal`  - aligned on the diagonal
 * `cascade` - like diagonal but with larger and overlapping cells 

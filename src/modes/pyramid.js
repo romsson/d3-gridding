@@ -1,11 +1,13 @@
 export default function(nodes, v) {
 
+  var shiftX, shiftY;
+
   nodes.forEach(function(n, i) {
 
     if(v.orient == "bottom") {
 
-      var shiftX = v.size[0] / (2 * nodes.length);
-      var shiftY = v.size[1] / (2 * nodes.length);
+      shiftX = v.size[0] / (2 * nodes.length);
+      shiftY = v.size[1] / (2 * nodes.length);
 
       n[v.__x] = 0 + v.offset[0] + shiftX * i;
       n[v.__y] = 0 + v.offset[1] + shiftY * i * 2;
@@ -18,8 +20,8 @@ export default function(nodes, v) {
 
     } else if(v.orient == "top") {
 
-      var shiftX = v.size[0] / (2 * nodes.length);
-      var shiftY = v.size[1] / (2 * nodes.length);
+      shiftX = v.size[0] / (2 * nodes.length);
+      shiftY = v.size[1] / (2 * nodes.length);
 
       n[v.__x] = 0 + v.offset[0] + shiftX * i;
       n[v.__y] = 0 + v.offset[1];
@@ -32,8 +34,8 @@ export default function(nodes, v) {
 
     } else { // central default
 
-      var shiftX = v.size[0] / (2 * nodes.length);
-      var shiftY = v.size[1] / (2 * nodes.length);
+      shiftX = v.size[0] / (2 * nodes.length);
+      shiftY = v.size[1] / (2 * nodes.length);
 
       n[v.__x] = 0 + v.offset[0] + shiftX * i;
       n[v.__y] = 0 + v.offset[1] + shiftY * i;
