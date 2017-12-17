@@ -3,7 +3,7 @@ import * as d3Hierarchy from "d3-hierarchy";
 export default function(nodes, v) {
 
   var treemap = d3Hierarchy.treemap()
-      .size([v.size[0], v.size[1]])
+      .size([v.size[0] - 2 * v.margin, v.size[1] - 2 * v.margin])
       .padding(v.padding);
 
   var stratify = d3Hierarchy.stratify()
@@ -34,8 +34,8 @@ export default function(nodes, v) {
   var tree = treemap(root);
 
   tree.leaves().forEach(function(t, i) {
-    t.data[v.__x] = t.x0 + v.offset[0];
-    t.data[v.__y] = t.y0 + v.offset[1];
+    t.data[v.__x] = t.x0 + v.offset[0] + v.margin;
+    t.data[v.__y] = t.y0 + v.offset[1] + v.margin;
 
     t.data[v.__width] = t.x1 - t.x0;
     t.data[v.__height] = t.y1 - t.y0;

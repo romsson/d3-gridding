@@ -22,13 +22,13 @@ export default function(nodes, v) {
   }
 
   // var _valueWidth = function() { return 1; }
-  v.width.domain([0, nodes.length]).range([0, v.size[0] - 2 * v.padding]);
+  v.width.domain([0, nodes.length]).range([v.margin, v.size[0] - 2 * v.padding - 2 * v.margin]);
 
   // var _valueHeight = function() { return 1; }
-  v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding]);
+  v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding - 2 * v.margin]);
 
-  v.x.domain([0, _cols]).range([0, v.size[0]]);
-  v.y.domain([0, _rows]).range([0, v.size[1]]);
+  v.x.domain([0, _cols]).range([v.margin, v.size[0] - v.margin]);
+  v.y.domain([0, _rows]).range([v.margin, v.size[1] - v.margin]);
 
   nodes.forEach(function(n, i) {
 
@@ -41,8 +41,8 @@ export default function(nodes, v) {
     // n[v.__width] = v.width(_valueWidth(n));
     // n[v.__height] = v.height(_valueHeight(n));
 
-    n[v.__width] = v.size[0] / _cols - 2 * v.padding;
-    n[v.__height] = v.size[1] / _rows - 2 * v.padding;
+    n[v.__width] = (v.size[0] - 2 * v.margin) / _cols - 2 * v.padding ;
+    n[v.__height] = (v.size[1] - 2 * v.margin) / _rows - 2 * v.padding;
 
     if(v.orient == "up") {
       n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
