@@ -1,4 +1,4 @@
-// https://github.com/romsson/d3-gridding Version 0.0.10. Copyright 2017 Romain Vuillemot.
+// https://github.com/romsson/d3-gridding Version 0.0.11. Copyright 2017 Romain Vuillemot.
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-scale'), require('d3-array'), require('d3-hierarchy'), require('d3-shape')) :
 	typeof define === 'function' && define.amd ? define('d3-gridding', ['exports', 'd3-scale', 'd3-array', 'd3-hierarchy', 'd3-shape'], factory) :
@@ -15,22 +15,22 @@ var brick = function(nodes, v) {
     v.shiftY = 1/2;
   }
 
-  v.cols = Math.ceil(Math.sqrt(nodes.length));
-  v.rows = Math.ceil(nodes.length / v.cols);
+  var _cols = Math.ceil(Math.sqrt(nodes.length));
+  var _rows = Math.ceil(nodes.length / _cols);
 
-  v.x.domain([0, v.cols]).range([0, v.size[0] - v.size[0] / v.cols]);
-  v.y.domain([0, v.rows]).range([0, v.size[1] - v.size[1] / v.rows]);
+  v.x.domain([0, _cols]).range([0, v.size[0] - v.size[0] / _cols]);
+  v.y.domain([0, _rows]).range([0, v.size[1] - v.size[1] / _rows]);
 
   nodes.forEach(function(n, i) {
 
-    var col = i % v.cols;
-    var row = Math.floor(i / v.cols);
+    var col = i % _cols;
+    var row = Math.floor(i / _cols);
 
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
-    n[v.__width] = v.x.range()[1] / v.cols - 2 * v.padding;
-    n[v.__height] = v.y.range()[1] / v.rows - 2 * v.padding;
+    n[v.__width] = v.x.range()[1] / _cols - 2 * v.padding;
+    n[v.__height] = v.y.range()[1] / _rows - 2 * v.padding;
 
     if(v.orient === "left") {
       if(row % 2 === 1) {
@@ -65,8 +65,6 @@ var brick = function(nodes, v) {
 };
 
 var central = function(nodes, v) {
-
-  v.cols = v.rows = 1;
 
   nodes.forEach(function(n) {
 
@@ -114,27 +112,37 @@ var cascade = function(nodes, v) {
 
 var coordinate = function(nodes, v) {
 
-  var _valueX;
+  var _valueX, _valueXmax;
 
   // Create random data if no value function has been set
   if(!v.valueX) {
     _valueX = function() { return Math.random(); };
-    v.x.domain([0, 1]).range([0, v.size[0]]);
+    _valueXmax = 1;
+  } else if(typeof v.valueX === "string") {
+    _valueX = function(d) { return d[v.valueX]; };
+    _valueXmax = d3Array.max(nodes, _valueX);
   } else {
     _valueX = v.valueX;
-    v.x.domain([0, d3Array.max(nodes, v.valueX)]).range([0, v.size[0]]);
+    _valueXmax = d3Array.max(nodes, _valueX);
   }
 
-  var _valueY;
+  v.x.domain([0, _valueXmax]).range([0, v.size[0]]);
+
+  var _valueY, _valueYmax;
 
   // Same as for X, create random data for vertical axis
   if(!v.valueY) {
     _valueY = function() { return Math.random(); };
-    v.y.domain([0, 1]).range([0, v.size[1]]);
+    _valueYmax = 1;
+  } else if(typeof v.valueY === "string") {
+    _valueY = function(d) { return d[v.valueY]; };
+    _valueYmax = d3Array.max(nodes, _valueY);
   } else {
     _valueY = v.valueY;
-    v.y.domain([0, d3Array.max(nodes, v.valueY)]).range([0, v.size[1]]);
+    _valueYmax = d3Array.max(nodes, v.valueY);
   }
+
+  v.y.domain([0, _valueYmax]).range([0, v.size[1]]);
 
   var _valueWidth;
 
@@ -147,9 +155,9 @@ var coordinate = function(nodes, v) {
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueWidth = function() { return v.valueWidth; };
     v.width.domain([0, v.size[0]]).range([0, v.size[0] - 2 * v.padding]);
-  } else {
+  } else { // function
     _valueWidth = v.valueWidth;
-    v.width.domain(d3Array.extent(nodes, v.valueX)).range([0, v.size[0]]);
+    v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
   }
 
   var _valueHeight;
@@ -163,9 +171,9 @@ var coordinate = function(nodes, v) {
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueHeight = function() { return v.valueHeight; };
     v.height.domain([0, v.size[0]]).range([0, v.size[1] - 2 * v.padding]);
-  } else {
+  } else { // function
     _valueHeight = v.valueHeight;
-    v.height.domain(d3Array.extent(nodes, v.valueY)).range([0, v.size[1]]);
+    v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   }
 
   // Preveting overflows
@@ -175,7 +183,6 @@ var coordinate = function(nodes, v) {
   // v.height.range([0, v.size[1] - v.height(_valueHeight(nodes[0]))]);
 
   nodes.forEach(function(n) {
-
     n[v.__x] = v.x(_valueX(n)) + v.offset[0] + v.padding;
     n[v.__y] = v.y(_valueY(n)) + v.offset[1] + v.padding;
 
@@ -307,32 +314,40 @@ var diagonal = function(nodes, v) {
 
 var grid = function(nodes, v) {
 
+  var _cols;
+
   if(!v.cols) {
-    v.cols = Math.ceil(Math.sqrt(nodes.length));
+    _cols = Math.ceil(Math.sqrt(nodes.length));
+  } else {
+    _cols = v.cols;
   }
 
+  var _rows;
+
   if(!v.rows) {
-    v.rows = Math.ceil(nodes.length / v.cols);
+    _rows = Math.ceil(nodes.length / _cols);
+  } else {
+    _rows = v.rows;
   }
 
   if(v.cellSize) {
-    v.size[0] = v.cellSize[0] * v.cols;
-    v.size[1] = v.cellSize[1] * v.rows;
+    v.size[0] = v.cellSize[0] * _cols;
+    v.size[1] = v.cellSize[1] * _rows;
   }
 
   // var _valueWidth = function() { return 1; }
-  v.width.domain([0, nodes.length]).range([0, v.size[0] - 2 * v.padding]);
+  v.width.domain([0, nodes.length]).range([v.margin, v.size[0] - 2 * v.padding - 2 * v.margin]);
 
   // var _valueHeight = function() { return 1; }
-  v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding]);
+  v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding - 2 * v.margin]);
 
-  v.x.domain([0, v.cols]).range([0, v.size[0]]);
-  v.y.domain([0, v.rows]).range([0, v.size[1]]);
+  v.x.domain([0, _cols]).range([v.margin, v.size[0] - v.margin]);
+  v.y.domain([0, _rows]).range([v.margin, v.size[1] - v.margin]);
 
   nodes.forEach(function(n, i) {
 
-    var col = i % v.cols;
-    var row = Math.floor(i / v.cols);
+    var col = i % _cols;
+    var row = Math.floor(i / _cols);
 
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
@@ -340,8 +355,8 @@ var grid = function(nodes, v) {
     // n[v.__width] = v.width(_valueWidth(n));
     // n[v.__height] = v.height(_valueHeight(n));
 
-    n[v.__width] = v.size[0] / v.cols - 2 * v.padding;
-    n[v.__height] = v.size[1] / v.rows - 2 * v.padding;
+    n[v.__width] = (v.size[0] - 2 * v.margin) / _cols - 2 * v.padding ;
+    n[v.__height] = (v.size[1] - 2 * v.margin) / _rows - 2 * v.padding;
 
     if(v.orient == "up") {
       n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
@@ -351,8 +366,8 @@ var grid = function(nodes, v) {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
     } else if(v.orient == "right") {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
-    } else { // default up
-      n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
+    } else { // default down
+      n[v.__y] = v.y(row) + v.offset[1] + v.padding;
     }
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
@@ -360,7 +375,6 @@ var grid = function(nodes, v) {
 
     n.tx = n[v.__x] + n[v.__width] / 2;
     n.ty = v.padding / 2;
-
   });
 
   return nodes;
@@ -372,16 +386,16 @@ var horizontal = function(nodes, v) {
     nodes = nodes.sort(v.sort);
   }
 
-  v.rows = nodes.length;
+  var _rows = nodes.length;
 
   var _size = JSON.parse(JSON.stringify(v.size));
 
   if(v.cellSize) {
     v.size[0] = v.cellSize[0] * 2;
-    v.size[1] = v.cellSize[1] * v.rows;
+    v.size[1] = v.cellSize[1] * _rows;
   }
 
-  v.y.domain([0, v.rows]).range([0, v.size[1] - 2 * v.padding]);
+  v.y.domain([0, _rows]).range([0, v.size[1] - 2 * v.padding]);
 
   var _valueY;
 
@@ -497,12 +511,8 @@ var pack$1 = function(nodes, v) {
     n[v.__x] = packed.children[i].x + v.offset[0];
     n[v.__y] = packed.children[i].y + v.offset[1];
 
-    //n[v.__width] = packed.children[i].r;
-    //n[v.__height] = packed.children[i].r;
-
     n[v.__width] = v.width(_valueWidth(n, i));
     n[v.__height] = v.height(_valueHeight(n, i));
-
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
@@ -513,19 +523,53 @@ var pack$1 = function(nodes, v) {
 
 var pyramid = function(nodes, v) {
 
-  var shiftX = v.size[0] / (2 * nodes.length);
-  var shiftY = v.size[1] / (2 * nodes.length);
+  var shiftX, shiftY;
 
   nodes.forEach(function(n, i) {
 
-    n[v.__x] = 0 + v.offset[0] + shiftX * i;
-    n[v.__y] = 0 + v.offset[1] + shiftY * i;
+    if(v.orient == "bottom") {
 
-    n[v.__width] = v.size[0] - shiftX * i * 2;
-    n[v.__height] = v.size[1] - shiftY * i * 2;
+      shiftX = v.size[0] / (2 * nodes.length);
+      shiftY = v.size[1] / (2 * nodes.length);
 
-    n[v.__cx] = n[v.__x] + n[v.__width] / 2;
-    n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+      n[v.__x] = 0 + v.offset[0] + shiftX * i;
+      n[v.__y] = 0 + v.offset[1] + shiftY * i * 2;
+
+      n[v.__width] = v.size[0] - shiftX * i * 2;
+      n[v.__height] = v.size[1] - shiftY * i * 2;
+
+      n[v.__cx] = n[v.__x] + n[v.__width] / 2;
+      n[v.__cy] = n[v.__y] + shiftY;
+
+    } else if(v.orient == "top") {
+
+      shiftX = v.size[0] / (2 * nodes.length);
+      shiftY = v.size[1] / (2 * nodes.length);
+
+      n[v.__x] = 0 + v.offset[0] + shiftX * i;
+      n[v.__y] = 0 + v.offset[1];
+
+      n[v.__width] = v.size[0] - shiftX * i * 2;
+      n[v.__height] = v.size[1] - shiftY * i * 2;
+
+      n[v.__cx] = n[v.__x] + n[v.__width] / 2;
+      n[v.__cy] = n[v.__y] + shiftY * i * 2 + shiftY;
+
+    } else { // central default
+
+      shiftX = v.size[0] / (2 * nodes.length);
+      shiftY = v.size[1] / (2 * nodes.length);
+
+      n[v.__x] = 0 + v.offset[0] + shiftX * i;
+      n[v.__y] = 0 + v.offset[1] + shiftY * i;
+
+      n[v.__width] = v.size[0] - shiftX * i * 2;
+      n[v.__height] = v.size[1] - shiftY * i * 2;
+
+      n[v.__cx] = n[v.__x] + n[v.__width] / 2;
+      n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
+    }
   });
 
   return nodes;
@@ -565,8 +609,6 @@ var radial = function(nodes, v) {
 
 var rotation = function(nodes, v) {
 
-  v.cols = v.rows = 1;
-
   var shiftRotate = v.rotate / nodes.length;
 
   var shiftX = v.size[0]/4, shiftY = v.size[1]/4;
@@ -584,7 +626,7 @@ var rotation = function(nodes, v) {
 
     n[v.__r] = shiftRotate * i;
   });
-    
+
   return nodes;
 };
 
@@ -678,11 +720,10 @@ var tree$1 = function(nodes, v) {
 var treemap$1 = function(nodes, v) {
 
   var treemap$$1 = d3Hierarchy.treemap()
-      .size([v.size[0], v.size[1]])
+      .size([v.size[0] - 2 * v.margin, v.size[1] - 2 * v.margin])
       .padding(v.padding);
 
   var stratify$$1 = d3Hierarchy.stratify()
-    //  .id(function(d) { return d.___id; })
       .parentId(function(d) { return d.___parent_id; });
 
   nodes.forEach(function(d, i) {
@@ -695,19 +736,29 @@ var treemap$1 = function(nodes, v) {
   var root = stratify$$1(nodes.concat(extra))
       .sum(function(d) { return d.___parent_id === "" ? 0: 1; });
 
+  if(v.valueHeight) {
+    root.sum(function(d) { return v.valueHeight(d); });
+  }
+
+  if(v.sort) {
+    if(v.sortAsc) {
+      root.sort(function(a, b) { return a.value - b.value; });
+    } else {
+      root.sort(function(a, b) { return b.value - a.value; });
+    }
+  }
+
   var tree$$1 = treemap$$1(root);
 
   tree$$1.leaves().forEach(function(t, i) {
-
-    t.data[v.__x] = t.x0 + v.offset[0];
-    t.data[v.__y] = t.y0 + v.offset[1];
+    t.data[v.__x] = t.x0 + v.offset[0] + v.margin;
+    t.data[v.__y] = t.y0 + v.offset[1] + v.margin;
 
     t.data[v.__width] = t.x1 - t.x0;
     t.data[v.__height] = t.y1 - t.y0;
 
     t.data[v.__cx] = nodes[i][v.__x] + nodes[i][v.__width] / 2;
     t.data[v.__cy] = nodes[i][v.__y] + nodes[i][v.__height] / 2;
-
   });
 
   return nodes;
@@ -833,7 +884,7 @@ var gridding = function() {
         "layout": grid,
         "properties": [
           {"key": "orient", "value": "up"},
-          {"key": "orient", "value": "down"},
+          {"key": "orient", "value": "down", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"}
         ]
@@ -841,6 +892,10 @@ var gridding = function() {
       "horizontal": {
         "layout": horizontal,
         "properties": [
+          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "left"},
+          {"key": "orient", "value": "right"},
+          {"key": "orient", "value": "center"},
           {"key": "valueY", "value": null},
           {"key": "valueWidth", "value": null}
         ]
@@ -854,7 +909,9 @@ var gridding = function() {
       "pyramid": {
         "layout": pyramid,
         "properties": [
-          {"key": "orient", "value": "top"}
+          {"key": "orient", "value": "center", "default": true},
+          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "bottom"}
         ]
       },
       "radial": {
@@ -900,8 +957,7 @@ var gridding = function() {
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
-          {"key": "valueHeight", "value": null},
-          {"key": "valueY", "value": null}
+          {"key": "valueHeight", "value": null}
         ]
       }
     },
@@ -916,6 +972,7 @@ var gridding = function() {
     shiftY: null,
     size: [1, 1],
     sort: null,
+    sortAsc: true,
     value: function(d) { return d; },
     valueHeight: null,
     valueWidth: null,
@@ -963,17 +1020,14 @@ var gridding = function() {
     return vars.layout(nodes, vars);
   }
 
-  gridding.mode = function(value) {
-
+  gridding.mode = function(_mode) {
     if (!arguments.length) return vars.mode;
-    vars.mode = value;
-
+    vars.mode = _mode;
     if(vars.mode === "identity") {
       vars.layout = identity;
-    } else if(Object.keys(vars.modes).indexOf(value) >= 0) {
+    } else if(Object.keys(vars.modes).indexOf(_mode) >= 0) {
       vars.layout = vars.modes[vars.mode].layout;
     }
-
     return gridding;
   };
 
@@ -1042,7 +1096,17 @@ var gridding = function() {
 
   gridding.sort = function(_sort) {
     if(!arguments.length) return vars.sort;
-    vars.sort = _sort;
+    if(typeof _sort === "string") {
+      vars.sort = function(d) { return d[_sort]; };
+    } else {
+      vars.sort = _sort;
+    }
+    return gridding;
+  };
+
+  gridding.sortAsc = function(_sortAsc) {
+    if(!arguments.length) return vars.sortAsc;
+    vars.sortAsc = _sortAsc;
     return gridding;
   };
 
@@ -1097,6 +1161,20 @@ var gridding = function() {
   gridding.id = function(_id) {
     if(!arguments.length) return vars.id;
     vars.id = _id;
+    return gridding;
+  };
+
+  gridding.params = function(_params) {
+    if(!arguments.length) return vars;
+    for(var key in _params) {
+      if (_params.hasOwnProperty(key)) {
+        if(key === "mode") {
+          gridding.mode(_params[key]);
+        } else {
+          vars[key] = _params[key];
+        }
+      }
+    }
     return gridding;
   };
 
