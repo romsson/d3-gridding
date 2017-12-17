@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+  font-family: Helvetica;
+  font-size: 10px;
+}
+rect {
+  fill: none;
+  stroke: black;
+  stroke-width: 1;
+}
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="../build/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 300;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .margin(10)
+  .mode("treemap");
+
+var data =  d3.range(10).map(function(d, i) {
+  return {index: i};
+});
+
+var svgSquares = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g");
+
+var border = svgSquares.append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("height", height)
+    .attr("width", width)
+    .style("stroke", "black")
+    .style("fill", "none")
+    .style("stroke-width", 1);
+
+svgSquares.selectAll(".square")
+    .data(gridding(data))
+  .enter().append("rect")
+    .attr("class", "square")
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+svgSquares.selectAll(".index")
+    .data(gridding(data))
+  .enter().append("text")
+    .attr("class", "index")
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
+    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+    .text(function(d, i) { return d.index; });
+
+</script>
