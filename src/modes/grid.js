@@ -1,5 +1,9 @@
 export default function(nodes, v) {
 
+  if(v.sort) {
+    nodes = nodes.sort(v.sort);
+  }
+
   var _cols;
 
   if(!v.cols) {

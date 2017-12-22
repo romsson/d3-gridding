@@ -26,7 +26,7 @@ export default function(nodes, v) {
     v.height.domain([0, d3Array.max(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
   }
 
-  nodes[0].x0 = v.padding;
+  nodes[0].x0 = v.padding + v.margin;
 
   nodes.forEach(function(n, i) {
 
