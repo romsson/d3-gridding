@@ -150,6 +150,58 @@ var gridding = d3.gridding()
   });
 ```
 
+## Layouts
+
+Layouts help to divde and organize a page into regions. Layouts actually are grids that are generated with some dataset that can be seen as proportions. Below is an example of dataset that is from this [list of layouts](https://romsson.github.io/d3-gridding/example/utils/layouts.js). See the <a href="https://romsson.github.io/d3-gridding/example/layout-all.html">layout list</a> and source code.
+
+
+```
+var layout = {
+  "name": "basic3columns",
+  "values": [
+    {"index": 1, "__x": 10, "__y": 10, "__height": 0, "__width": 0},
+    {"index": 2, "__x": 0, "__y": 0, "__height": 10, "__width": 2, "name": "left"},
+    {"index": 3, "__x": 2, "__y": 0, "__height": 10, "__width": 6, "name": "main"},
+    {"index": 4, "__x": 8, "__y": 0, "__height": 10, "__width": 2, "name": "right"}]
+};
+
+```
+
+The result is as below and can be found [on this page](https://romsson.github.io/d3-gridding/example/layout.html).
+
+<p align="center">
+  <img src="img/layout-3col.png" width="400" alt="layout 3col">
+</p>
+
+Then to draw the layout you may need to set the grid parameters accordingly as below.
+
+```
+var gridding = d3.gridding()
+  .params({
+    "size": [width, height],
+    "offset": [0, 0],
+    "mode": "coordinate",
+    "valueX": "__x",
+    "valueY": "__y",
+    "valueWidth": function(d) { return d["__width"]},
+    "valueHeight": function(d) { return d["__height"]}
+  });
+```
+
+And finally drawing the layout the very same way one draws a grid.
+
+```
+svgSquares.selectAll(".square")
+    .data(gridding(layout.values))
+  .enter().append("rect")
+    .attr("class", "square")
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { 
+        return "translate(" + d.x + "," + d.y + ")"; 
+      });
+```
+
 ## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
