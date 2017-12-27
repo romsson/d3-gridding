@@ -5,30 +5,40 @@ body {
   font-family: Helvetica;
   font-size: 10px;
 }
-.point {
-  fill: black;
-}
 
-rect, circle {
+rect {
   fill: none;
   stroke: black;
   stroke-width: 1;
 }
 </style>
 <body>
-<script src="http://d3js.org/d3.v4.js"></script>
+<script src="../node_modules/d3/build/d3.js"></script>
 <script src="../build/d3-gridding.js"></script>
 <script>
 
-var width = window.innerWidth,
-    height = window.innerHeight;
+var width = 800,
+    height = 600;
 
 var gridding = d3.gridding()
-  .size([width, height])
-  .valueY("__value")
-  .mode("horizontal");
+  .params({
+    "size": [width, height],
+    "offset": [0, 0],
+    "mode": "coordinate",
+    "valueX": "__x",
+    "valueY": "__y",
+    "valueWidth": function(d) { return d["__width"]},
+    "valueHeight": function(d) { return d["__height"]}
+  });
 
-var data =  [1, 10, 1];
+var layout = {
+  "name": "basic3columns",
+  "values": [
+    {"index": 1, "__x": 10, "__y": 10, "__height": 0, "__width": 0},
+    {"index": 2, "__x": 0, "__y": 0, "__height": 10, "__width": 2, "name": "left"},
+    {"index": 3, "__x": 2, "__y": 0, "__height": 10, "__width": 6, "name": "main"},
+    {"index": 4, "__x": 8, "__y": 0, "__height": 10, "__width": 2, "name": "right"}]
+};
 
 var svgSquares = d3.select("body").append("svg")
     .attr("width", width)
@@ -36,7 +46,7 @@ var svgSquares = d3.select("body").append("svg")
   .append("g");
 
 svgSquares.selectAll(".square")
-    .data(gridding(data))
+    .data(gridding(layout.values))
   .enter().append("rect")
     .attr("class", "square")
       .attr("width", function(d) { return d.width; })
@@ -44,38 +54,10 @@ svgSquares.selectAll(".square")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
 svgSquares.selectAll(".index")
-    .data(gridding(data))
+    .data(gridding(layout.values))
   .enter().append("text")
     .attr("class", "index")
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.__index; });
-
-window.onresize = function(event) {
-
-  width = window.innerWidth;
-  height = window.innerHeight;
-
-  gridding.size([width, height])
-
-  update();
-};
-
-
-function update() {
-
-  svgSquares.selectAll(".square")
-      .data(gridding(data))
-      .transition().duration(0)
-      .attr("width", function(d) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-
-  svgSquares.selectAll(".index")
-      .data(gridding(data))
-      .transition().duration(0)
-      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-      .text(function(d, i) { return d.width; });
-
-}
+    .text(function(d, i) { return d.name; });
 
 </script>
