@@ -1,3 +1,5 @@
+import rotate from "../utils/rotate";
+
 export default function(nodes, v) {
 
   var shiftX, shiftY;
@@ -45,6 +47,15 @@ export default function(nodes, v) {
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
+      if(v.rotate !==null) {
+        n["__p"] = [];
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x], n[v.__y], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x] + n[v.__width], n[v.__y], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x] + n[v.__width], n[v.__y] + n[v.__height], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x], n[v.__y] + n[v.__height], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x], n[v.__y], v.rotate));
+      }
 
     }
   });

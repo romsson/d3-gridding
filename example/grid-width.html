@@ -21,7 +21,8 @@ var width = 400,
 
 var gridding = d3.gridding()
   .size([width, height])
-  .mode("pyramid");
+  .valueWidth("index")
+  .mode("grid");
 
 var data =  d3.range(10).map(function(d, i) {
   return {index: i};
@@ -36,9 +37,9 @@ svgSquares.selectAll(".square")
     .data(gridding(data))
   .enter().append("rect")
     .attr("class", "square")
-    .attr("width", function(d) { return d.width; })
-    .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
 svgSquares.selectAll(".index")
     .data(gridding(data))

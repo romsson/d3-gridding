@@ -5,7 +5,7 @@ body {
   font-family: Helvetica;
   font-size: 10px;
 }
-rect {
+rect, path {
   fill: none;
   stroke: black;
   stroke-width: 1;
@@ -17,10 +17,11 @@ rect {
 <script>
 
 var width = 400,
-    height = 300;
+    height = 400;
 
 var gridding = d3.gridding()
   .size([width, height])
+  .rotate(45)
   .mode("pyramid");
 
 var data =  d3.range(10).map(function(d, i) {
@@ -32,21 +33,16 @@ var svgSquares = d3.select("body").append("svg")
     .attr("height", height)
   .append("g");
 
+var line = d3.line();
+
+line
+  .x(function(d) { return d[0]; })
+  .y(function(d) { return d[1]; });
+
 svgSquares.selectAll(".square")
     .data(gridding(data))
-  .enter().append("rect")
+  .enter().append("path")
     .attr("class", "square")
-    .attr("width", function(d) { return d.width; })
-    .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-
-svgSquares.selectAll(".index")
-    .data(gridding(data))
-  .enter().append("text")
-    .attr("class", "index")
-    .style('text-anchor', 'middle')
-    .style('dominant-baseline', 'central')
-    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.index; });
+    .attr("d", function(d) { return line(d.__p); });
 
 </script>

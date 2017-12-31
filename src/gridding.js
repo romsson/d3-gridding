@@ -12,7 +12,6 @@ import identity from "./modes/identity";
 import pack from "./modes/pack";
 import pyramid from "./modes/pyramid";
 import radial from "./modes/radial";
-import rotation from "./modes/rotation";
 import stack from "./modes/stack";
 import step from "./modes/step";
 import tree from "./modes/tree";
@@ -116,12 +115,6 @@ export default function() {
           {"key": "orient", "value": "top"}
         ]
       },
-      "rotation": {
-        "layout": rotation,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
-      },
       "stack": {
         "layout": stack,
         "properties": [
@@ -162,7 +155,7 @@ export default function() {
     parentId: function(d, i) { return i === 0 ? null: 0; },
     padding: 0,
     radius: null,
-    rotate: 45,
+    rotate: null,
     rows: null,
     shiftX: null,
     shiftY: null,
@@ -345,6 +338,12 @@ export default function() {
   gridding.radius = function(_radius) {
     if(!arguments.length) return vars.radius;
     vars.radius = _radius;
+    return gridding;
+  }
+
+  gridding.rotate = function(_rotate) {
+    if(!arguments.length) return vars.rotate;
+    vars.rotate = _rotate;
     return gridding;
   }
 

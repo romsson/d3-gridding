@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  .square {
+    border: solid 1px #aaa;
+  }
+</style>
+<body>
+<script src="js/d3.js"></script>
+<script src="js/d3-gridding.js"></script>
+<script>
+
+var width = 400,
+    height = 400;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+var svg = d3.select("body")
+    .append("div")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", draw);
+
+var data =  d3.range(10).map(function(d, i) {
+  return {index: i};
+});
+
+var griddingData = gridding(data);
+
+var divSquares = svg.selectAll(".square")
+    .data(griddingData);
+
+squares.enter().append("div")
+    .attr("class", "square")
+    .style("width", function(d) { return d.width + "px"; })
+    .style("height", function(d) { return d.height + "px"; })
+    .style("position", "fixed")
+    .style("left", function(d) { return d.x + "px"; })
+    .style("top", function(d) { return d.y + "px"; })
+
+</script>
+</body>
