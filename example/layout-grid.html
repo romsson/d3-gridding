@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  body {
+    font-family: Helvetica;
+    font-size: 10px;
+  }
+
+  .point {
+    fill: black;
+  }
+
+  .square {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+    border: solid 1px #aaa;
+  }
+</style>
+<body>
+<script src="js/d3.js"></script>
+<script src="js/d3-gridding.js"></script>
+<script src="js/layouts.js"></script>
+<script>
+
+var width = 400,
+    height = 400;
+
+var gridding = d3.gridding()
+  .size([width, height])
+  .mode("grid");
+
+var svg = d3.select("body")
+    .append("div")
+        .style("width", width + "px")
+        .style("height", height + "px")
+        .on("click", draw);
+
+var grid_params = {
+  "size": [width, height],
+  "offset": [0, 0],
+  "mode": "grid",
+  "valueX": null,
+  "valueY": null,
+  "valueWidth":  null,
+  "valueHeight":  null
+}
+
+var layout_params = {
+  "size": [width, height],
+  "offset": [0, 0],
+  "mode": "coordinate",
+  "valueX": "__x",
+  "valueY": "__y",
+  "valueWidth": function(d) { return d["__width"]},
+  "valueHeight": function(d) { return d["__height"]}
+};
+
+var layout = {
+  "name": "basic3columns",
+  "values": [
+    {"index": 1, "__x": 10, "__y": 10, "__height": 0, "__width": 0},
+    {"index": 2, "__x": 0, "__y": 0, "__height": 10, "__width": 2, "name": "left"},
+    {"index": 3, "__x": 2, "__y": 0, "__height": 10, "__width": 6, "name": "main"},
+    {"index": 4, "__x": 8, "__y": 0, "__height": 10, "__width": 2, "name": "right"}]
+};
+
+var all_layouts = ["layout", "grid", "coordinate", "cascade"];
+var current_layout = "layout";
+
+function draw() {
+
+  console.log("[draw] ", current_layout)
+
+  if(current_layout === "layout") {
+
+    data = layout.values;
+    params = layout_params;
+
+  } else {
+
+    data = layout.values;
+    params = grid_params;
+    params.mode = current_layout;
+
+  }
+
+  gridding.params(params);
+
+  var griddingData = gridding(data);
+
+  var squares = svg.selectAll(".square")
+      .data(griddingData);
+
+  squares.enter().append("div")
+      .attr("class", "square")
+      .style("width", function(d) { return d.width + "px"; })
+      .style("height", function(d) { return d.height + "px"; })
+      .style("position", "fixed")
+      .style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+
+  squares.transition()
+      .style("width", function(d) { return d.width + "px"; })
+      .style("height", function(d) { return d.height + "px"; })
+      .style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+
+  squares.exit().remove();
+
+  current_layout = all_layouts[(all_layouts.indexOf(current_layout) + 1) % all_layouts.length];
+
+}
+
+draw();
+
+</script>
+</body>
