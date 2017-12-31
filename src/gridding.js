@@ -162,7 +162,7 @@ export default function() {
     parentId: function(d, i) { return i === 0 ? null: 0; },
     padding: 0,
     radius: null,
-    rotate: 45,
+    rotate: null,
     rows: null,
     shiftX: null,
     shiftY: null,
@@ -345,6 +345,12 @@ export default function() {
   gridding.radius = function(_radius) {
     if(!arguments.length) return vars.radius;
     vars.radius = _radius;
+    return gridding;
+  }
+
+  gridding.rotate = function(_rotate) {
+    if(!arguments.length) return vars.rotate;
+    vars.rotate = _rotate;
     return gridding;
   }
 
