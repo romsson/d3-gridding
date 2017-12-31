@@ -25,10 +25,7 @@ export default function(nodes, v) {
     v.size[1] = v.cellSize[1] * _rows;
   }
 
-  // var _valueWidth = function() { return 1; }
   v.width.domain([0, nodes.length]).range([v.margin, v.size[0] - 2 * v.padding - 2 * v.margin]);
-
-  // var _valueHeight = function() { return 1; }
   v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding - 2 * v.margin]);
 
   v.x.domain([0, _cols]).range([v.margin, v.size[0] - v.margin]);
@@ -41,9 +38,6 @@ export default function(nodes, v) {
 
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
-
-    // n[v.__width] = v.width(_valueWidth(n));
-    // n[v.__height] = v.height(_valueHeight(n));
 
     n[v.__width] = (v.size[0] - 2 * v.margin) / _cols - 2 * v.padding ;
     n[v.__height] = (v.size[1] - 2 * v.margin) / _rows - 2 * v.padding;
