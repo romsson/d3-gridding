@@ -12,7 +12,6 @@ import identity from "./modes/identity";
 import pack from "./modes/pack";
 import pyramid from "./modes/pyramid";
 import radial from "./modes/radial";
-import rotation from "./modes/rotation";
 import stack from "./modes/stack";
 import step from "./modes/step";
 import tree from "./modes/tree";
@@ -112,12 +111,6 @@ export default function() {
       },
       "radial": {
         "layout": radial,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
-      },
-      "rotation": {
-        "layout": rotation,
         "properties": [
           {"key": "orient", "value": "top"}
         ]
