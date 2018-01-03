@@ -44,6 +44,8 @@ svgSquares.selectAll(".index")
     .data(gridding(data))
   .enter().append("text")
     .attr("class", "index")
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
     .text(function(d, i) { return d.index; });
 
