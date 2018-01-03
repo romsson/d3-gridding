@@ -8,6 +8,9 @@ export default function(nodes, v) {
   if(!v.valueX) {
     _valueX = function() { return Math.random(); }
     _valueXmax = 1;
+  } else if(typeof v.valueX === "function" && typeof v.valueX(nodes[0]) === "string" && v.valueX(nodes[0]).indexOf("px") === v.valueX(nodes[0]).length - 2) {
+    _valueX = function(d) { return +v.valueX(d).replace("px", ""); }
+    _valueXmax = v.size[0];
   } else if(typeof v.valueX === "string") {
     _valueX = function(d) { return d[v.valueX]; }
     _valueXmax = d3Array.max(nodes, _valueX);
@@ -24,6 +27,9 @@ export default function(nodes, v) {
   if(!v.valueY) {
     _valueY = function() { return Math.random(); }
     _valueYmax = 1;
+  } else if(typeof v.valueY === "function" && typeof v.valueY(nodes[0]) === "string" && v.valueY(nodes[0]).indexOf("px") === v.valueY(nodes[0]).length - 2) {
+    _valueY = function(d) { return +v.valueY(d).replace("px", ""); }
+    _valueYmax = v.size[1];
   } else if(typeof v.valueY === "string") {
     _valueY = function(d) { return d[v.valueY]; }
     _valueYmax = d3Array.max(nodes, _valueY)
@@ -73,6 +79,8 @@ export default function(nodes, v) {
   // v.height.range([0, v.size[1] - v.height(_valueHeight(nodes[0]))]);
 
   nodes.forEach(function(n) {
+
+
     n[v.__x] = v.x(_valueX(n)) + v.offset[0] + v.padding;
     n[v.__y] = v.y(_valueY(n)) + v.offset[1] + v.padding;
 
@@ -81,6 +89,7 @@ export default function(nodes, v) {
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
   });
 
   return nodes;
