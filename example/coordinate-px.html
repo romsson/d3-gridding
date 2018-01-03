@@ -23,12 +23,14 @@ var gridding = d3.gridding()
   .size([width, height])
   .valueX("x")
   .valueY("y")
+  .valueWidth("w")
+  .valueHeight("h")
   .prefix("__")
   .mode("coordinate");
 
 var data = [
-  {x: "0px", y: "0px", h: "200px", w: "200px"},
-  {x: "200px", y: "200px", h: "200px", w: "200px"}
+  {x: "0px", y: "0px", w: "250px", h: "100px"},
+  {x: "250px", y: "100px", w: "150px", h: "300px"}
 ];
 
 var griddingData = gridding(data);

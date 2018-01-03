@@ -45,6 +45,9 @@ export default function(nodes, v) {
   if(!v.valueWidth) {
     _valueWidth = function() { return 1; }
     v.width.domain([0, nodes.length]).range([0, v.size[0]]);
+  } else if(typeof v.valueWidth === "function" && typeof v.valueWidth(nodes[0]) === "string" && v.valueWidth(nodes[0]).indexOf("px") === v.valueWidth(nodes[0]).length - 2) {
+    _valueWidth = function(d) { return +v.valueWidth(d).replace("px", ""); }
+    v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
   } else if(typeof v.valueWidth === "string") { // pixels
     _valueWidth = function() { return +v.valueWidth; }
     v.width.domain([0, 1]).range([0, 1]);
@@ -61,6 +64,9 @@ export default function(nodes, v) {
   if(!v.valueHeight) {
     _valueHeight = function() { return 1; }
     v.height.domain([0, nodes.length]).range([0, v.size[1]]);
+  } else if(typeof v.valueHeight === "function" && typeof v.valueHeight(nodes[0]) === "string" && v.valueHeight(nodes[0]).indexOf("px") === v.valueHeight(nodes[0]).length - 2) {
+    _valueHeight = function(d) { return +v.valueHeight(d).replace("px", ""); }
+    v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   } else if(typeof v.valueWidth === "string") { // pixels
     _valueHeight = function() { return +v.valueHeight; }
     v.height.domain([0, 1]).range([0, 1]);
