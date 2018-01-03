@@ -78,6 +78,8 @@ Output below; checkout a [live coding version](http://blockbuilder.org/romsson/b
 
 * List of [tutorials](tutorial/) 
 
+* Search the Bl.ocks for [d3-gridding](http://blockbuilder.org/search#d3modules%3Dd3-gridding)
+
 ## How to use it
 
 **To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
@@ -154,7 +156,6 @@ var gridding = d3.gridding()
 
 Layouts help to divde and organize a page into regions. Layouts actually are grids that are generated with some dataset that can be seen as proportions. Below is an example of dataset that is from this [list of layouts](https://romsson.github.io/d3-gridding/example/utils/layouts.js). See the <a href="https://romsson.github.io/d3-gridding/example/layout-all.html">layout list</a> and source code.
 
-
 ```
 var layout = {
   "name": "basic3columns",
@@ -212,7 +213,7 @@ The `mode` parameter sets the layout:
 * [`horizontal`](https://romsson.github.io/d3-gridding/example/vertical.html) - horizontal partitioning of value `.valueWidth()` and vertical offset `.valueY()`
 * [`central`](https://romsson.github.io/d3-gridding/example/central.html) - overlapping partitioning
 * [`grid`](https://romsson.github.io/d3-gridding/example/grid.html) - classic grid partitioning
-* `coordinate` - absolute position by `.valueX()` and `.valueY()`
+* [`coordinate`](https://romsson.github.io/d3-gridding/example/coordinate.html) - position (`.valueX()` and `.valueY()`) and dimensions (`.valueWidth()`, `.valueHeight()`) can be set with relative or absolute positions
 * `radial` - circular partitioning (e.g. pie chart with uniform wedges)
 * [`treemap`](https://romsson.github.io/d3-gridding/example/treemap.html)- using [d3.treemap()](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemap) layout
 * `pack` - using [d3.pack()](https://github.com/d3/d3-hierarchy/blob/master/README.md#pack)
