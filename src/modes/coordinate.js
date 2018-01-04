@@ -48,9 +48,9 @@ export default function(nodes, v) {
   } else if(typeof v.valueWidth === "function" && typeof v.valueWidth(nodes[0]) === "string" && v.valueWidth(nodes[0]).indexOf("px") === v.valueWidth(nodes[0]).length - 2) {
     _valueWidth = function(d) { return +v.valueWidth(d).replace("px", ""); }
     v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
-  } else if(typeof v.valueWidth === "string") { // pixels
-    _valueWidth = function() { return +v.valueWidth; }
-    v.width.domain([0, 1]).range([0, 1]);
+  } else if(typeof v.valueWidth === "string") {
+    _valueWidth = function(d) { return d[v.valueWidth]; }
+    v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueWidth = function() { return v.valueWidth; }
     v.width.domain([0, v.size[0]]).range([0, v.size[0] - 2 * v.padding]);
@@ -68,8 +68,8 @@ export default function(nodes, v) {
     _valueHeight = function(d) { return +v.valueHeight(d).replace("px", ""); }
     v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   } else if(typeof v.valueWidth === "string") { // pixels
-    _valueHeight = function() { return +v.valueHeight; }
-    v.height.domain([0, 1]).range([0, 1]);
+    _valueHeight = function(d) { return d[v.valueHeight]; }
+    v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueHeight = function() { return v.valueHeight; }
     v.height.domain([0, v.size[0]]).range([0, v.size[1] - 2 * v.padding]);
