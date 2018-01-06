@@ -10,9 +10,15 @@ rect {
   stroke: black;
   stroke-width: 1;
 }
+
+.polygons {
+  fill: none;
+  stroke: #000;
+}
+
 </style>
 <body>
-<script src="https://d3js.org/d3.v4.js"></script>
+<script src="../node_modules/d3/build/d3.js"></script>
 <script src="../build/d3-gridding.js"></script>
 <script>
 
@@ -21,37 +27,26 @@ var width = 400,
 
 var gridding = d3.gridding()
   .size([width, height])
-  .orient("up")
-  .margin(10)
-  .mode("vertical");
+  .mode("radial");
 
 var data =  d3.range(10).map(function(d, i) {
   return {index: i};
 });
 
-var svgSquares = d3.select("body").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g");
 
-var border = svgSquares.append("rect")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("height", height)
-    .attr("width", width)
-    .style("stroke", "black")
-    .style("fill", "none")
-    .style("stroke-width", 1);
-
-svgSquares.selectAll(".square")
+svg.selectAll(".square")
     .data(gridding(data))
   .enter().append("rect")
     .attr("class", "square")
-      .attr("width", function(d) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-svgSquares.selectAll(".index")
+svg.selectAll(".index")
     .data(gridding(data))
   .enter().append("text")
     .attr("class", "index")
@@ -59,5 +54,23 @@ svgSquares.selectAll(".index")
     .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
     .text(function(d, i) { return d.index; });
+
+var voronoi = d3.voronoi()
+    .extent([[0, 0], [width, height]])
+    .x(function(d) { return d.cx; })
+    .y(function(d) { return d.cy; })
+
+var polygon = svg.append("g")
+    .attr("class", "polygons")
+  .selectAll("path")
+  .data(voronoi.polygons(gridding(data)))
+  .enter().append("path")
+    .call(redrawPolygon);
+
+function redrawPolygon(polygon) {
+  polygon
+      .attr("d", function(d) { return d ? "M" + d.join("L") + "Z" : null; });
+}
+
 
 </script>

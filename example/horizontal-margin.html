@@ -23,7 +23,7 @@ var gridding = d3.gridding()
   .size([width, height])
   .orient("up")
   .margin(10)
-  .mode("vertical");
+  .mode("horizontal");
 
 var data =  d3.range(10).map(function(d, i) {
   return {index: i};
@@ -34,22 +34,13 @@ var svgSquares = d3.select("body").append("svg")
     .attr("height", height)
   .append("g");
 
-var border = svgSquares.append("rect")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("height", height)
-    .attr("width", width)
-    .style("stroke", "black")
-    .style("fill", "none")
-    .style("stroke-width", 1);
-
 svgSquares.selectAll(".square")
     .data(gridding(data))
   .enter().append("rect")
     .attr("class", "square")
-      .attr("width", function(d) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
 svgSquares.selectAll(".index")
     .data(gridding(data))

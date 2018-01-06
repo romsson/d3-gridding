@@ -27,8 +27,8 @@ var gridding = d3.gridding()
     "mode": "coordinate",
     "valueX": "__x",
     "valueY": "__y",
-    "valueWidth": function(d) { return d["__width"]},
-    "valueHeight": function(d) { return d["__height"]}
+    "valueWidth": "__width",
+    "valueHeight": "__height"
   });
 
 var layout = {
@@ -49,14 +49,16 @@ svgSquares.selectAll(".square")
     .data(gridding(layout.values))
   .enter().append("rect")
     .attr("class", "square")
-      .attr("width", function(d) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
 svgSquares.selectAll(".index")
     .data(gridding(layout.values))
   .enter().append("text")
     .attr("class", "index")
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
     .text(function(d, i) { return d.name; });
 
