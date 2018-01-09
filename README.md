@@ -4,7 +4,7 @@
 [![Build Status](https://circleci.com/gh/romsson/d3-gridding/tree/master.png?style=shield)](https://circleci.com/gh/romsson/d3-gridding)
 [![dependencies Status](https://david-dm.org/romsson/d3-gridding/status.svg)](https://david-dm.org/romsson/d3-gridding)
 
-Rapid mock-ups for D3 charts, using data-driven grids.
+Create rapid mock-ups for D3 charts, using data-driven grids.
 
 <p align="center">
   <table style="border: none;">
@@ -62,7 +62,7 @@ svg.selectAll(".square")
 </body>
 ```
 
-Output below; checkout a [live coding version](http://blockbuilder.org/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a).
+Output below and [live coding version](http://blockbuilder.org/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a).
 
 <p align="center">
   <img src="https://gist.githubusercontent.com/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a/raw/03ec156d88ebbc21d8545771f8d84a5fe19c9629/tumbnail.png" width="400" alt="minimalistic grid">
@@ -70,23 +70,21 @@ Output below; checkout a [live coding version](http://blockbuilder.org/romsson/b
 
 ## More Examples
 
-* Gallery of [examples](https://romsson.github.io/d3-gridding/example/capture/display.html)
+* Gallery of [examples](https://romsson.github.io/d3-gridding/example/capture/display.html) in this repository
 
-* Simple [grid example](http://blockbuilder.org/romsson/a2e9ff5f7dafe12cc97d2cc286dad733)
+* Simple [grid example](http://blockbuilder.org/romsson/a2e9ff5f7dafe12cc97d2cc286dad733) using live coding
 
-* Search for [code examples](http://blockbuilder.org/search#d3modules=d3-gridding) using `d3-gridding`  on blockbuilder.org.
+* Search for [code examples](http://blockbuilder.org/search#d3modules=d3-gridding) using `d3-gridding`  on blockbuilder.org
 
-* List of [tutorials](tutorial/) 
+* List of [tutorials](tutorial/) to add or customize grids
 
-* Search the Bl.ocks for [d3-gridding](http://blockbuilder.org/search#d3modules%3Dd3-gridding)
+* Some creative blocks using [d3-gridding](https://bl.ocks.org/romsson) using generative coding
 
 ## How to use it
 
 **To install**, use NPM `npm install d3-gridding` or download the [latest release](https://github.com/romsson/d3-gridding/releases/latest). 
 
-**To use**, include the `d3-gridding.js` JavaScript file in your HTML code.
-
-**To include** in a webpage, use the following:
+**To use**, include the `d3-gridding.js` JavaScript file in your HTML code or use the following:
 
 ```html
 <script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
@@ -95,20 +93,27 @@ Output below; checkout a [live coding version](http://blockbuilder.org/romsson/b
 The code snippet below lets you create dots organized as a grid:
 
 ```js
-var data = d3.range(10);
-
-var gridding = d3.gridding()
-  .size([800, 600])
-  .mode("vertical");
-
-var points = svgPoints.selectAll(".point")
-  .data(gridding(data));
-
-points.enter().append("circle")
-  .attr("class", "point")
-  .attr("r", 10)
-  .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; });
+d3.select("body").append("svg")
+    .attr("width", 800)
+    .attr("height", 600)
+    .selectAll("circle")
+    .data(
+      d3.gridding()
+        .size([800, 600])
+        .mode("vertical")(d3.range(10))
+    )
+  .enter().append("circle")
+    .attr("r", 10)
+    .attr("transform", function(d) { 
+      return "translate(" + d.cx + "," + d.cy + ")"; 
+      });
 ```
+
+Output below and [live coding version](http://blockbuilder.org/romsson/1e1cd0f8af1c2c043ff54299ce8fa13f).
+
+<p align="center">
+  <img src="https://gist.githubusercontent.com/romsson/1e1cd0f8af1c2c043ff54299ce8fa13f/raw/6e27a0df178c97e368f18feaa46500a22669633e/thumbnail.png" width="400" alt="minimalistic circle grid">
+</p>
 
 The magic happens with `gridding` which turns an array of JavaScript Objects, into another array with additional attributes:
 
@@ -223,7 +228,11 @@ The `mode` parameter sets the layout:
 * `cascade` - like diagonal but with larger and overlapping cells 
 * `identity` - does nothing, returns same values
 
-To get the list of all available modes `gridding.modes()`.
+Others
+
+* `gridding.modes()` returns the list of all available modes as an array, e.g. `["brick", "cascade", "central", "coordinate", "corner", "diagonal", "grid", "horizontal", "pack", "pyramid", "radial", "stack", "step", "tree", "treemap", "vertical"]`
+
+* `gridding.modes("brick")` returns the properties for a single mode that are exposed as [an array of key/values] such as `[{"key": "orient", "value": "left"}, {"key": "valueX", "value": null}]` that contain both possible values and the default ones.
 
 <a name="gridding_sort" href="#gridding_sort">#</a> <i>d3.gridding()</i>.<b>sort</b>([<i>compare</i>])
 
