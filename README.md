@@ -68,6 +68,26 @@ Output below and [live coding version](http://blockbuilder.org/romsson/b7799e85c
   <img src="https://gist.githubusercontent.com/romsson/b7799e85c0dd52f87f1e7eeba4c4b28a/raw/03ec156d88ebbc21d8545771f8d84a5fe19c9629/tumbnail.png" width="400" alt="minimalistic grid">
 </p>
 
+The code snippet below lets you create dots organized as a grid:
+
+```js
+d3.select("body").append("svg")
+    .attr("width", 800)
+    .attr("height", 600)
+    .selectAll("circle")
+    .data(
+      d3.gridding()
+        .size([800, 600])
+        .mode("vertical")(d3.range(10))
+    )
+  .enter().append("circle")
+    .attr("r", 10)
+    .attr("transform", function(d) { 
+      return "translate(" + d.cx + "," + d.cy + ")"; 
+      });
+```
+
+
 ## More Examples
 
 * Gallery of [examples](https://romsson.github.io/d3-gridding/example/capture/display.html) in this repository
@@ -88,25 +108,6 @@ Output below and [live coding version](http://blockbuilder.org/romsson/b7799e85c
 
 ```html
 <script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
-```
-
-The code snippet below lets you create dots organized as a grid:
-
-```js
-d3.select("body").append("svg")
-    .attr("width", 800)
-    .attr("height", 600)
-    .selectAll("circle")
-    .data(
-      d3.gridding()
-        .size([800, 600])
-        .mode("vertical")(d3.range(10))
-    )
-  .enter().append("circle")
-    .attr("r", 10)
-    .attr("transform", function(d) { 
-      return "translate(" + d.cx + "," + d.cy + ")"; 
-      });
 ```
 
 Output below and [live coding version](http://blockbuilder.org/romsson/1e1cd0f8af1c2c043ff54299ce8fa13f).
