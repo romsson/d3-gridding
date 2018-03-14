@@ -209,6 +209,27 @@ svgSquares.selectAll(".square")
       });
 ```
 
+
+## Nesting
+
+One of the most powerful property of grids is to allow their nesting
+
+-Simple recursive function
+
+-How to set the grids in one param element?
+
+## Rendering methods
+
+d3-gridding is agnostic to the rendering method
+
+SVG
+
+Canvas
+
+Divs
+
+WebGL
+
 ## API
 
 <a name="gridding_mode" href="#gridding_mode">#</a> <i>d3.gridding()</i>.<b>mode</b>(<i>mode</i>)
