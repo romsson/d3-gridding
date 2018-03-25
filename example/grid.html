@@ -36,14 +36,16 @@ svgSquares.selectAll(".square")
     .data(gridding(data))
   .enter().append("rect")
     .attr("class", "square")
-      .attr("width", function(d) { return d.width; })
-      .attr("height", function(d) { return d.height; })
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; })
+    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
 svgSquares.selectAll(".index")
     .data(gridding(data))
   .enter().append("text")
     .attr("class", "index")
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
     .text(function(d, i) { return d.index; });
 

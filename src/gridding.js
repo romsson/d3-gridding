@@ -42,8 +42,8 @@ export default function() {
         "properties": [
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "cascade": {
@@ -87,7 +87,7 @@ export default function() {
       "horizontal": {
         "layout": horizontal,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up"},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -97,16 +97,14 @@ export default function() {
       },
       "pack": {
         "layout": pack,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "pyramid": {
         "layout": pyramid,
         "properties": [
           {"key": "orient", "value": "center", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "radial": {
@@ -135,14 +133,12 @@ export default function() {
       },
       "treemap": {
         "layout": treemap,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},

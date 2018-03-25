@@ -6,7 +6,7 @@ export default function(nodes, v) {
 
   nodes.forEach(function(n, i) {
 
-    if(v.orient == "bottom") {
+    if(v.orient == "down") {
 
       shiftX = v.size[0] / (2 * nodes.length);
       shiftY = v.size[1] / (2 * nodes.length);
@@ -20,7 +20,7 @@ export default function(nodes, v) {
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + shiftY;
 
-    } else if(v.orient == "top") {
+    } else if(v.orient == "up") {
 
       shiftX = v.size[0] / (2 * nodes.length);
       shiftY = v.size[1] / (2 * nodes.length);
