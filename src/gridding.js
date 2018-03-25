@@ -138,7 +138,7 @@ export default function() {
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "up", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
