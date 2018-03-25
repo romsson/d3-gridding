@@ -2,5 +2,3 @@
 npm-debug.log
 
 example/capture/figures/*.png
-
-node_modules/

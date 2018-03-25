@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+
+var os = require("os"),
+    fs = require("fs");
+
+fs.readFile("package.json", "utf8", function(error, text) {
+  if (error) throw error;
+  var json = JSON.parse(text);
+  process.stdout.write("// " + (json.homepage || json.name)
+      + " Version " + json.version + "."
+      + " Copyright " + (new Date).getFullYear()
+      + " " + json.author.name + "."
+      + os.EOL);
+});

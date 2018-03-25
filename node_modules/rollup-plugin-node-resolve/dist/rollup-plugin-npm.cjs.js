@@ -1,0 +1,70 @@
+'use strict';
+
+var path = require('path');
+var builtins = require('builtin-modules');
+builtins = 'default' in builtins ? builtins['default'] : builtins;
+var nodeResolve = require('resolve');
+nodeResolve = 'default' in nodeResolve ? nodeResolve['default'] : nodeResolve;
+var browserResolve = require('browser-resolve');
+browserResolve = 'default' in browserResolve ? browserResolve['default'] : browserResolve;
+
+var COMMONJS_BROWSER_EMPTY = nodeResolve.sync('browser-resolve/empty.js', __dirname);
+var ES6_BROWSER_EMPTY = path.resolve(__dirname, '../src/empty.js');
+
+function npm(options) {
+	options = options || {};
+
+	var skip = options.skip || [];
+	var useMain = options.main !== false;
+
+	var _resolveId = options.browser ? browserResolve : nodeResolve;
+
+	return {
+		resolveId: function resolveId(importee, importer) {
+			var parts = importee.split(/[\/\\]/);
+			var id = parts.shift();
+
+			// scoped packages
+			if (id[0] === '@' && parts.length) {
+				id += '/' + parts.shift();
+			}
+
+			if (skip !== true && ~skip.indexOf(id)) return null;
+
+			// disregard entry module
+			if (!importer) return null;
+
+			return new Promise(function (accept, reject) {
+				_resolveId(importee, {
+					basedir: path.dirname(importer),
+					packageFilter: function packageFilter(pkg) {
+						if (options.jsnext) {
+							var main = pkg['jsnext:main'];
+							if (main) {
+								pkg['main'] = main;
+							} else if (!useMain) {
+								if (skip === true) accept(false);else reject(Error('Package ' + importee + ' (imported by ' + importer + ') does not have a jsnext:main field. You should either allow legacy modules with options.main, or skip it with options.skip = [\'' + importee + '\'])'));
+							}
+						} else if (!useMain) {
+							if (skip === true) accept(false);else reject(Error('To import from a package in node_modules (' + importee + '), either options.jsnext or options.main must be true'));
+						}
+						return pkg;
+					},
+
+					extensions: options.extensions
+				}, function (err, resolved) {
+					if (err) {
+						if (skip === true) accept(false);else reject(err);
+					} else {
+						if (resolved === COMMONJS_BROWSER_EMPTY) resolved = ES6_BROWSER_EMPTY;
+						if (~builtins.indexOf(resolved)) resolved = null;
+
+						accept(resolved);
+					}
+				});
+			});
+		}
+	};
+}
+
+module.exports = npm;

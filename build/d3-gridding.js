@@ -1,4 +1,4 @@
-// https://github.com/romsson/d3-gridding Version 0.0.11. Copyright 2017 Romain Vuillemot.
+// https://github.com/romsson/d3-gridding Version 0.0.11. Copyright 2018 Romain Vuillemot.
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-scale'), require('d3-array'), require('d3-hierarchy'), require('d3-shape')) :
 	typeof define === 'function' && define.amd ? define('d3-gridding', ['exports', 'd3-scale', 'd3-array', 'd3-hierarchy', 'd3-shape'], factory) :
@@ -118,6 +118,9 @@ var coordinate = function(nodes, v) {
   if(!v.valueX) {
     _valueX = function() { return Math.random(); };
     _valueXmax = 1;
+  } else if(typeof v.valueX === "function" && typeof v.valueX(nodes[0]) === "string" && v.valueX(nodes[0]).indexOf("px") === v.valueX(nodes[0]).length - 2) {
+    _valueX = function(d) { return +v.valueX(d).replace("px", ""); };
+    _valueXmax = v.size[0];
   } else if(typeof v.valueX === "string") {
     _valueX = function(d) { return d[v.valueX]; };
     _valueXmax = d3Array.max(nodes, _valueX);
@@ -134,6 +137,9 @@ var coordinate = function(nodes, v) {
   if(!v.valueY) {
     _valueY = function() { return Math.random(); };
     _valueYmax = 1;
+  } else if(typeof v.valueY === "function" && typeof v.valueY(nodes[0]) === "string" && v.valueY(nodes[0]).indexOf("px") === v.valueY(nodes[0]).length - 2) {
+    _valueY = function(d) { return +v.valueY(d).replace("px", ""); };
+    _valueYmax = v.size[1];
   } else if(typeof v.valueY === "string") {
     _valueY = function(d) { return d[v.valueY]; };
     _valueYmax = d3Array.max(nodes, _valueY);
@@ -149,9 +155,12 @@ var coordinate = function(nodes, v) {
   if(!v.valueWidth) {
     _valueWidth = function() { return 1; };
     v.width.domain([0, nodes.length]).range([0, v.size[0]]);
-  } else if(typeof v.valueWidth === "string") { // pixels
-    _valueWidth = function() { return +v.valueWidth; };
-    v.width.domain([0, 1]).range([0, 1]);
+  } else if(typeof v.valueWidth === "function" && typeof v.valueWidth(nodes[0]) === "string" && v.valueWidth(nodes[0]).indexOf("px") === v.valueWidth(nodes[0]).length - 2) {
+    _valueWidth = function(d) { return +v.valueWidth(d).replace("px", ""); };
+    v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
+  } else if(typeof v.valueWidth === "string") {
+    _valueWidth = function(d) { return d[v.valueWidth]; };
+    v.width.domain([0, _valueXmax]).range([0, v.size[0]]);
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueWidth = function() { return v.valueWidth; };
     v.width.domain([0, v.size[0]]).range([0, v.size[0] - 2 * v.padding]);
@@ -165,9 +174,12 @@ var coordinate = function(nodes, v) {
   if(!v.valueHeight) {
     _valueHeight = function() { return 1; };
     v.height.domain([0, nodes.length]).range([0, v.size[1]]);
+  } else if(typeof v.valueHeight === "function" && typeof v.valueHeight(nodes[0]) === "string" && v.valueHeight(nodes[0]).indexOf("px") === v.valueHeight(nodes[0]).length - 2) {
+    _valueHeight = function(d) { return +v.valueHeight(d).replace("px", ""); };
+    v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   } else if(typeof v.valueWidth === "string") { // pixels
-    _valueHeight = function() { return +v.valueHeight; };
-    v.height.domain([0, 1]).range([0, 1]);
+    _valueHeight = function(d) { return d[v.valueHeight]; };
+    v.height.domain([0, _valueYmax]).range([0, v.size[1]]);
   } else if(typeof v.valueWidth === "number") { // proportion
     _valueHeight = function() { return v.valueHeight; };
     v.height.domain([0, v.size[0]]).range([0, v.size[1] - 2 * v.padding]);
@@ -183,6 +195,8 @@ var coordinate = function(nodes, v) {
   // v.height.range([0, v.size[1] - v.height(_valueHeight(nodes[0]))]);
 
   nodes.forEach(function(n) {
+
+
     n[v.__x] = v.x(_valueX(n)) + v.offset[0] + v.padding;
     n[v.__y] = v.y(_valueY(n)) + v.offset[1] + v.padding;
 
@@ -191,6 +205,7 @@ var coordinate = function(nodes, v) {
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
   });
 
   return nodes;
@@ -314,6 +329,10 @@ var diagonal = function(nodes, v) {
 
 var grid = function(nodes, v) {
 
+  if(v.sort) {
+    nodes = nodes.sort(v.sort);
+  }
+
   var _cols;
 
   if(!v.cols) {
@@ -335,10 +354,7 @@ var grid = function(nodes, v) {
     v.size[1] = v.cellSize[1] * _rows;
   }
 
-  // var _valueWidth = function() { return 1; }
   v.width.domain([0, nodes.length]).range([v.margin, v.size[0] - 2 * v.padding - 2 * v.margin]);
-
-  // var _valueHeight = function() { return 1; }
   v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding - 2 * v.margin]);
 
   v.x.domain([0, _cols]).range([v.margin, v.size[0] - v.margin]);
@@ -351,9 +367,6 @@ var grid = function(nodes, v) {
 
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
-
-    // n[v.__width] = v.width(_valueWidth(n));
-    // n[v.__height] = v.height(_valueHeight(n));
 
     n[v.__width] = (v.size[0] - 2 * v.margin) / _cols - 2 * v.padding ;
     n[v.__height] = (v.size[1] - 2 * v.margin) / _rows - 2 * v.padding;
@@ -386,25 +399,14 @@ var horizontal = function(nodes, v) {
     nodes = nodes.sort(v.sort);
   }
 
-  var _rows = nodes.length;
+  var _valueHeight;
 
-  var _size = JSON.parse(JSON.stringify(v.size));
-
-  if(v.cellSize) {
-    v.size[0] = v.cellSize[0] * 2;
-    v.size[1] = v.cellSize[1] * _rows;
-  }
-
-  v.y.domain([0, _rows]).range([0, v.size[1] - 2 * v.padding]);
-
-  var _valueY;
-
-  if(!v.valueY) {
-    _valueY = function() { return 1; };
-    v.y.domain([0, nodes.length]).range([0, v.size[1] - 2 * v.padding]);
+  if(!v.valueHeight) {
+    _valueHeight = function() { return 1; };
+    v.height.domain([0, nodes.length]).range([0, v.size[1] - 2 * v.padding]);
   } else {
-    _valueY = v.valueY;
-    v.y.domain([0, d3Array.sum(nodes, _valueY)]).range([0, v.size[1] - 2 * v.padding]);
+    _valueHeight = v.valueHeight;
+    v.height.domain([0, d3Array.sum(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
   }
 
   var _valueWidth;
@@ -417,31 +419,36 @@ var horizontal = function(nodes, v) {
     v.width.domain([0, d3Array.max(nodes, _valueWidth)]).range([0, v.size[0] - 2 * v.padding]);
   }
 
-  nodes[0].y0 = v.padding;
+  if(nodes.length > 0) {
+    nodes[0].y0 = v.padding;
+  }
 
   nodes.forEach(function(n, i) {
 
     n[v.__y] = n.y0 + v.offset[1] + v.margin;
+
     if(v.orient === "right") {
-      n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
+      n[v.__x] = 0 + v.offset[0] + v.padding + v.margin;
     } else if(v.orient === "left") {
-      n[v.__x] = v.size[0] - v.width(_valueWidth(n))  + v.offset[0] + v.margin - v.padding;
+      n[v.__x] = v.size[0] - v.width(_valueWidth(n))  + v.offset[0] - v.padding + v.margin;
    } else if(v.orient === "up") {
-      n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
-      n[v.__y] = _size[1] - n.y0 + v.offset[1] + v.margin;
+      n[v.__x] = 0 + v.offset[0] + v.padding + v.margin;
+     // n[v.__y] = v.size[1] - n.y0 - v.height(_valueHeight(n)) - v.offset[1] - v.margin;
     } else if(v.orient === "center") {
-      n[v.__x] = (v.size[0] / 2) - v.width(_valueWidth(n)) / 2 + v.offset[0] + v.margin - v.padding;
+      n[v.__x] = (v.size[0] / 2) - v.width(_valueWidth(n)) / 2 + v.offset[0] + v.margin;
     } else { // defaut right
-      n[v.__x] = 0 + v.offset[0] + v.margin + v.padding;
+      n[v.__x] = 0 + v.offset[0] + v.padding + v.margin;
     }
 
-    n[v.__width] = v.width(_valueWidth(n));
-    n[v.__height] = v.y(_valueY(n));
+    n[v.__width] = v.width(_valueWidth(n)) - 2 * v.margin;
+    n[v.__height] = v.height(_valueHeight(n));
 
     // Updates the next node's y0 for all nodes but the last one
     if(i < nodes.length - 1) {
       nodes[i+1].y0 = n.y0 + n[v.__height];
     }
+
+    n[v.__height] -= 2 * v.margin;
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
@@ -521,13 +528,22 @@ var pack$1 = function(nodes, v) {
   return nodes;
 };
 
+var rotate = function(cx, cy, x, y, a) {
+  var r = (Math.PI / 180) * a,
+      cos = Math.cos(r),
+      sin = Math.sin(r),
+      resx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+      resy = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+  return [resx, resy];
+};
+
 var pyramid = function(nodes, v) {
 
   var shiftX, shiftY;
 
   nodes.forEach(function(n, i) {
 
-    if(v.orient == "bottom") {
+    if(v.orient == "down") {
 
       shiftX = v.size[0] / (2 * nodes.length);
       shiftY = v.size[1] / (2 * nodes.length);
@@ -541,7 +557,7 @@ var pyramid = function(nodes, v) {
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + shiftY;
 
-    } else if(v.orient == "top") {
+    } else if(v.orient == "up") {
 
       shiftX = v.size[0] / (2 * nodes.length);
       shiftY = v.size[1] / (2 * nodes.length);
@@ -568,6 +584,15 @@ var pyramid = function(nodes, v) {
 
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
+      if(v.rotate !==null) {
+        n["__p"] = [];
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x], n[v.__y], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x] + n[v.__width], n[v.__y], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x] + n[v.__width], n[v.__y] + n[v.__height], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x], n[v.__y] + n[v.__height], v.rotate));
+        n["__p"].push(rotate(n[v.__cx], n[v.__cy], n[v.__x], n[v.__y], v.rotate));
+      }
 
     }
   });
@@ -602,29 +627,6 @@ var radial = function(nodes, v) {
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
-  });
-
-  return nodes;
-};
-
-var rotation = function(nodes, v) {
-
-  var shiftRotate = v.rotate / nodes.length;
-
-  var shiftX = v.size[0]/4, shiftY = v.size[1]/4;
-
-  nodes.forEach(function(n, i) {
-
-    n[v.__x] = shiftX + v.padding + v.offset[0];
-    n[v.__y] = shiftY + v.padding + v.offset[1];
-
-    n[v.__width] = v.size[0] - 2 * v.padding - 2 * shiftX;
-    n[v.__height] = v.size[1] - 2 * v.padding - 2 * shiftY;
-
-    n[v.__cx] = n[v.__x] + n[v.__width] / 2;
-    n[v.__cy] = n[v.__y] + n[v.__height] / 2;
-
-    n[v.__r] = shiftRotate * i;
   });
 
   return nodes;
@@ -790,7 +792,9 @@ var vertical = function(nodes, v) {
     v.height.domain([0, d3Array.max(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
   }
 
-  nodes[0].x0 = v.padding;
+  if(nodes.length > 0) {
+    nodes[0].x0 = v.padding;
+  }
 
   nodes.forEach(function(n, i) {
 
@@ -802,10 +806,11 @@ var vertical = function(nodes, v) {
       n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
     } else if(v.orient === "center") {
       n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + v.margin - v.padding;
-    } else { // defaut down
-      n[v.__y] = 0 + v.offset[1] + v.margin + v.padding;
+    } else { // defaut up
+      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
     }
 
+    n[v.__height] = v.height(_valueHeight(n)) - 2 * v.margin;
     n[v.__width] = v.width(_valueWidth(n));
 
     // Updates the next node's y0 for all nodes but the last one
@@ -814,10 +819,19 @@ var vertical = function(nodes, v) {
     }
 
     n[v.__width] -= 2 * v.margin;
-    n[v.__height] = v.height(_valueHeight(n)) - 2 * v.margin;
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
+    if(v.rotate !==null) {
+      n["__p"] = [];
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x], n[v.__y], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x] + n[v.__width], n[v.__y], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x] + n[v.__width], n[v.__y] + n[v.__height], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x], n[v.__y] + n[v.__height], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x], n[v.__y], v.rotate));
+    }
+
   });
 
   return nodes;
@@ -847,8 +861,8 @@ var gridding = function() {
         "properties": [
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "cascade": {
@@ -892,7 +906,7 @@ var gridding = function() {
       "horizontal": {
         "layout": horizontal,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up"},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -902,26 +916,18 @@ var gridding = function() {
       },
       "pack": {
         "layout": pack$1,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "pyramid": {
         "layout": pyramid,
         "properties": [
           {"key": "orient", "value": "center", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "radial": {
         "layout": radial,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
-      },
-      "rotation": {
-        "layout": rotation,
         "properties": [
           {"key": "orient", "value": "top"}
         ]
@@ -946,14 +952,12 @@ var gridding = function() {
       },
       "treemap": {
         "layout": treemap$1,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -966,7 +970,7 @@ var gridding = function() {
     parentId: function(d, i) { return i === 0 ? null: 0; },
     padding: 0,
     radius: null,
-    rotate: 45,
+    rotate: null,
     rows: null,
     shiftX: null,
     shiftY: null,
@@ -1149,6 +1153,12 @@ var gridding = function() {
   gridding.radius = function(_radius) {
     if(!arguments.length) return vars.radius;
     vars.radius = _radius;
+    return gridding;
+  };
+
+  gridding.rotate = function(_rotate) {
+    if(!arguments.length) return vars.rotate;
+    vars.rotate = _rotate;
     return gridding;
   };
 
