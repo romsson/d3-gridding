@@ -12,7 +12,6 @@ import identity from "./modes/identity";
 import pack from "./modes/pack";
 import pyramid from "./modes/pyramid";
 import radial from "./modes/radial";
-import rotation from "./modes/rotation";
 import stack from "./modes/stack";
 import step from "./modes/step";
 import tree from "./modes/tree";
@@ -43,8 +42,8 @@ export default function() {
         "properties": [
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "cascade": {
@@ -88,7 +87,7 @@ export default function() {
       "horizontal": {
         "layout": horizontal,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up"},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -98,26 +97,18 @@ export default function() {
       },
       "pack": {
         "layout": pack,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "pyramid": {
         "layout": pyramid,
         "properties": [
           {"key": "orient", "value": "center", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "radial": {
         "layout": radial,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
-      },
-      "rotation": {
-        "layout": rotation,
         "properties": [
           {"key": "orient", "value": "top"}
         ]
@@ -142,14 +133,12 @@ export default function() {
       },
       "treemap": {
         "layout": treemap,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -162,7 +151,7 @@ export default function() {
     parentId: function(d, i) { return i === 0 ? null: 0; },
     padding: 0,
     radius: null,
-    rotate: 45,
+    rotate: null,
     rows: null,
     shiftX: null,
     shiftY: null,
@@ -345,6 +334,12 @@ export default function() {
   gridding.radius = function(_radius) {
     if(!arguments.length) return vars.radius;
     vars.radius = _radius;
+    return gridding;
+  }
+
+  gridding.rotate = function(_rotate) {
+    if(!arguments.length) return vars.rotate;
+    vars.rotate = _rotate;
     return gridding;
   }
 

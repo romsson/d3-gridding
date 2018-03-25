@@ -5,7 +5,6 @@ body {
   font-family: Helvetica;
   font-size: 10px;
 }
-
 rect {
   fill: none;
   stroke: black;
@@ -17,28 +16,19 @@ rect {
 <script src="../build/d3-gridding.js"></script>
 <script>
 
-var width = 800,
-    height = 600;
+var width = 400,
+    height = 300;
 
 var gridding = d3.gridding()
-  .params({
-    "size": [width, height],
-    "offset": [0, 0],
-    "mode": "coordinate",
-    "valueX": "__x",
-    "valueY": "__y",
-    "valueWidth": "__width",
-    "valueHeight": "__height"
-  });
+  .size([width, height])
+  .offset([100, 100])
+  .margin(20)
+  .padding(20)
+  .mode("grid");
 
-var layout = {
-  "name": "basic3columns",
-  "values": [
-    {"index": 1, "__x": 10, "__y": 10, "__height": 0, "__width": 0},
-    {"index": 2, "__x": 0, "__y": 0, "__height": 10, "__width": 2, "name": "left"},
-    {"index": 3, "__x": 2, "__y": 0, "__height": 10, "__width": 6, "name": "main"},
-    {"index": 4, "__x": 8, "__y": 0, "__height": 10, "__width": 2, "name": "right"}]
-};
+var data =  d3.range(10).map(function(d, i) {
+  return {index: i};
+});
 
 var svgSquares = d3.select("body").append("svg")
     .attr("width", width)
@@ -46,7 +36,7 @@ var svgSquares = d3.select("body").append("svg")
   .append("g");
 
 svgSquares.selectAll(".square")
-    .data(gridding(layout.values))
+    .data(gridding(data))
   .enter().append("rect")
     .attr("class", "square")
     .attr("width", function(d) { return d.width; })
@@ -54,12 +44,12 @@ svgSquares.selectAll(".square")
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
 svgSquares.selectAll(".index")
-    .data(gridding(layout.values))
+    .data(gridding(data))
   .enter().append("text")
     .attr("class", "index")
     .style('text-anchor', 'middle')
     .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.name; });
+    .text(function(d, i) { return d.index; });
 
 </script>

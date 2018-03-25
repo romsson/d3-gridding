@@ -5,7 +5,11 @@ body {
   font-family: Helvetica;
   font-size: 10px;
 }
-rect {
+.point {
+  fill: black;
+}
+
+rect, circle {
   fill: none;
   stroke: black;
   stroke-width: 1;
@@ -16,16 +20,15 @@ rect {
 <script src="../build/d3-gridding.js"></script>
 <script>
 
-var width = 400,
-    height = 300;
+var width = window.innerWidth,
+    height = window.innerHeight;
 
 var gridding = d3.gridding()
   .size([width, height])
-  .mode("central");
+  .valueY("__value")
+  .mode("horizontal");
 
-var data =  d3.range(10).map(function(d, i) {
-  return {index: i};
-});
+var data =  [1, 10, 1];
 
 var svgSquares = d3.select("body").append("svg")
     .attr("width", width)
@@ -44,9 +47,35 @@ svgSquares.selectAll(".index")
     .data(gridding(data))
   .enter().append("text")
     .attr("class", "index")
-    .style('text-anchor', 'middle')
-    .style('dominant-baseline', 'central')
     .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.index; });
+    .text(function(d, i) { return d.__index; });
+
+window.onresize = function(event) {
+
+  width = window.innerWidth;
+  height = window.innerHeight;
+
+  gridding.size([width, height])
+
+  update();
+};
+
+
+function update() {
+
+  svgSquares.selectAll(".square")
+      .data(gridding(data))
+      .transition().duration(0)
+      .attr("width", function(d) { return d.width; })
+      .attr("height", function(d) { return d.height; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+  svgSquares.selectAll(".index")
+      .data(gridding(data))
+      .transition().duration(0)
+      .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
+      .text(function(d, i) { return d.width; });
+
+}
 
 </script>

@@ -17,15 +17,23 @@ rect {
 <script>
 
 var width = 400,
-    height = 300;
+    height = 400;
 
 var gridding = d3.gridding()
   .size([width, height])
-  .mode("pyramid");
+  .valueX("x")
+  .valueY("y")
+  .valueWidth("w")
+  .valueHeight("h")
+  .prefix("__")
+  .mode("coordinate");
 
-var data =  d3.range(10).map(function(d, i) {
-  return {index: i};
-});
+var data = [
+  {x: "0px", y: "0px", w: "250px", h: "100px"},
+  {x: "250px", y: "100px", w: "150px", h: "300px"}
+];
+
+var griddingData = gridding(data);
 
 var svgSquares = d3.select("body").append("svg")
     .attr("width", width)
@@ -33,20 +41,20 @@ var svgSquares = d3.select("body").append("svg")
   .append("g");
 
 svgSquares.selectAll(".square")
-    .data(gridding(data))
+    .data(griddingData)
   .enter().append("rect")
     .attr("class", "square")
-    .attr("width", function(d) { return d.width; })
-    .attr("height", function(d) { return d.height; })
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("width", function(d) { return d.__width; })
+      .attr("height", function(d) { return d.__height; })
+      .attr("transform", function(d) { return "translate(" + d.__x + "," + d.__y + ")"; })
 
 svgSquares.selectAll(".index")
-    .data(gridding(data))
+    .data(griddingData)
   .enter().append("text")
     .attr("class", "index")
     .style('text-anchor', 'middle')
     .style('dominant-baseline', 'central')
-    .attr("transform", function(d) { return "translate(" + d.cx + "," + d.cy + ")"; })
-    .text(function(d, i) { return d.index; });
+    .attr("transform", function(d) { return "translate(" + d.__cx + "," + d.__cy + ")"; })
+    .text(function(d, i) { return d.x + " x " + d.y; });
 
 </script>

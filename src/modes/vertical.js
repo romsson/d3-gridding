@@ -1,4 +1,5 @@
 import * as d3Array from "d3-array";
+import rotate from "../utils/rotate";
 
 export default function(nodes, v) {
 
@@ -26,7 +27,9 @@ export default function(nodes, v) {
     v.height.domain([0, d3Array.max(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
   }
 
-  nodes[0].x0 = v.padding;
+  if(nodes.length > 0) {
+    nodes[0].x0 = v.padding;
+  }
 
   nodes.forEach(function(n, i) {
 
@@ -38,10 +41,11 @@ export default function(nodes, v) {
       n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
     } else if(v.orient === "center") {
       n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + v.margin - v.padding;
-    } else { // defaut down
-      n[v.__y] = 0 + v.offset[1] + v.margin + v.padding;
+    } else { // defaut up
+      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
     }
 
+    n[v.__height] = v.height(_valueHeight(n)) - 2 * v.margin;
     n[v.__width] = v.width(_valueWidth(n));
 
     // Updates the next node's y0 for all nodes but the last one
@@ -50,10 +54,19 @@ export default function(nodes, v) {
     }
 
     n[v.__width] -= 2 * v.margin;
-    n[v.__height] = v.height(_valueHeight(n)) - 2 * v.margin;
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
+
+    if(v.rotate !==null) {
+      n["__p"] = [];
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x], n[v.__y], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x] + n[v.__width], n[v.__y], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x] + n[v.__width], n[v.__y] + n[v.__height], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x], n[v.__y] + n[v.__height], v.rotate));
+      n["__p"].push(rotate(v.size[0] / 2, v.size[1] / 2, n[v.__x], n[v.__y], v.rotate));
+    }
+
   });
 
   return nodes;
