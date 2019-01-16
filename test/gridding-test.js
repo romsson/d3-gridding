@@ -81,4 +81,15 @@ tape("data = (array-like) should return a grid", function(test) {
   test.end();
 });
 
+tape("value = function(d,i) should extract values", function(test) {
+  var data = [1, 2, 3];
+  var value = function(d,i) {
+    return d * d + i;
+  };
+  var grid = gridding.gridding().value(value).size([10, 20]);
+  test.equal(grid(data)[2].__value, value(data[2], 2));
+  test.end();
+});
+
+
 

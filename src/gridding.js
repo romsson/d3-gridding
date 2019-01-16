@@ -182,24 +182,14 @@ export default function() {
     if (!nodes) {
       nodes = [];
     } else {
-      nodes = Array.from(nodes);
-    }
-
-    } if(typeof vars.value(nodes) === "undefined" || vars.value(nodes) === "" || vars.value(nodes) === null) {
-
-      nodes = [];
-
-    } else if(typeof vars.value(nodes)[0] !== "object") {
-
-      nodes = Array.prototype.map.call(nodes, function(d, i) {
-        return {"__value": d, "__index": i};
+      nodes = Array.from(nodes, function(d,i) {
+        var value = vars.value(d,i);
+        if (typeof value !== "object")
+          value = {"__value": value, "__index": i};
+        return value;
       });
-
-    } else {
-
-      nodes = vars.value(nodes);
     }
-
+    
     nodes.forEach(function(n) {
       n[vars.__r] = 0;
     })
