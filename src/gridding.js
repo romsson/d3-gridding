@@ -179,9 +179,11 @@ export default function() {
     vars.__cy = vars.__prefix + "cy";
     vars.__r = vars.__prefix + "r";
 
-    if(typeof nodes === "undefined" || nodes === "" || nodes === null) {
-
+    if (!nodes) {
       nodes = [];
+    } else {
+      nodes = Array.from(nodes);
+    }
 
     } if(typeof vars.value(nodes) === "undefined" || vars.value(nodes) === "" || vars.value(nodes) === null) {
 
