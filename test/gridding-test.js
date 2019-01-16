@@ -70,4 +70,15 @@ tape("data = ['A'] should return a 1-element grid", function(test) {
   test.end();
 });
 
+tape("data = (array-like) should return a grid", function(test) {
+  var data = {
+    0: "Hello",
+    1: "World",
+    length: 2
+  };
+  var grid = gridding.gridding().size([10, 20]);
+  test.equal(grid(data).length, 2);
+  test.end();
+});
+
 
