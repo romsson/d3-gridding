@@ -1,5 +1,6 @@
 import * as d3Array from "d3-array";
 import rotate from "../utils/rotate";
+import {margin} from "../utils/margin.js";
 
 export default function(nodes, v) {
 
@@ -33,19 +34,19 @@ export default function(nodes, v) {
 
   nodes.forEach(function(n, i) {
 
-    n[v.__x] = n.x0 + v.offset[0] + v.margin;
+    n[v.__x] = n.x0 + v.offset[0] + margin(v, "left");
 
     if(v.orient === "down") {
-      n[v.__y] = 0 + v.offset[1] + v.margin + v.padding;
+      n[v.__y] = 0 + v.offset[1] + margin(v, "top") + v.padding;
     } else if(v.orient === "up") {
-      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
+      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + margin(v, "bottom") - v.padding;
     } else if(v.orient === "center") {
-      n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + v.margin - v.padding;
+      n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + margin(v, "top") - v.padding;
     } else { // defaut up
-      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
+      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + margin(v, "bottom") - v.padding;
     }
 
-    n[v.__height] = v.height(_valueHeight(n)) - 2 * v.margin;
+    n[v.__height] = v.height(_valueHeight(n)) - margin(v, "top") - margin(v, "bottom");
     n[v.__width] = v.width(_valueWidth(n));
 
     // Updates the next node's y0 for all nodes but the last one
@@ -53,7 +54,7 @@ export default function(nodes, v) {
       nodes[i+1].x0 = n.x0 + n[v.__width];
     }
 
-    n[v.__width] -= 2 * v.margin;
+    n[v.__width] -= margin(v, "left") + margin(v, "right");
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;

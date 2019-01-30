@@ -1,3 +1,5 @@
+import {margin} from "../utils/margin.js";
+
 export default function(nodes, v) {
 
   if(v.sort) {
@@ -25,11 +27,11 @@ export default function(nodes, v) {
     v.size[1] = v.cellSize[1] * _rows;
   }
 
-  v.width.domain([0, nodes.length]).range([v.margin, v.size[0] - 2 * v.padding - 2 * v.margin]);
-  v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding - 2 * v.margin]);
+  v.width.domain([0, nodes.length]).range([margin(v, "left"), v.size[0] - v.padding - margin(v, "horizontal")]);
+  v.height.domain([0, 1]).range([0, v.size[1] - v.padding - margin(v, "vertical")]);
 
-  v.x.domain([0, _cols]).range([v.margin, v.size[0] - v.margin]);
-  v.y.domain([0, _rows]).range([v.margin, v.size[1] - v.margin]);
+  v.x.domain([0, _cols]).range([margin(v, "left"), v.size[0] - margin(v, "right")]);
+  v.y.domain([0, _rows]).range([margin(v, "top"), v.size[1] - margin(v, "bottom")]);
 
   nodes.forEach(function(n, i) {
 
@@ -39,8 +41,8 @@ export default function(nodes, v) {
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
-    n[v.__width] = (v.size[0] - 2 * v.margin) / _cols - 2 * v.padding ;
-    n[v.__height] = (v.size[1] - 2 * v.margin) / _rows - 2 * v.padding;
+    n[v.__width] = (v.size[0] - margin(v, "horizontal")) / _cols - 2 * v.padding ;
+    n[v.__height] = (v.size[1] - margin(v, "vertical")) / _rows - 2 * v.padding;
 
     if(v.orient == "up") {
       n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
