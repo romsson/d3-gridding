@@ -179,25 +179,17 @@ export default function() {
     vars.__cy = vars.__prefix + "cy";
     vars.__r = vars.__prefix + "r";
 
-    if(typeof nodes === "undefined" || nodes === "" || nodes === null) {
-
+    if (!nodes) {
       nodes = [];
-
-    } if(typeof vars.value(nodes) === "undefined" || vars.value(nodes) === "" || vars.value(nodes) === null) {
-
-      nodes = [];
-
-    } else if(typeof vars.value(nodes)[0] !== "object") {
-
-      nodes = Array.prototype.map.call(nodes, function(d, i) {
-        return {"__value": d, "__index": i};
-      });
-
     } else {
-
-      nodes = vars.value(nodes);
+      nodes = Array.from(nodes, function(d,i) {
+        var value = vars.value(d,i);
+        if (typeof value !== "object")
+          value = {"__value": value, "__index": i};
+        return value;
+      });
     }
-
+    
     nodes.forEach(function(n) {
       n[vars.__r] = 0;
     })

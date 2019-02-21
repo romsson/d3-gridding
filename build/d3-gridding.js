@@ -1,4 +1,4 @@
-// https://github.com/romsson/d3-gridding Version 0.0.11. Copyright 2018 Romain Vuillemot.
+// https://github.com/romsson/d3-gridding Version 0.0.11. Copyright 2019 Romain Vuillemot.
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3-scale'), require('d3-array'), require('d3-hierarchy'), require('d3-shape')) :
 	typeof define === 'function' && define.amd ? define('d3-gridding', ['exports', 'd3-scale', 'd3-array', 'd3-hierarchy', 'd3-shape'], factory) :
@@ -543,7 +543,7 @@ var pyramid = function(nodes, v) {
 
   nodes.forEach(function(n, i) {
 
-    if(v.orient == "bottom") {
+    if(v.orient == "down") {
 
       shiftX = v.size[0] / (2 * nodes.length);
       shiftY = v.size[1] / (2 * nodes.length);
@@ -557,7 +557,7 @@ var pyramid = function(nodes, v) {
       n[v.__cx] = n[v.__x] + n[v.__width] / 2;
       n[v.__cy] = n[v.__y] + shiftY;
 
-    } else if(v.orient == "top") {
+    } else if(v.orient == "up") {
 
       shiftX = v.size[0] / (2 * nodes.length);
       shiftY = v.size[1] / (2 * nodes.length);
@@ -806,8 +806,8 @@ var vertical = function(nodes, v) {
       n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
     } else if(v.orient === "center") {
       n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + v.margin - v.padding;
-    } else { // defaut down
-      n[v.__y] = 0 + v.offset[1] + v.margin + v.padding;
+    } else { // defaut up
+      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + v.margin - v.padding;
     }
 
     n[v.__height] = v.height(_valueHeight(n)) - 2 * v.margin;
@@ -861,8 +861,8 @@ var gridding = function() {
         "properties": [
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "cascade": {
@@ -906,7 +906,7 @@ var gridding = function() {
       "horizontal": {
         "layout": horizontal,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up"},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -916,16 +916,14 @@ var gridding = function() {
       },
       "pack": {
         "layout": pack$1,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "pyramid": {
         "layout": pyramid,
         "properties": [
           {"key": "orient", "value": "center", "default": true},
-          {"key": "orient", "value": "top"},
-          {"key": "orient", "value": "bottom"}
+          {"key": "orient", "value": "up"},
+          {"key": "orient", "value": "down"}
         ]
       },
       "radial": {
@@ -954,14 +952,12 @@ var gridding = function() {
       },
       "treemap": {
         "layout": treemap$1,
-        "properties": [
-          {"key": "orient", "value": "top"}
-        ]
+        "properties": []
       },
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"key": "orient", "value": "top"},
+          {"key": "orient", "value": "up", "default": true},
           {"key": "orient", "value": "left"},
           {"key": "orient", "value": "right"},
           {"key": "orient", "value": "center"},
@@ -1002,25 +998,17 @@ var gridding = function() {
     vars.__cy = vars.__prefix + "cy";
     vars.__r = vars.__prefix + "r";
 
-    if(typeof nodes === "undefined" || nodes === "" || nodes === null) {
-
+    if (!nodes) {
       nodes = [];
-
-    } if(typeof vars.value(nodes) === "undefined" || vars.value(nodes) === "" || vars.value(nodes) === null) {
-
-      nodes = [];
-
-    } else if(typeof vars.value(nodes)[0] !== "object") {
-
-      nodes = Array.prototype.map.call(nodes, function(d, i) {
-        return {"__value": d, "__index": i};
-      });
-
     } else {
-
-      nodes = vars.value(nodes);
+      nodes = Array.from(nodes, function(d,i) {
+        var value = vars.value(d,i);
+        if (typeof value !== "object")
+          value = {"__value": value, "__index": i};
+        return value;
+      });
     }
-
+    
     nodes.forEach(function(n) {
       n[vars.__r] = 0;
     });
