@@ -1,4 +1,5 @@
 import * as d3Array from "d3-array";
+import {margin} from "../utils/margin.js";
 
 export default function(nodes, v) {
 
@@ -53,24 +54,24 @@ export default function(nodes, v) {
 
     } else if(v.orient === "top") {
 
-      n[v.__width] = v.width(_valueWidth(n, i)) - 2 * v.margin;
-      n[v.__height] = v.height(_valueHeight(n, i)) - 2 * v.margin;
+      n[v.__width] = v.width(_valueWidth(n, i)) - margin(v, "horizontal");
+      n[v.__height] = v.height(_valueHeight(n, i)) - margin(v, "vertical");
 
       n[v.__x] = 0 + v.offset[0] + (v.size[0] / 2) - (n[v.__width] / 2) + v.padding;
       n[v.__y] = 0 + v.offset[1] + v.padding;
 
     } else if(v.orient === "bottom") {
 
-      n[v.__width] = v.width(_valueWidth(n, i)) - 2 * v.margin;
-      n[v.__height] = v.size[1] - 10 - 3*i;// v.height(_valueHeight(n, i)) - 2 * v.margin;
+      n[v.__width] = v.width(_valueWidth(n, i)) - margin(v, "horizontal");
+      n[v.__height] = v.size[1] - 10 - 3*i;// v.height(_valueHeight(n, i)) - margin(v, "vertical");
 
       n[v.__x] = 0 + v.offset[0] + (v.size[0] / 2) - (n[v.__width] / 2) + 2 * i;
       n[v.__y] = 0 + v.offset[1] + v.size[1] - n[v.__height];
 
     } else if(v.orient === "middle") {
 
-      n[v.__width] = v.width(_valueWidth(n, i)) - 2 * v.margin;
-      n[v.__height] = v.height(_valueHeight(n, i)) - 2 * v.margin;
+      n[v.__width] = v.width(_valueWidth(n, i)) - margin(v, "horizontal");
+      n[v.__height] = v.height(_valueHeight(n, i)) - margin(v, "vertical");
 
       n[v.__x] = 0 + v.offset[0] + (v.size[0] / 2) - (n[v.__width] / 2);
       n[v.__y] = 0 + v.offset[1] + (v.size[1] / 2) - (n[v.__height] / 2);
@@ -79,8 +80,8 @@ export default function(nodes, v) {
 
       n[v.__x] = 0 + v.offset[0];
       n[v.__y] = 0 + v.offset[1];
-      n[v.__width] = v.width(_valueWidth(n, i)) - 2 * v.margin;
-      n[v.__height] = v.height(_valueHeight(n, i)) - 2 * v.margin;
+      n[v.__width] = v.width(_valueWidth(n, i)) - margin(v, "horizontal");
+      n[v.__height] = v.height(_valueHeight(n, i)) - margin(v, "vertical");
 
     }
 
