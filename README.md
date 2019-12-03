@@ -30,8 +30,8 @@ Create rapid mock-ups for D3 charts, using data-driven grids.
 <!DOCTYPE html>
 <meta charset="utf-8">
 <body>
-<script src="http://d3js.org/d3.v4.js"></script>
-<script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
+<script src="https://unpkg.com/d3@5"></script>
+<script src="https://unpkg.com/d3-gridding@0.1"></script>
 <script>
 
 var width = 400,
@@ -107,7 +107,7 @@ d3.select("body").append("svg")
 **To use**, include the `d3-gridding.js` JavaScript file in your HTML code or use the following:
 
 ```html
-<script src="http://romsson.github.io/d3-gridding/build/d3-gridding.js"></script>
+<script src="https://unpkg.com/d3-gridding@0.1"></script>
 ```
 
 Output below and [live coding version](http://blockbuilder.org/romsson/1e1cd0f8af1c2c043ff54299ce8fa13f).
