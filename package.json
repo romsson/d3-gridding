@@ -32,18 +32,18 @@
     "eslint": "^6.6.0",
     "eslint-plugin-es5": "1",
     "esm": "3",
-    "package-preamble": "0.0.2",
+    "package-preamble": "0.1",
     "rollup": "1",
     "rollup-plugin-terser": "5",
     "tape": "4",
-    "uglify-js": "^2.8.11",
-    "watch": "^1.0.0"
+    "uglify-js": "3",
+    "watch": "1"
   },
   "dependencies": {
     "d3": "4 - 5",
-    "d3-array": "^1.0.2",
+    "d3-array": "1 - 2",
     "d3-hierarchy": "^1.1.4",
-    "d3-scale": "^1.0.1",
+    "d3-scale": "2.1.2",
     "d3-shape": "^1.0.2"
   }
 }
