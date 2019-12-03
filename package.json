@@ -10,7 +10,8 @@
   ],
   "license": "BSD-3-Clause",
   "main": "build/d3-gridding.js",
-  "jsnext:main": "index",
+  "module": "index.js",
+  "jsnext:main": "index.js",
   "homepage": "https://github.com/romsson/d3-gridding",
   "repository": {
     "type": "git",
