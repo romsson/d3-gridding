@@ -8,24 +8,28 @@
     "grid",
     "visualization"
   ],
-  "license": "BSD-3-Clause",
-  "main": "dist/d3-gridding.js",
-  "module": "index.js",
-  "jsnext:main": "index.js",
   "homepage": "https://github.com/romsson/d3-gridding",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/romsson/d3-gridding.git"
-  },
+  "license": "BSD-3-Clause",
   "author": {
     "name": "Romain Vuillemot",
     "url": "http://romain.vuillemot.net/"
   },
+  "main": "dist/d3-gridding.js",
+  "unpkg": "dist/d3-gridding.min.js",
+  "jsdelivr": "dist/d3-gridding.min.js",
+  "module": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/romsson/d3-gridding.git"
+  },
+  "files": [
+    "dist/**/*.js",
+    "src/**/*.js"
+  ],
   "scripts": {
-    "pretest": "rm -rf dist && mkdir dist && rollup --banner \"$(preamble)\" -c rollup.config.js -f umd -g d3-array:d3,d3-shape:d3,d3-scale:d3,d3-hierarchy:d3 -n d3 -o dist/d3-gridding.js -- index.js",
-    "test": "tape -r esm 'test/**/*-test.js' && eslint index.js src test",
-    "prepublish": "npm run test && uglifyjs --preamble \"$(preamble)\" dist/d3-gridding.js -c -m -o dist/d3-gridding.min.js",
-    "prepublish:watch": "watch 'npm run pretest' ./src ./test",
+    "pretest": "rollup -c",
+    "test": "tape -r esm 'test/**/*-test.js' && eslint src",
+    "prepublish": "rm -rf dist && yarn test",
     "postpublish": "zip -j dist/d3-gridding.zip -- LICENSE README.md dist/d3-gridding.js dist/d3-gridding.min.js"
   },
   "devDependencies": {

@@ -18,7 +18,7 @@ import tree from "./modes/tree";
 import treemap from "./modes/treemap";
 import vertical from "./modes/vertical";
 
-export default function() {
+export function gridding() {
 
   var vars = {
     __prefix: "",
