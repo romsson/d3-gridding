@@ -7,33 +7,35 @@ export default function(nodes, v) {
     nodes = nodes.sort(v.sort);
   }
 
-  var _valueHeight;
+  var _valueHeight, _valueWidth, domain;
 
-  if(!v.valueHeight) {
+  if (!v.valueHeight) {
     _valueHeight = function() { return 1; }
-    v.height.domain([0, nodes.length]).range([0, v.size[1] - 2 * v.padding]);
+    domain = [0, nodes.length];
   } else {
     _valueHeight = v.valueHeight;
-    v.height.domain([0, d3Array.sum(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
+    domain = [0, d3Array.sum(nodes, _valueHeight)];
   }
+  v.height.domain(domain)
+    .range([0, Math.max(1, v.size[1] - 2 * v.padding - nodes.length * (margin(v,"top") + margin(v,"bottom")))]);
 
-  var _valueWidth;
-
-  if(!v.valueWidth) {
+  if (!v.valueWidth) {
     _valueWidth = function() { return 1; }
-    v.width.domain([0, 1]).range([0, v.size[0] - 2 * v.padding - margin(v, "left") - margin(v, "right")]);
+    domain = [0, 1];
   } else {
     _valueWidth = v.valueWidth;
-    v.width.domain([0, d3Array.max(nodes, _valueWidth)]).range([0, v.size[0] - 2 * v.padding - margin(v, "left") - margin(v, "right")]);
+    domain = [0, d3Array.max(nodes, _valueWidth)];
   }
+  v.width.domain(domain)
+    .range([0, Math.max(1, v.size[0] - 2 * v.padding - margin(v, "left") - margin(v, "right"))]);
 
-  if(nodes.length > 0) {
+  if (nodes.length > 0) {
     nodes[0].y0 = v.padding;
   }
 
   nodes.forEach(function(n, i) {
 
-    n[v.__y] = n.y0 + v.offset[1] + margin(v, "top");
+    n[v.__y] = n.y0 + v.offset[1] + (i+1) * (margin(v, "top")) + i * margin(v, "bottom");
 
     if(v.orient === "right") {
       n[v.__x] = 0 + v.offset[0] + v.padding + margin(v, "left");
@@ -55,8 +57,6 @@ export default function(nodes, v) {
     if(i < nodes.length - 1) {
       nodes[i+1].y0 = n.y0 + n[v.__height];
     }
-
-    n[v.__height] -= margin(v, "top") + margin(v, "bottom");
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
