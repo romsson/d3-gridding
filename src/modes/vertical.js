@@ -1,6 +1,7 @@
-import * as d3Array from "d3-array";
-import rotate from "../utils/rotate";
+import {max, sum} from "d3-array";
 import {margin} from "../utils/margin.js";
+import {constant} from "../utils/constant.js";
+import rotate from "../utils/rotate";
 
 export default function(nodes, v) {
 
@@ -8,25 +9,17 @@ export default function(nodes, v) {
     nodes = nodes.sort(v.sort);
   }
 
-  var _valueWidth;
+  var _valueHeight = v.valueHeight ? v.valueHeight : constant(1),
+      _valueWidth = v.valueWidth ? v.valueWidth : constant(1),
+      heights = nodes.map(_valueHeight),
+      widths = nodes.map(_valueWidth);
+  
+  v.height.domain([0, max(heights)])
+    .range([0, Math.max(1, v.size[1] - 2 * v.padding - (margin(v,"top") + margin(v,"bottom")))]);
 
-  if(!v.valueWidth) {
-    _valueWidth = function() { return 1; }
-    v.width.domain([0, nodes.length]).range([0, v.size[0] - 2 * v.padding]);
-  } else {
-    _valueWidth = v.valueWidth;
-    v.width.domain([0, d3Array.sum(nodes, _valueWidth)]).range([0, v.size[0] - 2 * v.padding]);
-  }
+  v.width.domain([0, sum(widths)])
+    .range([0, Math.max(1, v.size[0] - 2 * v.padding - nodes.length * (margin(v, "left") + margin(v, "right")))]);
 
-  var _valueHeight;
-
-  if(!v.valueHeight) {
-    _valueHeight = function() { return 1; }
-    v.height.domain([0, 1]).range([0, v.size[1] - 2 * v.padding]);
-  } else {
-    _valueHeight = v.valueHeight;
-    v.height.domain([0, d3Array.max(nodes, _valueHeight)]).range([0, v.size[1] - 2 * v.padding]);
-  }
 
   if(nodes.length > 0) {
     nodes[0].x0 = v.padding;
@@ -34,27 +27,25 @@ export default function(nodes, v) {
 
   nodes.forEach(function(n, i) {
 
-    n[v.__x] = n.x0 + v.offset[0] + margin(v, "left");
+    n[v.__x] = n.x0 + v.offset[0] + (i+1) * (margin(v, "left")) + i * margin(v, "right");
 
     if(v.orient === "down") {
       n[v.__y] = 0 + v.offset[1] + margin(v, "top") + v.padding;
     } else if(v.orient === "up") {
-      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + margin(v, "bottom") - v.padding;
+      n[v.__y] = v.size[1] - v.height(heights[i]) + v.offset[1] + margin(v, "bottom") - v.padding;
     } else if(v.orient === "center") {
-      n[v.__y] = (v.size[1] / 2) - v.height(_valueHeight(n)) / 2 + v.offset[1] + margin(v, "top") - v.padding;
+      n[v.__y] = (v.size[1] / 2) - v.height(heights[i]) / 2 + v.offset[1] + margin(v, "top") - v.padding;
     } else { // defaut up
-      n[v.__y] = v.size[1] - v.height(_valueHeight(n)) + v.offset[1] + margin(v, "bottom") - v.padding;
+      n[v.__y] = v.size[1] - v.height(heights[i]) + v.offset[1] + margin(v, "bottom") - v.padding;
     }
 
-    n[v.__height] = v.height(_valueHeight(n)) - margin(v, "top") - margin(v, "bottom");
-    n[v.__width] = v.width(_valueWidth(n));
+    n[v.__height] = v.height(heights[i]);
+    n[v.__width] = v.width(widths[i]);
 
     // Updates the next node's y0 for all nodes but the last one
     if(i < nodes.length - 1) {
       nodes[i+1].x0 = n.x0 + n[v.__width];
     }
-
-    n[v.__width] -= margin(v, "left") + margin(v, "right");
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
