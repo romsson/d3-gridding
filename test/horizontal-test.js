@@ -56,3 +56,20 @@ tape("horizontal offset", function(test) {
   test.deepEqual(nodes.map(function(d) { return d.height === 200 / nodes.length; }), [true, true, true, true]);
   test.end();
 });
+
+tape("horizontal layout works with margins", function(test) {
+
+  var nodes = [{w:1}, {w:2}, {w:3}];
+
+  var grid = gridding.gridding()
+    .valueHeight(d => d.w)
+    .mode("vertical")
+    .size([54, 30]).margin(3);
+  grid(nodes);
+
+  test.deepEqual(nodes.map(function(d) { return d.x; }), [3, 21, 39]);
+  test.deepEqual(nodes.map(function(d) { return d.y; }), [3, 3, 3]);
+  test.deepEqual(nodes.map(function(d) { return d.height; }), [8, 16, 24]);
+  test.deepEqual(nodes.map(function(d) { return d.width; }), [12, 12, 12]);
+  test.end();
+});
