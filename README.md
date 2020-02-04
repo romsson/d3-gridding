@@ -160,7 +160,7 @@ var gridding = d3.gridding()
 
 ## Layouts
 
-Layouts help to divde and organize a page into regions. Layouts actually are grids that are generated with some dataset that can be seen as proportions. Below is an example of dataset that is from this [list of layouts](https://romsson.github.io/d3-gridding/example/utils/layouts.js). See the <a href="https://romsson.github.io/d3-gridding/example/layout-all.html">layout list</a> and source code.
+Layouts help to divide and organize a page into regions. Layouts actually are grids that are generated with some dataset that can be seen as proportions. Below is an example of dataset that is from this [list of layouts](https://romsson.github.io/d3-gridding/example/utils/layouts.js). See the <a href="https://romsson.github.io/d3-gridding/example/layout-all.html">layout list</a> and source code.
 
 ```
 var layout = {
