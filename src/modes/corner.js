@@ -39,7 +39,7 @@ export default function(nodes, v) {
 
     if(v.orient === "top right") {
 
-      n[v.__x] = v.size[0] - n.width + v.offset[0];
+      n[v.__x] = v.size[0] - n[v.__width] + v.offset[0];
       n[v.__y] = 0 + v.offset[1];
 
     } else if(v.orient === "bottom right") {
