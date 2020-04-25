@@ -21,13 +21,11 @@ export default function(nodes, v) {
     .range([0, Math.max(1, v.size[0] - 2 * v.padding - nodes.length * (margin(v, "left") + margin(v, "right")))]);
 
 
-  if(nodes.length > 0) {
-    nodes[0].x0 = v.padding;
-  }
+  let x0 = v.padding;
 
   nodes.forEach(function(n, i) {
 
-    n[v.__x] = n.x0 + v.offset[0] + (i+1) * (margin(v, "left")) + i * margin(v, "right");
+    n[v.__x] = x0 + v.offset[0] + (i+1) * (margin(v, "left")) + i * margin(v, "right");
 
     if(v.orient === "down") {
       n[v.__y] = 0 + v.offset[1] + margin(v, "top") + v.padding;
@@ -42,10 +40,7 @@ export default function(nodes, v) {
     n[v.__height] = v.height(heights[i]);
     n[v.__width] = v.width(widths[i]);
 
-    // Updates the next node's y0 for all nodes but the last one
-    if(i < nodes.length - 1) {
-      nodes[i+1].x0 = n.x0 + n[v.__width];
-    }
+    x0 += n[v.__width];
 
     n[v.__cx] = n[v.__x] + n[v.__width] / 2;
     n[v.__cy] = n[v.__y] + n[v.__height] / 2;
