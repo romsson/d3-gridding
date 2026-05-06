@@ -1,5 +1,7 @@
-import {terser} from "rollup-plugin-terser";
-import * as meta from "./package.json";
+import terser from "@rollup/plugin-terser";
+import { readFileSync } from "fs";
+
+const meta = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const config = {
   input: "src/index.js",
@@ -11,7 +13,8 @@ const config = {
     indent: false,
     extend: true,
     banner: `// ${meta.homepage} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author.name}`,
-    globals: Object.assign({}, ...Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)).map(key => ({[key]: "d3"})))
+    globals: Object.assign({}, ...Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)).map(key => ({ [key]: "d3" }))),
+    sourcemap: true
   },
   plugins: []
 };
@@ -22,10 +25,17 @@ export default [
     ...config,
     output: {
       ...config.output,
+      file: `dist/${meta.name}.esm.js`,
+      format: "esm"
+    }
+  },
+  {
+    ...config,
+    output: {
+      ...config.output,
       file: `dist/${meta.name}.min.js`
     },
     plugins: [
-      ...config.plugins,
       terser({
         output: {
           preamble: config.output.banner

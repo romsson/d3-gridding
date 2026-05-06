@@ -1,56 +1,59 @@
-import {margin} from "../utils/margin.js";
+import { margin } from "../utils/margin.js";
 
-export default function(nodes, v) {
+export default function (nodes, v) {
 
-  if(v.sort) {
+  if (v.sort) {
     nodes = nodes.sort(v.sort);
   }
 
-  var _cols;
+  let _cols;
 
-  if(!v.cols) {
+  if (!v.cols) {
     _cols = Math.ceil(Math.sqrt(nodes.length));
   } else {
     _cols = v.cols;
   }
 
-  var _rows;
+  let _rows;
 
-  if(!v.rows) {
+  if (!v.rows) {
     _rows = Math.ceil(nodes.length / _cols);
   } else {
     _rows = v.rows;
   }
 
-  if(v.cellSize) {
-    v.size[0] = v.cellSize[0] * _cols;
-    v.size[1] = v.cellSize[1] * _rows;
+  let effectiveWidth = v.size[0];
+  let effectiveHeight = v.size[1];
+
+  if (v.cellSize) {
+    effectiveWidth = v.cellSize[0] * _cols;
+    effectiveHeight = v.cellSize[1] * _rows;
   }
 
-  v.width.domain([0, nodes.length]).range([margin(v, "left"), v.size[0] - v.padding - margin(v, "horizontal")]);
-  v.height.domain([0, 1]).range([0, v.size[1] - v.padding - margin(v, "vertical")]);
+  v.width.domain([0, nodes.length]).range([margin(v, "left"), effectiveWidth - v.padding - margin(v, "horizontal")]);
+  v.height.domain([0, 1]).range([0, effectiveHeight - v.padding - margin(v, "vertical")]);
 
-  v.x.domain([0, _cols]).range([margin(v, "left"), v.size[0] - margin(v, "right")]);
-  v.y.domain([0, _rows]).range([margin(v, "top"), v.size[1] - margin(v, "bottom")]);
+  v.x.domain([0, _cols]).range([margin(v, "left"), effectiveWidth - margin(v, "right")]);
+  v.y.domain([0, _rows]).range([margin(v, "top"), effectiveHeight - margin(v, "bottom")]);
 
-  nodes.forEach(function(n, i) {
+  nodes.forEach((n, i) => {
 
-    var col = i % _cols;
-    var row = Math.floor(i / _cols);
+    const col = i % _cols;
+    const row = Math.floor(i / _cols);
 
     n[v.__x] = v.x(col) + v.offset[0] + v.padding;
     n[v.__y] = v.y(row) + v.offset[1] + v.padding;
 
-    n[v.__width] = (v.size[0] - margin(v, "horizontal")) / _cols - 2 * v.padding ;
-    n[v.__height] = (v.size[1] - margin(v, "vertical")) / _rows - 2 * v.padding;
+    n[v.__width] = (effectiveWidth - margin(v, "horizontal")) / _cols - 2 * v.padding;
+    n[v.__height] = (effectiveHeight - margin(v, "vertical")) / _rows - 2 * v.padding;
 
-    if(v.orient == "up") {
-      n[v.__y] = v.size[1] - n[v.__y] - n[v.__height];
-    } else if(v.orient == "down") {
+    if (v.orient == "up") {
+      n[v.__y] = effectiveHeight - n[v.__y] - n[v.__height];
+    } else if (v.orient == "down") {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
-    } else if(v.orient == "left") {
+    } else if (v.orient == "left") {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
-    } else if(v.orient == "right") {
+    } else if (v.orient == "right") {
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;
     } else { // default down
       n[v.__y] = v.y(row) + v.offset[1] + v.padding;

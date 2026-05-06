@@ -22,9 +22,9 @@ At this point any change made in ./src and ./test will trigger a new compilation
 
 To only compile the library run:
 
-> npm run postpublish
+> npm run build
 
-Will create the build/d3-gridding.js and  build/d3-gridding.min.js files
+Will create the dist/d3-gridding.js, dist/d3-gridding.esm.js and dist/d3-gridding.min.js files
 
 To check if this works, then go to the example/ folders and open the URL below and you should see a grid with all the grids inside:
 

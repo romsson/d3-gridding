@@ -20,7 +20,7 @@ import vertical from "./modes/vertical";
 
 export function gridding() {
 
-  var vars = {
+  const vars = {
     __prefix: "",
     __x: "",
     __y: "",
@@ -32,7 +32,7 @@ export function gridding() {
     cellSize: null,
     cols: null,
     height: d3Scale.scaleLinear(),
-    id: function(d, i) { return i; },
+    id: function (d, i) { return i; },
     layout: identity,
     margin: 0,
     mode: "identity",
@@ -40,10 +40,10 @@ export function gridding() {
       "brick": {
         "layout": brick,
         "properties": [
-          {"key": "orient", "value": "left"},
-          {"key": "orient", "value": "right", "default": true},
-          {"key": "orient", "value": "up"},
-          {"key": "orient", "value": "down"}
+          { "key": "orient", "value": "left" },
+          { "key": "orient", "value": "right", "default": true },
+          { "key": "orient", "value": "up" },
+          { "key": "orient", "value": "down" }
         ]
       },
       "cascade": {
@@ -59,40 +59,40 @@ export function gridding() {
       "coordinate": {
         "layout": coordinate,
         "properties": [
-          {"key": "valueX", "value": null},
-          {"key": "valueY", "value": null}
+          { "key": "valueX", "value": null },
+          { "key": "valueY", "value": null }
         ]
       },
       "corner": {
         "layout": corner,
         "properties": [
-          {"key": "orient", "value": "top right"}
+          { "key": "orient", "value": "top right" }
         ]
       },
       "diagonal": {
         "layout": diagonal,
         "properties": [
-          {"key": "orient", "value": "top"}
+          { "key": "orient", "value": "top" }
         ]
       },
       "grid": {
         "layout": grid,
         "properties": [
-          {"key": "orient", "value": "up"},
-          {"key": "orient", "value": "down", "default": true},
-          {"key": "orient", "value": "left"},
-          {"key": "orient", "value": "right"}
+          { "key": "orient", "value": "up" },
+          { "key": "orient", "value": "down", "default": true },
+          { "key": "orient", "value": "left" },
+          { "key": "orient", "value": "right" }
         ]
       },
       "horizontal": {
         "layout": horizontal,
         "properties": [
-          {"key": "orient", "value": "up"},
-          {"key": "orient", "value": "left"},
-          {"key": "orient", "value": "right"},
-          {"key": "orient", "value": "center"},
-          {"key": "valueY", "value": null},
-          {"key": "valueWidth", "value": null}
+          { "key": "orient", "value": "up" },
+          { "key": "orient", "value": "left" },
+          { "key": "orient", "value": "right" },
+          { "key": "orient", "value": "center" },
+          { "key": "valueY", "value": null },
+          { "key": "valueWidth", "value": null }
         ]
       },
       "pack": {
@@ -102,33 +102,33 @@ export function gridding() {
       "pyramid": {
         "layout": pyramid,
         "properties": [
-          {"key": "orient", "value": "center", "default": true},
-          {"key": "orient", "value": "up"},
-          {"key": "orient", "value": "down"}
+          { "key": "orient", "value": "center", "default": true },
+          { "key": "orient", "value": "up" },
+          { "key": "orient", "value": "down" }
         ]
       },
       "radial": {
         "layout": radial,
         "properties": [
-          {"key": "orient", "value": "top"}
+          { "key": "orient", "value": "top" }
         ]
       },
       "stack": {
         "layout": stack,
         "properties": [
-          {"key": "orient", "value": "top"}
+          { "key": "orient", "value": "top" }
         ]
       },
       "step": {
         "layout": step,
         "properties": [
-          {"key": "orient", "value": "top"}
+          { "key": "orient", "value": "top" }
         ]
       },
       "tree": {
         "layout": tree,
         "properties": [
-          {"key": "orient", "value": "top"}
+          { "key": "orient", "value": "top" }
         ]
       },
       "treemap": {
@@ -138,17 +138,17 @@ export function gridding() {
       "vertical": {
         "layout": vertical,
         "properties": [
-          {"key": "orient", "value": "up", "default": true},
-          {"key": "orient", "value": "left"},
-          {"key": "orient", "value": "right"},
-          {"key": "orient", "value": "center"},
-          {"key": "valueHeight", "value": null}
+          { "key": "orient", "value": "up", "default": true },
+          { "key": "orient", "value": "left" },
+          { "key": "orient", "value": "right" },
+          { "key": "orient", "value": "center" },
+          { "key": "valueHeight", "value": null }
         ]
       }
     },
     offset: [0, 0],
     orient: "down",
-    parentId: function(d, i) { return i === 0 ? null: 0; },
+    parentId: function (d, i) { return i === 0 ? null : 0; },
     padding: 0,
     radius: null,
     rotate: null,
@@ -158,7 +158,7 @@ export function gridding() {
     size: [1, 1],
     sort: null,
     sortAsc: true,
-    value: function(d) { return d; },
+    value: function (d) { return d; },
     valueHeight: null,
     valueWidth: null,
     valueX: null,
@@ -182,176 +182,180 @@ export function gridding() {
     if (!nodes) {
       nodes = [];
     } else {
-      nodes = Array.from(nodes, function(d,i) {
-        var value = vars.value(d,i);
+      nodes = Array.from(nodes, function (d, i) {
+        let value = vars.value(d, i);
         if (typeof value !== "object")
-          value = {"__value": value, "__index": i};
+          value = { "__value": value, "__index": i };
         return value;
       });
     }
-    
-    nodes.forEach(function(n) {
+
+    nodes.forEach(function (n) {
       n[vars.__r] = 0;
     })
 
     return vars.layout(nodes, vars);
   }
 
-  gridding.mode = function(_mode) {
+  gridding.mode = function (_mode) {
     if (!arguments.length) return vars.mode;
     vars.mode = _mode;
-    if(vars.mode === "identity") {
+    if (vars.mode === "identity") {
       vars.layout = identity;
-    } else if(Object.keys(vars.modes).indexOf(_mode) >= 0) {
+    } else if (Object.keys(vars.modes).indexOf(_mode) >= 0) {
       vars.layout = vars.modes[vars.mode].layout;
     }
     return gridding;
   }
 
-  gridding.modes = function(_mode) {
-    if(arguments.length === 1) return vars.modes[_mode].properties;
+  gridding.modes = function (_mode) {
+    if (arguments.length === 1) return vars.modes[_mode].properties;
     return Object.keys(vars.modes);
   }
 
-  gridding.size = function(_size) {
-    if(!arguments.length) return vars.size;
+  gridding.size = function (_size) {
+    if (!arguments.length) return vars.size;
     vars.size = _size;
     return gridding;
   }
 
-  gridding.cellSize = function(_cellSize) {
-    if(!arguments.length) return vars.cellSize;
+  gridding.cellSize = function (_cellSize) {
+    if (!arguments.length) return vars.cellSize;
     vars.cellSize = _cellSize;
     return gridding;
   }
 
-  gridding.value = function(_value) {
-    if(!arguments.length) return vars.value;
+  gridding.value = function (_value) {
+    if (!arguments.length) return vars.value;
     vars.value = _value;
     return gridding;
   }
 
-  gridding.valueX = function(_valueX) {
-    if(!arguments.length) return vars.valueX;
-    if(typeof _valueX === "string") {
-      vars.valueX = function(d) { return d[_valueX]; }
+  gridding.valueX = function (_valueX) {
+    if (!arguments.length) return vars.valueX;
+    if (typeof _valueX === "string") {
+      vars.valueX = function (d) { return d[_valueX]; }
     } else {
       vars.valueX = _valueX;
     }
     return gridding;
   }
 
-  gridding.valueY = function(_valueY) {
-    if(!arguments.length) return vars.valueY;
-    if(typeof _valueY === "string") {
-      vars.valueY = function(d) { return d[_valueY]; }
+  gridding.valueY = function (_valueY) {
+    if (!arguments.length) return vars.valueY;
+    if (typeof _valueY === "string") {
+      vars.valueY = function (d) { return d[_valueY]; }
     } else {
       vars.valueY = _valueY;
     }
     return gridding;
   }
 
-  gridding.valueHeight = function(_valueHeight) {
-    if(!arguments.length) return vars.valueHeight;
-    if(typeof _valueHeight === "string") {
-      vars.valueHeight = function(d) { return d[_valueHeight]; }
+  gridding.valueHeight = function (_valueHeight) {
+    if (!arguments.length) return vars.valueHeight;
+    if (typeof _valueHeight === "string") {
+      vars.valueHeight = function (d) { return d[_valueHeight]; }
     } else {
       vars.valueHeight = _valueHeight;
     }
     return gridding;
   }
 
-  gridding.valueWidth = function(_valueWidth) {
-    if(!arguments.length) return vars.valueWidth;
-    if(typeof _valueWidth === "string") {
-      vars.valueWidth = function(d) { return d[_valueWidth]; }
+  gridding.valueWidth = function (_valueWidth) {
+    if (!arguments.length) return vars.valueWidth;
+    if (typeof _valueWidth === "string") {
+      vars.valueWidth = function (d) { return d[_valueWidth]; }
     } else {
       vars.valueWidth = _valueWidth;
     }
     return gridding;
   }
 
-  gridding.sort = function(_sort) {
-    if(!arguments.length) return vars.sort;
-    if(typeof _sort === "string") {
-      vars.sort = function(d) { return d[_sort]; }
+  gridding.sort = function (_sort) {
+    if (!arguments.length) return vars.sort;
+    if (typeof _sort === "string") {
+      vars.sort = function (a, b) {
+        const aVal = a[_sort];
+        const bVal = b[_sort];
+        return vars.sortAsc ? (aVal < bVal ? -1 : aVal > bVal ? 1 : 0) : (aVal > bVal ? -1 : aVal < bVal ? 1 : 0);
+      };
     } else {
       vars.sort = _sort;
     }
     return gridding;
   }
 
-  gridding.sortAsc = function(_sortAsc) {
-    if(!arguments.length) return vars.sortAsc;
+  gridding.sortAsc = function (_sortAsc) {
+    if (!arguments.length) return vars.sortAsc;
     vars.sortAsc = _sortAsc;
     return gridding;
   }
 
-  gridding.padding = function(_padding) {
-    if(!arguments.length) return vars.padding;
+  gridding.padding = function (_padding) {
+    if (!arguments.length) return vars.padding;
     vars.padding = _padding;
     return gridding;
   }
 
-  gridding.margin = function(_margin) {
-    if(!arguments.length) return vars.margin;
+  gridding.margin = function (_margin) {
+    if (!arguments.length) return vars.margin;
     vars.margin = _margin;
     return gridding;
   }
 
-  gridding.offset = function(_offset) {
-    if(!arguments.length) return vars.offset;
+  gridding.offset = function (_offset) {
+    if (!arguments.length) return vars.offset;
     vars.offset = _offset;
     return gridding;
   }
 
-  gridding.orient = function(_orient) {
-    if(!arguments.length) return vars.orient;
+  gridding.orient = function (_orient) {
+    if (!arguments.length) return vars.orient;
     vars.orient = _orient;
     return gridding;
   }
 
-  gridding.cols = function(_cols) {
-    if(!arguments.length) return vars.cols;
+  gridding.cols = function (_cols) {
+    if (!arguments.length) return vars.cols;
     vars.cols = _cols;
     return gridding;
   }
 
-  gridding.rows = function(_rows) {
-    if(!arguments.length) return vars.rows;
+  gridding.rows = function (_rows) {
+    if (!arguments.length) return vars.rows;
     vars.rows = _rows;
     return gridding;
   }
 
-  gridding.radius = function(_radius) {
-    if(!arguments.length) return vars.radius;
+  gridding.radius = function (_radius) {
+    if (!arguments.length) return vars.radius;
     vars.radius = _radius;
     return gridding;
   }
 
-  gridding.rotate = function(_rotate) {
-    if(!arguments.length) return vars.rotate;
+  gridding.rotate = function (_rotate) {
+    if (!arguments.length) return vars.rotate;
     vars.rotate = _rotate;
     return gridding;
   }
 
-  gridding.prefix = function(_prefix) {
-    if(!arguments.length) return vars.__prefix;
+  gridding.prefix = function (_prefix) {
+    if (!arguments.length) return vars.__prefix;
     vars.__prefix = _prefix;
     return gridding;
   }
 
-  gridding.id = function(_id) {
-    if(!arguments.length) return vars.id;
+  gridding.id = function (_id) {
+    if (!arguments.length) return vars.id;
     vars.id = _id;
     return gridding;
   }
 
-  gridding.params = function(_params) {
-    if(!arguments.length) return vars;
-    for(var key in _params) {
+  gridding.params = function (_params) {
+    if (!arguments.length) return vars;
+    for (const key in _params) {
       if (_params.hasOwnProperty(key)) {
-        if(key === "mode") {
+        if (key === "mode") {
           gridding.mode(_params[key]);
         } else {
           vars[key] = _params[key];
@@ -361,20 +365,20 @@ export function gridding() {
     return gridding;
   }
 
-  gridding.parentId = function(_parentId) {
-    if(!arguments.length) return vars.parentId;
+  gridding.parentId = function (_parentId) {
+    if (!arguments.length) return vars.parentId;
     vars.parentId = _parentId;
     return gridding;
   }
 
-  gridding.shiftX = function(_shiftX) {
-    if(!arguments.length) return vars.shiftX;
+  gridding.shiftX = function (_shiftX) {
+    if (!arguments.length) return vars.shiftX;
     vars.shiftX = _shiftX;
     return gridding;
   }
 
-  gridding.shiftY = function(_shiftY) {
-    if(!arguments.length) return vars.shiftY;
+  gridding.shiftY = function (_shiftY) {
+    if (!arguments.length) return vars.shiftY;
     vars.shiftY = _shiftY;
     return gridding;
   }

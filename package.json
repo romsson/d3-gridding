@@ -27,27 +27,27 @@
     "src/**/*.js"
   ],
   "scripts": {
-    "pretest": "rollup -c",
+    "build": "rm -rf dist && rollup -c",
+    "pretest": "npm run build",
     "test": "tape -r esm 'test/**/*-test.js' && eslint src",
-    "prepublish": "rm -rf dist && yarn test",
-    "postpublish": "zip -j dist/d3-gridding.zip -- LICENSE README.md dist/d3-gridding.js dist/d3-gridding.min.js"
+    "prepublish": "rm -rf dist && npm test",
+    "postpublish": "zip -j dist/d3-gridding.zip -- LICENSE README.md dist/d3-gridding.js dist/d3-gridding.esm.js dist/d3-gridding.min.js"
   },
   "devDependencies": {
-    "eslint": "^6.6.0",
-    "eslint-plugin-es5": "1",
-    "esm": "3",
-    "package-preamble": "0.1",
-    "rollup": "1",
-    "rollup-plugin-terser": "5",
-    "tape": "4",
-    "uglify-js": "3",
-    "watch": "1"
+    "@rollup/plugin-terser": "^0.4.4",
+    "eslint": "^8.57.0",
+    "esm": "^3.2.25",
+    "package-preamble": "^0.1.0",
+    "rollup": "^4.9.6",
+    "tape": "^5.7.5",
+    "uglify-js": "^3.17.4",
+    "watch": "^1.0.2"
   },
   "dependencies": {
-    "d3": "4 - 5",
-    "d3-array": "1 - 2",
-    "d3-hierarchy": "^1.1.4",
-    "d3-scale": "2.1.2",
-    "d3-shape": "^1.0.2"
+    "d3": "^7.8.5",
+    "d3-array": "^3.2.4",
+    "d3-hierarchy": "^3.1.2",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0"
   }
 }
