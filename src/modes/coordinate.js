@@ -76,7 +76,7 @@ export default function (nodes, v) {
   } else if (typeof v.valueHeight === "string") { // pixels
     _valueHeight = function (d) { return d[v.valueHeight]; }
     v.height.domain([0, _valueYmax]);
-  } else if (typeof v.valueWidth === "number") { // proportion
+  } else if (typeof v.valueHeight === "number") { // proportion
     _valueHeight = function () { return v.valueHeight; }
     v.height.domain([0, v.size[0]]);
   } else { // function

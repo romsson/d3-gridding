@@ -42,8 +42,12 @@ function draw(el, data, params, level, id, show_cross) {
     // ??
   }
 
-  var grid = d3.gridding()
-      .value(function(d) { return d.values; });
+  var grid = d3.gridding();
+  var gridNodes = Array.isArray(data) ? data : (data && data.values);
+
+  if(!Array.isArray(gridNodes)) {
+    gridNodes = [];
+  }
 
   // In case non-generic params have been defined
   if(typeof params[level].size !== "undefined") {
@@ -130,7 +134,7 @@ function draw(el, data, params, level, id, show_cross) {
     grid.sort(params[level].sort);
   }
 
-  var gridData = grid(data);
+  var gridData = grid(gridNodes);
 
   var squares = el.selectAll(".square" + id)
       .data(gridData, function(d, i) { return i; });
@@ -140,21 +144,18 @@ function draw(el, data, params, level, id, show_cross) {
       .attr("data-level", level)
       .attr("width", function(d, i) {
         if(isNaN(d.width) || d.width < 0) {
-          console.log("rect width < 0, set to 0");
           return 0;
         }
         return d.width;
       })
       .attr("height", function(d) {
         if(isNaN(d.height) || d.height < 0) {
-          console.log("rect width < 0, set to 0");
           return 0;
         }
         return d.height;
       })
       .attr("transform", function(d) {
         if(isNaN(d.x) || isNaN(d.y)) {
-          console.log("rect translate is NaN, set to 0");
           return "translate(" + 0 + "," + 0 + ")";
         }
         return "translate(" + d.x + "," + d.y + ")";
@@ -170,21 +171,18 @@ function draw(el, data, params, level, id, show_cross) {
       .transition().duration(first_time === true ? 0: duration_update).delay(first_time === true ? 0: delay_update)
       .attr("width", function(d, i) {
         if(isNaN(d.width) || d.width < 0) {
-          console.log("rect width < 0, set to 0");
           return 0;
         }
         return d.width;
       })
       .attr("height", function(d) {
         if(isNaN(d.height) || d.height < 0) {
-          console.log("rect width < 0, set to 0");
           return 0;
         }
         return d.height;
       })
       .attr("transform", function(d) {
         if(isNaN(d.x) || isNaN(d.y)) {
-          console.log("rect translate is NaN, set to 0");
           return "translate(" + 0 + "," + 0 + ")";
         }
         return "translate(" + d.x + "," + d.y + ")";
@@ -279,17 +277,9 @@ function draw(el, data, params, level, id, show_cross) {
       if(typeof d.values !== "undefined") {
 
         draw(el, d, params, level + 1, id + "_" + (level + 1) + "_" + i, show_cross);
-
-      } else {
-
-        // console.log("<<<<<<<< done no more values")
       }
 
     });
-
-  } else {
-
-    // console.log(">>>>> level ", level, " does not exist");
 
   }
 
@@ -297,33 +287,84 @@ function draw(el, data, params, level, id, show_cross) {
 }
 
 
-function generate_nesting(dimensions, str_data) {
-
-  var __this__data = null;
-
+function resolve_nesting_data(str_data) {
   if(typeof str_data !== "string") {
-
-    __this__data = str_data;
-    str_data = "__this__data";
-
+    return str_data;
   }
 
-  var res = "d3.nest()";
+  var scope = typeof globalThis !== "undefined" ? globalThis : (typeof window !== "undefined" ? window : (typeof self !== "undefined" ? self : {}));
+  return scope[str_data];
+}
 
-  dimensions.forEach(function(d) {
+function build_nesting_entries(data, nesting, level) {
+  if(level >= nesting.length) {
+    return data;
+  }
 
-    res += ".key(function(d) { return d['" + d + "']; })";
+  var groups = new Map();
+  var dimension = nesting[level];
 
-  })
+  data.forEach(function(d) {
+    var key = String(dimension.key(d));
 
-  res += ".entries(" + str_data + ")";
+    if(!groups.has(key)) {
+      groups.set(key, []);
+    }
 
-  var r = eval(res);
+    groups.get(key).push(d);
+  });
 
-  // var data = eval(str_data);
-  console.log("NESTING", res)
+  var entries = Array.from(groups, function(entry) {
+    return {
+      key: entry[0],
+      values: build_nesting_entries(entry[1], nesting, level + 1)
+    };
+  });
 
-  return r;
+  if(typeof dimension.sortKeys === "function") {
+    entries.sort(function(a, b) {
+      return dimension.sortKeys(a.key, b.key);
+    });
+  }
+
+  return entries;
+}
+
+function create_legacy_nest() {
+  var nesting = [];
+
+  return {
+    key: function(fn) {
+      nesting.push({key: fn});
+      return this;
+    },
+    sortKeys: function(fn) {
+      if(nesting.length > 0) {
+        nesting[nesting.length - 1].sortKeys = fn;
+      }
+      return this;
+    },
+    entries: function(data) {
+      return build_nesting_entries(data, nesting, 0);
+    }
+  };
+}
+
+if(typeof d3 !== "undefined" && typeof d3.nest !== "function") {
+  d3.nest = create_legacy_nest;
+}
+
+function generate_nesting(dimensions, str_data) {
+  var data = resolve_nesting_data(str_data);
+  var nesting = dimensions.map(function(d) {
+    return {
+      key: function(item) {
+        return item[d];
+      }
+    };
+  });
+
+  return build_nesting_entries(data, nesting, 0);
 
 }
 
@@ -345,8 +386,6 @@ function browse_nest(nested, dimensions, level, parent_key) {
 //      d.parentId = parent;
       return;
     } else {
-
-      console.log("process", dimensions[level], "level", level);
 
       var dim = dimensions[level];
 
@@ -381,49 +420,26 @@ function browse_nest(nested, dimensions, level, parent_key) {
 
   });
 
-  console.log(nested)
-
 }
 
 function generate_nesting_agg(dimensions, str_data) {
 
-// generate nesting tree
-// eval nesting tree
+// build nesting tree
 // browse each node
-// apply dimension agg fn to each node..
+// apply dimension agg fn to each node
 
-  var res = "d3.nest()";
-
-  dimensions.forEach(function(d) {
-
-    res += ".key(function(d) { return d['" + d.groupBy + "']; })";
-
-    if(typeof d.sortBy !== "undefined") {
-      res += ".sortKeys(function(a,b) { console.log(a,b); return b - a; })";
-    }
-
-  })
-
-  var __this__data = null;
-
-  if(typeof str_data !== "string") {
-
-    __this__data = str_data;
-    str_data = "__this__data";
-
-  }
-
-
-  res += ".entries(" + str_data + ")";
-
-  console.log("GENERA", res)
-
-  r = eval(res);
+  var data = resolve_nesting_data(str_data);
+  var nesting = dimensions.map(function(d) {
+    return {
+      key: function(item) {
+        return item[d.groupBy];
+      },
+      sortKeys: typeof d.sortBy !== "undefined" ? function(a, b) { return b - a; } : undefined
+    };
+  });
+  var r = build_nesting_entries(data, nesting, 0);
 
   browse_nest(r, dimensions);
-
-  // var data = eval(str_data);
-  // console.log("RRR",r, data)
 
   return r;
 }
@@ -748,7 +764,6 @@ function setKeys() {
       }
 
       update();
-      console.log("KEY", k);
 
      });
 

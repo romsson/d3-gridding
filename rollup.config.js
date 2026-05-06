@@ -5,7 +5,7 @@ const meta = JSON.parse(readFileSync("./package.json", "utf8"));
 
 const config = {
   input: "src/index.js",
-  external: Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)),
+  external: ['d3-array', 'd3-hierarchy', 'd3-shape'],
   output: {
     file: `dist/${meta.name}.js`,
     name: "d3",
@@ -13,7 +13,7 @@ const config = {
     indent: false,
     extend: true,
     banner: `// ${meta.homepage} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author.name}`,
-    globals: Object.assign({}, ...Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)).map(key => ({ [key]: "d3" }))),
+    globals: { 'd3-array': 'd3', 'd3-hierarchy': 'd3', 'd3-shape': 'd3', 'd3-scale': 'd3' },
     sourcemap: true
   },
   plugins: []

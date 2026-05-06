@@ -1,4 +1,4 @@
-import * as d3Scale from 'd3-scale';
+import { scaleLinear } from 'd3-scale';
 
 import brick from "./modes/brick";
 import central from "./modes/central";
@@ -18,6 +18,69 @@ import tree from "./modes/tree";
 import treemap from "./modes/treemap";
 import vertical from "./modes/vertical";
 
+function buildLegacyNestEntries(data, nesting, level) {
+  if (level >= nesting.length) {
+    return data;
+  }
+
+  const groups = new Map();
+  const dimension = nesting[level];
+
+  data.forEach(function (d) {
+    const key = String(dimension.key(d));
+    if (!groups.has(key)) {
+      groups.set(key, []);
+    }
+    groups.get(key).push(d);
+  });
+
+  const entries = Array.from(groups, function ([key, values]) {
+    return {
+      key,
+      values: buildLegacyNestEntries(values, nesting, level + 1)
+    };
+  });
+
+  if (typeof dimension.sortKeys === "function") {
+    entries.sort(function (a, b) {
+      return dimension.sortKeys(a.key, b.key);
+    });
+  }
+
+  return entries;
+}
+
+function createLegacyNest() {
+  const nesting = [];
+
+  return {
+    key(fn) {
+      nesting.push({ key: fn });
+      return this;
+    },
+    sortKeys(fn) {
+      if (nesting.length > 0) {
+        nesting[nesting.length - 1].sortKeys = fn;
+      }
+      return this;
+    },
+    entries(data) {
+      return buildLegacyNestEntries(data, nesting, 0);
+    }
+  };
+}
+
+function installLegacyNest() {
+  const target = typeof globalThis !== "undefined" ? globalThis : (typeof window !== "undefined" ? window : (typeof self !== "undefined" ? self : null));
+  if (!target || !target.d3 || typeof target.d3.nest === "function") {
+    return;
+  }
+
+  target.d3.nest = createLegacyNest;
+}
+
+installLegacyNest();
+
 export function gridding() {
 
   const vars = {
@@ -31,7 +94,7 @@ export function gridding() {
     __r: "",
     cellSize: null,
     cols: null,
-    height: d3Scale.scaleLinear(),
+    height: scaleLinear(),
     id: function (d, i) { return i; },
     layout: identity,
     margin: 0,
@@ -163,9 +226,9 @@ export function gridding() {
     valueWidth: null,
     valueX: null,
     valueY: null,
-    width: d3Scale.scaleLinear(),
-    x: d3Scale.scaleLinear(),
-    y: d3Scale.scaleLinear()
+    width: scaleLinear(),
+    x: scaleLinear(),
+    y: scaleLinear()
   };
 
   function gridding(nodes) {
@@ -188,6 +251,10 @@ export function gridding() {
           value = { "__value": value, "__index": i };
         return value;
       });
+    }
+
+    if (!nodes.length) {
+      return nodes;
     }
 
     nodes.forEach(function (n) {
